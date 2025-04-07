@@ -1,0 +1,11 @@
+.nav{
+    width: 400px;
+    height: 20px;
+    border: 2px solid black;
+    margin: auto;
+    padding: 10px;
+    background-color: rgb(226, 27, 53);
+    display: grid;
+    
+    
+}

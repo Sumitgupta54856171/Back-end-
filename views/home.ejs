@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./output.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="bg-red-600 text-black flex flex-row justify-between list-none">
+        <nav class="nav">
+            <% if(user){%>
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+                 <%}else{%>
+            <li>
+                <a href="/login">Login</a>
+            </li>
+            <li>
+                <a href="/signup">Sign</a>
+            </li>
+            <%}%>
+        </nav>
+    </div>
+    <div>
+        <h1>welcome to home page</h1>
+    </div>
+</body>
+</html>
