@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -18,7 +19,7 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-const userhome= new mongooose({
+const userhome= new mongoose.Schema({
     home:{
         type:String,
         required:true
@@ -58,14 +59,7 @@ const userhome= new mongooose({
         ref:'profiles'
     }
 })
-useimage=new mongoose({
-        image:{
-                   name:{
-                           type:String,
-                                  },
-                                         filePath:{type:String}
-                                             },
-        
+
 })
 userSchema.pre('save', async function(next) {
     if(!this.isModified('password'))  return next();

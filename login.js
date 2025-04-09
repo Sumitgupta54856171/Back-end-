@@ -8,7 +8,7 @@ const model = require('./models/model');
 const bodyParser= require('body-parser');
 const controller = require('./controller/sign');
 const multer=require('multer');
-
+const bcrypt= require('bcrypt')
 const session = require('express-session');
 const storge =multer.diskStorage({
   destination:(req,file,cb)=>{
