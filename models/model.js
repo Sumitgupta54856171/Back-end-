@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 
 const userSchema = new mongoose.Schema({
@@ -19,48 +19,7 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-const userhome= new mongoose.Schema({
-    home:{
-        type:String,
-        required:true
-    },
-    duration:{
-        type:String,
-        required:true
-    },
-    date:{
-        type:String,
-        required:true
-    },
-    country:{
-        type:String,
-        required:true
-    },
-    city:{
-  type:String,
-        required:true
-    },
-    description:{
-        type:String,
-        required:true
-    },
-  price:{
-        type:String,
-        required:true
-    },
-    image:{
-       name:{
-        type:String,
-       },
-       filePath:{type:String}
-    },
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'profiles'
-    }
-})
 
-})
 userSchema.pre('save', async function(next) {
     if(!this.isModified('password'))  return next();
     const salt = await bcrypt.genSalt(10);
@@ -71,6 +30,4 @@ userSchema.pre('save', async function(next) {
 userSchema.methods.comparePassword = async function(password) {
     return await bcrypt.compare(password, this.password);
 };
-module.exports =mongoose.model('image',useimage);
-module.exports= mongoose.model('Home',userhome)
 module.exports = mongoose.model("profiles", userSchema);

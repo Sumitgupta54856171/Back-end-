@@ -8,8 +8,10 @@ const model = require('./models/model');
 const bodyParser= require('body-parser');
 const controller = require('./controller/sign');
 const multer=require('multer');
-const bcrypt= require('bcrypt')
+const bcrypt= require('bcryptjs');
+const homecontroller = require('./controller/home');
 const session = require('express-session');
+const homeModel = require('./models/homemodel');
 const storge =multer.diskStorage({
   destination:(req,file,cb)=>{
     cb(null,'uploads/');
@@ -18,8 +20,9 @@ const storge =multer.diskStorage({
     cb(null,Date.now() + path.extname(file.originalname));
   }});
   const upload =multer({storage:storge});
+  app.use('/uploads', express.static('uploads'));
+  
 app.use(bodyParser.json());
-
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.set('views', './views');
@@ -29,35 +32,30 @@ app.use(session({
   secret:'completely secreet',
   resave:false,
   saveUninitialized:true,
-  cookie: { secure: false }
+  store: new session.MemoryStore(),
+  rolling:true,
+  cookie: { secure: false,maxAge:24 * 60 * 60 * 1000 }
 }));
+app.use(async(req,res,next)=>{
+
+  next();
+})
 app.use(express.static(path.join(__dirname,'views')));
-app.use(express.static(path.join))
 app.use((req,res,next)=>{
   res.locals.isLoggedIn = req.session.user ? true : false;
   res.locals.user = req.session.user || null;
   next();
 })
-app.post('/upload',upload.single('image'),(req,res)=>{
-  const file = req.file;
-  const image = {
-    name: file.originalname,
-    filePath: file.path
-  };
-  const userId = req.session.user._id;
-  const newImage = new model({ image, userId });
-  newImage.save()
-    .then(() => {
-      res.redirect('/');
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error saving image');
-    });
-});
+app.get('/homeadd',(req,res)=>{
+  res.sendFile(path.join(__dirname,'views','home_add.html'));
+})
+app.post('/homeadd',upload.single('image'),homecontroller.home_add);
+
 app.get('/profile',controller.profile);
-app.get('/',(req,res)=>{
- res.render('home');
+app.get('/',async(req,res)=>{
+  const homes = await homeModel.find();
+  console.log(homes);
+ res.render('home',{homes});
 });
 app.get('/login',(req,res)=>{
   res.sendFile(path.join(__dirname,'views','login.html'))

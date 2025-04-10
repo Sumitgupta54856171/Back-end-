@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./output.css">
     <title>Document</title>
 </head>
 <body>
-    <form action="/" method="post" >
-<input type="text" name="home" placeholder="home">
-<input type="text" name="duration" placeholder="duration">
-<input type="text" name="price" placeholder="price">
-<input type="text" name="description" placeholder="description">
-<input type="text" name="address" placeholder="address">
-<input type="text" name="city" placeholder="city">
-<input type="text" name="state" placeholder="state">
-<input type="text" name="country" placeholder="country">
-<form action="/upload" method  ="post" enctype="multipart/form-data">
-    <input type="file" name="image" placeholder="image" />
-</form>
-<input type="button" value="submit" name="submit"/>
+    <h1 class="text-red-500 gap-4 items-center p-4 justify-center">Home add</h1>
+    <form action="/homeadd" method="post" enctype="multipart/form-data" class="bg-blue  flex flex-col justify-items-center text-black  gap-1">
+<input type="text" name="homename" placeholder="homename" class="border-2 border-blue rounded-md">
+<input type="text" name="duration" placeholder="duration"  class="border-2 border-blue ">
+<input type="text" name="price" placeholder="price" class="border-2 border-blue  rounded-md">
+<input type="text" name="description" placeholder="description" class="h-50 w-full border-2 border-red rounded-md">
+<input type="text" name="city" placeholder="city" class="border-2 border-blue rounded-md">
+<input type="text" name="state" placeholder="state" class="border-2 border-blue  rounded-md">
+<input type="text" name="country" placeholder="country" class="border-2 border-blue rounded-md">
+<input type="file" name="image" placeholder="image" class="border-2 border-blue rounded-md">
+<button class="bg-green-600 text-white items-center h-10 w-40 rounded-md">Submit</button>
 </form>
 </body>
 </html>

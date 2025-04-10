@@ -7,8 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="bg-red-600 text-black flex flex-row justify-between list-none">
-        <nav class="nav">
+    <div class="bg-red-600 text-black flex flex-col justify-between list-none">
+        <nav class="flex flex-row justify-between ">
+            <li>
+                <a href="/">Home</a>
             <% if(user){%>
             <li>
                 <a href="/logout">Logout</a>
@@ -21,10 +23,32 @@
                 <a href="/signup">Sign</a>
             </li>
             <%}%>
+            <li>
+                <a href="/profile">Profile</a>
+            </li>
+            <li>
+                <a href="/homeadd">Add</a>
+            </li>
         </nav>
     </div>
     <div>
         <h1>welcome to home page</h1>
     </div>
+    <div class="flex flex-col justify-center items-center h-90 w-80 wrap-anywhere">
+       <% homes.map(items =>{%>
+        <div class="bg-blue-500 text-black flex flex-col justify-between items-center h-80 w-80  border-2 border-red-500 rounded-md p-4 m-4 gap-4">
+            <img src="/<%= items.image.filePath %>" alt="items.image.name" class="w-20 h-20">
+            <h1><%= items.homename %></h1>
+            <h1><%= items.duration %></h1>
+            <h1><%= items.price %></h1>
+            <h1><%= items.description %></h1>
+            <h1><%= items.city %></h1>
+            <h1><%= items.state %></h1>
+            <h1><%= items.country %></h1>
+        </div>
+        <%})%>
+    </div>
+    <div>
+        
 </body>
 </html>
