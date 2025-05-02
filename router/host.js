@@ -13,14 +13,11 @@ host.get('/host/homeadd',(req,res)=>{
   
   host.get('/host/profile',controller.profile);
   host.get('/host/',async(req,res)=>{
-    const homes = await homeModel.find();
-    console.log('hello');
-    console.log(homes);
-   res.render('home',{homes});
+  
   });
   host.post('/host/auth',controller.auth);
   host.get('/host/login',(req,res)=>{
-    res.sendFile(path.join(__dirname,'../views','login.html'))
+    res.sendFile(path.join(__dirname,'../views','hostlogin.html'))
   });
   host.get('/host/logout',controller.logout);
   host.post('/host/login',controller.loginl);

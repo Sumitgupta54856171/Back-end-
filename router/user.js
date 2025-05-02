@@ -4,6 +4,8 @@ const path = require('path');
 const controller = require('../controller/sign');
 const homeModel = require('../models/homemodel');
 user.use(express.static(path.join(__dirname,'views')));
+
+
   user.get('/user/profile',controller.profile);
   user.get('user/',async(req,res)=>{
     const homes = await homeModel.find();

@@ -12,7 +12,6 @@ const userSchema = new mongoose.Schema({
    id:{
     type: String,
     required: true,
-    unique: true
 },
    isverified:{
     type:Boolean,
@@ -24,7 +23,6 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true
     },
     password: {
         type: String,

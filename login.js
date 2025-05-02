@@ -1,4 +1,5 @@
 const cookieParser = require('cookie-parser');
+require('dotenv').config();
 const express = require('express');
 const app =express();
 const ejs = require('ejs');
@@ -10,6 +11,8 @@ const host = require('./router/host');
 const user = require('./router/user');
 const session = require('express-session');
 const homeModel = require('./models/homemodel');
+const { OAuth2Client } = require('google-auth-library');
+const {google} = require('googleapis');
 app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,10 +28,12 @@ app.use(session({
   rolling:true,
   cookie: { secure: false,maxAge:24 * 60 * 60 * 1000 }
 }));
+console.log( process.env.google_client_id, process.env.google_secret,process.env.google_redirect)
 app.use(express.static(path.join(__dirname,'views')));
 app.use((req,res,next)=>{
   res.locals.isLoggedIn = req.session.user ? true : false;
   res.locals.user = req.session.user || null;
+  res.locals.isVerified = req.session.isVerified ? true :false
   next();
 })
 app.get('/',async(req,res)=>{
@@ -39,7 +44,7 @@ app.get('/',async(req,res)=>{
 });
 app.use(host);
 app.use(user);
-const port =3000;
+const port =process.env.port;
 app.listen(port,()=>{
     console.log(`server is running ${port}`)
     client();

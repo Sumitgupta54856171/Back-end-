@@ -52,34 +52,30 @@ async function loginl(req, res) {
 }
 const auth = async(req,res)=>{
   const {id,otp}= req.body
-  const hostid = await temphost.findOne({id})
+  const hostid = await hosttemp.findOne({id})
   const userid = await tempuser.findOne({id})
   if(hostid){
-    const hostotp = await temphost.findOne({otp})
-    if(hostotp){
-        const hostsave = new host({temphost,isVerified:true});
-          hostsave.save();
-          const home = await temphost.findOne({id})
-          res.render('hosthome',{home})
-    }
+  const hostdataupdate = await hosttemp.updateOne({isverified:true})
+
+  const hostsave = await hosttemp.find({id});
+  console.log(hostsave);
+          req.session.isverified = {
+           id:id,
+            isverified: true,
+          }
+          console.log('say')
+          res.redirect('/host/')
+    
   }
 }
-let generatedotp =()=>{
-    return 1000 + Math.floor(Math.random * 900000)
-}
+
    
 
 const signup = async(req, res) => {
     console.log(req.body);    
     const {email, password,firstname,lastname,business,Otp} = req.body;
-    
-function generatedid(){
-
-    let tit =1000 + Math.floor(Math.random * 8000000);
-    return tit;
-}
-    console.log(generatedid())
-    const id = generatedid();
+ let count = 1;
+ let id = Date.now() + count++
     console.log(req.body);
     console.log(firstname,lastname,email,password,);
     if(business){

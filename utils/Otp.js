@@ -1,23 +1,29 @@
-const nodemailer= require('nodemailer');
-const sendEmail=async(email,otp)=>{
+const nodemailer = require('nodemailer');
+
+
+
+async function sendEmail (email, otp){
    
         const transport = nodemailer.createTransport({
-           service:'gmail',
-           host: 'smtp.gmail.com',
-       port: 587,
-        secure: false,
-            auth:{
-            user:'guptaashish2531@gmail.com',
-            pass:'7$Ashish',
+            service: 'gmail',
+            port:465,
+            secure:false,
+            auth: {
+               user:process.env.email,
+               pass:'ntkf ygea lqgo wzjb'
             }
-        })
-        const mailOptions ={
-            from:'guptaashish2531@gmail.com',
-            to:email,
-            subject:'otp send by airbnb',
-            text:`this otp send by airbnb otp ${otp}`
-        }
+        });
+
+        const mailOptions = {
+            from: process.env.email,
+            to: email,
+            subject: 'OTP from Airbnb',
+            text: `Your OTP for Airbnb verification is: ${otp}`
+        };
+
         await transport.sendMail(mailOptions);
-}
-module.exports=sendEmail;
+        return true;
+        } 
+
+module.exports = sendEmail;
                 
