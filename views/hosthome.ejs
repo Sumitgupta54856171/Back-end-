@@ -10,31 +10,23 @@
     <div class="bg-red-600 text-black flex flex-col justify-between list-none">
         <nav class="flex flex-row justify-between gap-4  ">
             <li>
-                <a href="/">Home</a>
-            <% if(user){%>
+                <a href="/host/">Home</a>
             <li>
                 <a href="/user/logout">Logout</a>
             </li>
             <li>
                 <a href="/user/profile">Profile</a>
             </li>
-            
-                 <%}else{%>
             <li>
-                <a href="/user/login">Login</a>
+                <a href="/host/histry">Histry</a>
             </li>
-            <li>
-                <a href="/user/signup">Sign</a>
-            </li>
-            <%}%>
-           
         </nav>
     </div>
     <div>
         <h1>welcome to home page</h1>
     </div>
     <div class="">
-      <% homes.map(items => {%>
+      <% home.map(items => {%>
        
         <div class="bg-white rounded-md grid grid-row wrap-anywhere gap-2 border-2 border-black m-3 p-3">
         <div class=" bg-white rounded-leg shadow-lg p-4 flex flex-col w-32 h-30 overflow-hidden transition hover:shadow-xl">

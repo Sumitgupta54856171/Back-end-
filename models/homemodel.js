@@ -1,6 +1,11 @@
 const mongoose =require('mongoose');
 
 const homeSigma =new mongoose.Schema({
+    id:{
+        type: String,
+        required: true,
+        unique: true
+    },
     homename:{
         type:String,
         required:true
