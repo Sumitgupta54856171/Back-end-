@@ -1,7 +1,7 @@
 const homeModel = require('../models/homemodel');
 function home_add(req,res){
     console.log(req.body);
-    const {homename,duration,country,city,state,description,price} = req.body;
+    const {homename,duration,country,city,state,description,price,email} = req.body;
     const image = {
         name: req.file.filename,
         filePath: req.file.path
@@ -15,14 +15,15 @@ function home_add(req,res){
         city,
         description,
         price,
-        image
+        image,
+        email
     });
     home.save()
     .then(() => {
-        res.redirect('/');
+        res.redirect('/host/');
     })
-    .catch(err => {
-        console.error(err);
+    .catch((err) => {
+        console.log(err)
         res.status(500).send('Error saving home');
     });
 }

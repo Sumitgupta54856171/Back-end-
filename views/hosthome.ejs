@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="bg-red-600 text-black flex flex-col justify-between list-none">
+    <div class=" text-black flex flex-col justify-between bg-blue-600">
         <nav class="flex flex-row justify-between gap-4  ">
             <li>
                 <a href="/host/">Home</a>
@@ -20,16 +20,29 @@
             <li>
                 <a href="/host/histry">Histry</a>
             </li>
+            <li>
+                <a href="/host/homeadd">Addhome</a>
+            </li>
         </nav>
     </div>
     <div>
-        <h1>welcome to home page</h1>
-        <input type="hidden" value="<%= id%>">
+      <h1>home is add them </h1>
     </div>
-    
-     
-        
-    </div>
-    <div>
+    <%homes.map(items => {%>
+        <div class="bg-white rounded-md grid grid-row wrap-anywhere gap-2 border-2 border-black m-3 p-3">
+        <div class=" bg-white rounded-leg shadow-lg p-4 flex flex-col w-32 h-30 overflow-hidden transition hover:shadow-xl">
+            <h1 class=" text-black md-4"><img src="/<%= items.image.filePath
+                %>" alt="items.image.name" class="w-full h-auto rounded-md object-cover" ></h1>
+            <h1 class="text-xl font-bold  text-black"><%= items.homename%></h1>
+            <h1 class="text-lg font-semibold  text-black"><%= items.duration %></h1>
+            <h1 class="text-xl font-bold  text-black"><%= items.price %></h1>
+            <h1 class="text-sm  text-black"><%= items.description %></h1>
+            <h1 class="text-lg font-semibold  text-black"><%= items.city %></h1>
+            <h1 class="text-lg font-semibold  text-black"><%= items.state %></h1>
+            <h1 class="text-lg font-semibold  text-black"><%= items.country %></h1>
+      
+        </div>
+        </div>
+        <%})%>
 </body>
 </html>

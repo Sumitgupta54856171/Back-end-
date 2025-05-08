@@ -6,9 +6,14 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="/host/auth" method="post">
+    <form action="/auth" method="post">
         <input type="hidden" name="id" value="<%= id%>">
         <input type="text" name="otp" value="">
+        <select name="role" id="role"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            <option value="user">User</option>
+            <option value="business">Business</option>
+        </select>
         <button>send</button>
     </form>
 </body>

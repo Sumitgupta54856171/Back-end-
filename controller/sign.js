@@ -1,86 +1,106 @@
 const bcrypt = require('bcryptjs');
-const User = require('../models/model');
 const sendEmail =require('../utils/Otp');
-const hostuser = require('../models/hostmodel')
 const hosttemp = require('../models/hosttempUser');
-const tempuser = require('../models/tempUser')
 const homemodel = require('../models/homemodel')
 const otpGenerator = require('otp-generator');
+const jwt = require('jsonwebtoken');
+const { CancellationToken } = require('mongodb');
 async function loginl(req, res) {
-    const {email, password,business} = req.body;
-    const exitbusiness = await hostuser.findOne({business:business})
-    if(exitbusiness){
-        console.log(req.body);
-        const hostUser = await hostuser.findOne({email: email});
+    const {email, password,role} = req.body;
+    console.log(role)
+   const jwts = process.env.jwt_sceret
+    if(role === "business"){
+        const user = await hosttemp.findOne({email: email});
         if(!user) return res.status(401).send('invalid email/password');
         const ismatch = await user.comparePassword(password);
         if(!ismatch) return res.status(401).send('invalid email/password');
-        res.cookie('token', user, {
+        payload= {
+            role:user.role,
+            id:user.id,
+            email:user.email,
+        }
+        const hosttoken = jwt.sign({
+            payload},jwts,{expiresIn:'1h'})
+            console.log(hosttoken)
+        res.cookie('token',hosttoken, {
             httpOnly: true,
             secure: 'my key secret',
             maxAge: 30*24*60*60*1000,
         });
-        res.cookie('isloggin',true)
-      console.log(user);
-       req.session.user={
-        id:user._id,
-        email:user.email,
-       }
-       req.session.save();
-        res.redirect('/');
+       res.redirect('/host/')
+       
     }else{
         console.log(req.body);
-        const user = await User.findOne({email: email});
+        console.log('user')
+        const user = await hosttemp.findOne({email: email});
         if(!user) return res.status(401).send('invalid email/password');
         const ismatch = await user.comparePassword(password);
         if(!ismatch) return res.status(401).send('invalid email/password');
-        res.cookie('token', user, {
-            httpOnly: true,
-            secure: 'my key secret',
-            maxAge: 30*24*60*60*1000,
-        });
-        res.cookie('isloggin',true)
-      console.log(user);
-       req.session.user={
-        id:user._id,
+       payload ={
+        role:user.role,
+        id:user.id,
         email:user.email,
        }
-       req.session.save();
-        res.redirect('/');
+        const token = jwt.sign(payload,jwts,{expiresIn:24*60 *60*100})
+            req.session.token = token
+        req.session.save();
+      console.log(user);
+      req.session.isLoging = true;
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.jwt_sceret,
+        maxAge: 30*24*60*60*1000,
+    });
+     res.redirect('/user/')
     }
    
 }
 const auth = async(req,res)=>{
-  const {id,otp}= req.body
-  const hostid = await hosttemp.findOne({id})
-  const userid = await tempuser.findOne({id})
-  if(hostid){
-  const hostdataupdate = await hosttemp.updateOne({isverified:true})
-
+  const {id,otp,role}= req.body
+  if(role === "business"){
+  const hostdataupdate = await hosttemp.findOneAndUpdate({id:id ,isverified:true})
   const hostsave = await hosttemp.find({id});
   console.log(hostsave);
-          req.session.isverified = {
-           id:id,
-            isverified: true,
-          }
           console.log('say')
-          res.redirect('/host/')
-    
+          res.redirect('/login')
+  }else{
+    const hostdataupdate = await hosttemp.findOneAndUpdate({id:id,isverified:true})
+  const hostsave = await hosttemp.find({id});
+  console.log(hostsave);
+     
+          console.log('say')
+          res.redirect('/login')
   }
 }
-
-   
+    
 
 const signup = async(req, res) => {
     console.log(req.body);    
-    const {email, password,firstname,lastname,business,Otp} = req.body;
+    const {email, password,username,role} = req.body;
  let count = 1;
  let id = Date.now() + count++
     console.log(req.body);
-    console.log(firstname,lastname,email,password,);
-    if(business){
-        console.log(business)
-        let exithost = await hostuser.findOne({email})
+    console.log(username,email,password,role);
+    if(role === "business"){
+        console.log(role)
+        let exithost = await hosttemp.findOne({email})
+        if(exithost) {
+            return res.send("email already exists");
+        }
+        const otp = otpGenerator.generate(6, { 
+            upperCase: false, 
+            specialChars: false, 
+            alphabets: false 
+          });
+          console.log(req.body);
+        sendEmail(email,otp);
+        otpExpires = new Date(Date.now() + 60*10*1000);
+        const hosttemps = new hosttemp({email,password,role,id,otp,otpExpires,username});
+        console.log(email,password,role,id,otp,otpExpires,username)
+        hosttemps.save();
+        res.render('hostotp.ejs',{id})
+    }else{
+        let exithost = await hosttemp.findOne({email})
         if(exithost) {
             return res.send("email already exists");
         }
@@ -92,42 +112,21 @@ const signup = async(req, res) => {
              
         sendEmail(email,otp);
         otpExpires = new Date(Date.now() + 60*10*1000);
-        const hostUser = new hosttemp({email,password,business,id,otp,otpExpires });
-        console.log(email,password,business,id,otp,otpExpires )
-        hostUser.save();
+        const hosttemps = new hosttemp({email,password,role,id,otp,otpExpires,username });
+        console.log(email,password,role,id,otp,otpExpires,username )
+        hosttemps.save();
         res.render('hostotp.ejs',{id})
-    }else{
-        let exituser = await User.findOne({email});
-        if(exituser) {
-            return res.send("email already exists");
-        }
-        function generatedid(){
-            return 1000 + Math.floor(Math.random * 8000000)
-        }
-        const otp = otpGenerator.generate(6, { 
-            upperCase: false, 
-            specialChars: false, 
-            alphabets: false 
-          });
-        sendEmail(email,otp);
-       
-        otpExpires = Date.now*60*10*1000;
-        const id = generatedid();
-        const user = new tempuser({email,password,id,otp,otpExpires});
-        await user.save();
-        res.render('otp.ejs',{id})
     }
-  
 };
 async function profile(req,res){
- if(req.session.user == null){
-  return res.status(401).send('please login first');
- }else{
-  console.log('hello');
-  const userid =User.findOne({email: req.session.user.email});
-  console.log(userid);
-  res.render('profile',{userid});
- }
+    if(req.user.email || req.user.email === 'undefined' || null ){
+        const userid = await hosttemp.findOne({email:req.user.email})
+        res.render('profile',{userid});
+    }else{
+        const userid = await hosttemp.findOne({email:req.user.payload.email})
+        res.render('profile',{userid});
+    }
+
 }
 async function logout(req, res) {   
     req.session.destroy(err => {

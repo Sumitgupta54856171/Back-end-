@@ -6,13 +6,20 @@
     <link rel="stylesheet" href="./output.css">
     <title>Document</title>
 </head>
-<body>
-    <form action="/user/auth" method="post" class="bg-blue  flex flex-row justify-items-center text-black ">
+<body class=" bg-blue-whit justify-center items-center w-full h-screen border-0 ">
+<div class=" bg-blue-whit justify-center items-center w-full h-screen border-0 " >
+    <form action="/signup" method="post" class="bg-blue  flex flex-row justify-items-center text-black ">
     <input type="text" name="username" placeholder="username"> 
      <input type="email" name="email" placeholder="email@gmail.com">  <input type="password" name="password" placeholder="password">
+     <select name="role" id="role" 
+     class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+<option value="user">User</option>
+<option value="business">Business</option>
+</select>
     <button>Sign</button></form>
     <form action="/host/signup" method="get">
         <button>Businessaccount</button>
       </form>
+</div>
 </body>
 </html>

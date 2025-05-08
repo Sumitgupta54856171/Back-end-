@@ -1,10 +1,9 @@
 const mongoose =require('mongoose');
 
 const homeSigma =new mongoose.Schema({
-    id:{
+    email:{
         type: String,
         required: true,
-        unique: true
     },
     homename:{
         type:String,
@@ -14,18 +13,20 @@ const homeSigma =new mongoose.Schema({
         type:String,
         required:true
     },
-    state:{
-        type:String,
-       required:true
-    },
-    country:{
-        type:String,
-        required:true
-    },
-    city:{
-  type:String,
-        required:true
-    },
+    
+        state:{
+            type:String,
+           required:true
+        },
+        country:{
+            type:String,
+            required:true
+        },
+        city:{
+      type:String,
+            required:true
+        },
+    
     description:{
         type:String,
         required:true
@@ -40,6 +41,5 @@ const homeSigma =new mongoose.Schema({
        },
        filePath:{type:String}
     },
-
 });
 module.exports = mongoose.model('home',homeSigma);

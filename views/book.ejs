@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Booking Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .detail-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .detail-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .detail-item p {
+            margin: 0;
+            color: #666;
+        }
+        .image-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><%= homename %></h1>
+            <p>Booking Confirmation</p>
+        </div>
+
+
+        <div class="details-grid">
+            <div class="detail-item">
+                <h3>Location</h3>
+                <p><%= city %>, <%= state %></p>
+                <p><%= country %></p>
+            </div>
+
+            <div class="detail-item">
+                <h3>Duration</h3>
+                <p><%= duration %></p>
+            </div>
+
+            <div class="detail-item">
+                <h3>Price</h3>
+                <p>$<%= price %></p>
+            </div>
+
+            <div class="detail-item">
+                <h3>Contact Email</h3>
+                <p><%= email %></p>
+            </div>
+        </div>
+
+        <div class="detail-item" style="margin-top: 20px;">
+            <h3>Description</h3>
+            <p><%= description %></p>
+        </div>
+    </div>
+</body>
+</html>
