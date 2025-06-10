@@ -10,10 +10,7 @@ const userSchema = new mongoose.Schema({
     type:String,
     required:true
    },
-   id:{
-    type: String,
-    required: true,
-},
+
    isverified:{
     type:Boolean,
     default:false

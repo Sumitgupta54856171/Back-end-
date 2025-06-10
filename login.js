@@ -3,12 +3,14 @@ require('dotenv').config();
 const express = require('express');
 const app =express();
 const ejs = require('ejs');
-const client = require('./models/mongoose');
+const client = require('./config/mongoose');
 const path= require("path");
+const reid = require('./config/redis')
 const bodyParser= require('body-parser');
 const multer=require('multer');
 const host = require('./router/host');
 const user = require('./router/user');
+const sql = require('./config/postgresql');
 const session = require('express-session');
 const homeModel = require('./models/homemodel');
 const { OAuth2Client } = require('google-auth-library');
@@ -33,13 +35,13 @@ app.use(session({
 app.use('/user',user);
 app.use('/host',host);
 app.use(express.static(path.join(__dirname,'/views')));
-console.log( process.env.google_client_id, process.env.google_secret,process.env.google_redirect)
+
 app.use(express.static(path.join(__dirname,'views')));
 app.use((req,res,next)=>{
   res.locals.isLoggedIn = req.session.isLoging ? true : false;
   res.locals.user = req.user || null;
   next();
-})
+});
 app.get('/login',(req,res)=>{
   res.sendFile(path.join(__dirname,'views','login.html'));
 })
@@ -52,11 +54,16 @@ app.get('/',async(req,res)=>{
 });
 app.get('/signup',(req,res)=>{
   res.sendFile(path.join(__dirname,'/views','signup.html'))
-})
+});
+app.get('/otp',(req,res)=>{
+  res.sendFile(path.join(__dirname,'/views','opt.html'))
+});
 app.post('/auth',controller.auth);
-app.post('/signup',controller.signup)
+app.post('/signup',controller.signup);
 const port =process.env.port;
 app.listen(port,()=>{
     console.log(`server is running ${port}`)
     client();
+    reid;
+    sql;
 });

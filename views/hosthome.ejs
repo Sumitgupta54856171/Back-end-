@@ -6,10 +6,10 @@
     <link rel="stylesheet" href="./output.css">
     <title>Document</title>
 </head>
-<body>
+<body class="w-full h-screen bg-white">
     <div class=" text-black flex flex-col justify-between bg-blue-600">
-        <nav class="flex flex-row justify-between gap-4  ">
-            <li>
+        <nav class="flex flex-row justify-between gap-4  list-none py-6 items-center ">
+            <li class="text-2xl">
                 <a href="/host/">Home</a>
             <li>
                 <a href="/host/logout">Logout</a>
@@ -18,7 +18,7 @@
                 <a href="/host/profile">Profile</a>
             </li>
             <li>
-                <a href="/host/histry">Histry</a>
+                <a href="/host/histry">Transation</a>
             </li>
             <li>
                 <a href="/host/homeadd">Addhome</a>
@@ -29,9 +29,8 @@
       <h1>home is add them </h1>
     </div>
     <%homes.map(items => {%>
-        <div class="bg-white rounded-md grid grid-row wrap-anywhere gap-2 border-2 border-black m-3 p-3">
-        <div class=" bg-white rounded-leg shadow-lg p-4 flex flex-col w-32 h-30 overflow-hidden transition hover:shadow-xl">
-            <h1 class=" text-black md-4"><img src="/<%= items.image.filePath
+       <div class="text-shadow-black border-0.5 md-4 box-border size-100 border-1 flex flex-col gap-2 rounded-md justify-center items-center">
+            <h1 class=" text-black box-border border-0 border-sky-50 size-40"><img src="/<%= items.image.filePath
                 %>" alt="items.image.name" class="w-full h-auto rounded-md object-cover" ></h1>
             <h1 class="text-xl font-bold  text-black"><%= items.homename%></h1>
             <h1 class="text-lg font-semibold  text-black"><%= items.duration %></h1>
@@ -40,9 +39,12 @@
             <h1 class="text-lg font-semibold  text-black"><%= items.city %></h1>
             <h1 class="text-lg font-semibold  text-black"><%= items.state %></h1>
             <h1 class="text-lg font-semibold  text-black"><%= items.country %></h1>
-      
-        </div>
-        </div>
+       </div>
         <%})%>
+        
+            <div class="bg-blue-600 text-white text-center fixed bottom-0 py-4 ">
+                <p>&copy; 2023 Your Company Name. All rights reserved.</p>
+            </div>
+   
 </body>
 </html>

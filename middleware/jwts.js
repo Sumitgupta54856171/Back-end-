@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const {getsession} =require('../models/session')
 function verifytoken(req,res,next){
-const token = req.cookies.token;
+const token = req.cookies.session;
     console.log(token)
     if(!token){
         return res.status(401).json({error:'No token provided'})

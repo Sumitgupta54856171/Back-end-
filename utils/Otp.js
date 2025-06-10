@@ -1,9 +1,5 @@
 const nodemailer = require('nodemailer');
-
-
-
 async function sendEmail (email, otp){
-   
         const transport = nodemailer.createTransport({
             service: 'gmail',
             port:465,
@@ -13,7 +9,6 @@ async function sendEmail (email, otp){
                pass:'ntkf ygea lqgo wzjb'
             }
         });
-
         const mailOptions = {
             from: process.env.email,
             to: email,

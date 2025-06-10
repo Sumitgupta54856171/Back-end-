@@ -8,13 +8,14 @@ const homecontroller = require('../controller/home');
 const session = require('express-session');
 const passport =require('passport')
 const MongoStore = require('connect-mongo')
-const mongo = require('../models/mongoose')
-const jwtcontroller = require('../middleware/jwt2');
+const mongo = require('../config/mongoose')
+const jwtcontroller = require('../middleware/jwts');
 const cookieParser = require('cookie-parser');
 host.use((req,res,next)=>{
   mongo;
   next();
 });
+host.use(express.static(path.join(__dirname,'../views')));
 host.use(jwtcontroller);
 host.use(passport.initialize());
 host.use(passport.session());
@@ -34,17 +35,11 @@ host.use(session({
     secure: false
 }
 }));
-
 host.use((req,res,next)=>{
-  res.locals.isLoggedIn = req.user.user ? true : false;
+  res.locals.isLoggedIn = req.user.email ? true : false;
   res.locals.user = req.user || null;
   next();
 })
-host.use((req, res, next) => {
-  console.log('Session:', req.session);
-  next();
-})
-
 host.get('/homeadd',(req,res)=>{
     res.sendFile(path.join(__dirname,'../views','home_add.html'));
   })
@@ -52,11 +47,13 @@ host.get('/homeadd',(req,res)=>{
   host.get('/profile',controller.profile);
 
   host.get('/',async(req,res)=>{
-    const homes = await homeModel.find({email:req.user.payload.email});
+    console.log('host home is SharedWorker',req.user.email)
+  if(req.user.role == "business"){
+    const homes = await homeModel.find({email:req.user.email});
     console.log('hello');
-    console.log(req.user.payload)
     console.log(homes);
    res.render('hosthome',{homes});
+  }
   });
   host.post('/auth',controller.auth);
   host.get('/logout',controller.logout);

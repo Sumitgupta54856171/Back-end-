@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+    <link rel="stylesheet" href="./output.css">
+</head>
+<body class="bg-gray-100">
+    <div class="max-w-4xl mx-auto py-12 px-4">
+        <div class="bg-white rounded-lg shadow-lg flex flex-col md:flex-row overflow-hidden">
+            <!-- Product Image -->
+            <div class="md:w-1/2 flex items-center justify-center bg-gray-50 p-6">
+                <img src="https://via.placeholder.com/350x350" alt="Product Image" class="rounded-lg object-cover w-full h-72 md:h-96">
+            </div>
+            <!-- Product Details -->
+            <div class="md:w-1/2 p-8 flex flex-col justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">Product Name</h1>
+                    <p class="text-lg text-gray-600 mb-4">Short description of the product goes here. Highlight key features and benefits to attract customers.</p>
+                    <div class="flex items-center mb-4">
+                        <span class="text-yellow-400 text-xl mr-2">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
+                        <span class="text-gray-500 text-sm">(120 reviews)</span>
+                    </div>
+                    <div class="mb-6">
+                        <span class="text-2xl font-semibold text-blue-600">$99.99</span>
+                        <span class="text-gray-400 line-through ml-2">$129.99</span>
+                    </div>
+                    <ul class="mb-6 space-y-2 text-gray-700">
+                        <li>• Feature 1 of the product</li>
+                        <li>• Feature 2 of the product</li>
+                        <li>• Feature 3 of the product</li>
+                    </ul>
+                </div>
+                <div>
+                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 mb-3">
+                        Add to Cart
+                    </button>
+                    <button class="w-full border border-blue-600 text-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-300">
+                        Buy Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -55,6 +55,7 @@
     </style>
 </head>
 <body>
+    <form action="/user/payment" method="post">
     <div class="container">
         <div class="header">
             <h1><%= homename %></h1>
@@ -76,7 +77,7 @@
 
             <div class="detail-item">
                 <h3>Price</h3>
-                <p>$<%= price %></p>
+                <input type="text"  name="amount" value='<%= price %>'></input>
             </div>
 
             <div class="detail-item">
@@ -89,6 +90,8 @@
             <h3>Description</h3>
             <p><%= description %></p>
         </div>
+        <button>Book</button>
     </div>
+    </form>
 </body>
 </html>

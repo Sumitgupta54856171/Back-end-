@@ -2,11 +2,11 @@ const homeModel = require('../models/homemodel');
 function home_add(req,res){
     console.log(req.body);
     const {homename,duration,country,city,state,description,price,email} = req.body;
+    console.log(req.file)
     const image = {
         name: req.file.filename,
         filePath: req.file.path
     };
-   
     const home = new homeModel({
         homename,
         duration,

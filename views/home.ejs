@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="./output.css">
     <title>Document</title>
 </head>
-<body>
-    <div class="bg-red-600 text-black flex flex-col justify-between list-none">
-        <nav class="flex flex-row justify-between gap-4  ">
+<body class="bg-white w-full h-screen">
+    <div class=" text-black flex flex-col justify-between ">
+        <nav class="flex flex-row justify-between gap-4 bg-red-600 list-none py-6 ">
             <li>
                 <a href="/user/">Home</a>
             <% if(user){%>
@@ -29,22 +29,20 @@
         </nav>
     </div>
     <div>
-        <h1>welcome to home page</h1>
+        <small>welcome to home page of user</small>
     </div>
       <% homes.map(items => {%>
-        <form action="/user/book" method="POST">
-        <div class="bg-white rounded-md grid grid-row wrap-anywhere gap-2 border-2 border-black m-3 p-3">
-        <div class=" bg-white rounded-leg shadow-lg p-4 flex flex-col w-32 h-30 overflow-hidden transition hover:shadow-xl">
-            <h1 class=" text-black md-4"><img src="/<%= items.image.filePath %>" alt="items.image.name" class="w-full h-auto rounded-md object-cover"  ></h1>
-            <h1 class="text-xl font-bold  text-black"><%= items.homename%></h1>
-            <h1 class="text-lg font-semibold  text-black"><%= items.duration %></h1>
-            <h1 class="text-xl font-bold  text-black"><%= items.price %></h1>
-            <h1 class="text-sm  text-black"><%= items.description %></h1>
-            <h1 class="text-lg font-semibold  text-black"><%= items.city %></h1>
-            <h1 class="text-lg font-semibold  text-black"><%= items.state %></h1>
-            <h1 class="text-lg font-semibold  text-black"><%= items.country %></h1>
-            
-            <!-- Hidden inputs to pass all values -->
+        <form action="/user/book" method="POST" class="flex flex-col justify-center">
+        <div class="text-shadow-black border-0.5 md-4 box-border size-100 border-1 flex flex-col gap-2 rounded-md justify-center items-center">
+            <div class=" text-black md-4 box-border size-40 border-red-100 "><img src="/<%= items.image.filePath %>" alt="items.image.name" class="w-full h-auto rounded-md object-cover size-4"  ></div>
+            <small class="text-xl font-bold  text-black"><%= items.homename%></small>
+            <small class="text-lg font-semibold  text-black"><%= items.duration %></small>
+            <small class="text-xl font-bold  text-black"><%= items.price %></small>
+            <small class="text-sm  text-black"><%= items.description %></small>
+            <small class="text-lg font-semibold  text-black"><%= items.city %></small>
+            <small class="text-lg font-semibold  text-black"><%= items.state %></small>
+            <small class="text-lg font-semibold  text-black">Country : <%= items.country %></small>
+           
             <input type="hidden" name="homename" value="<%= items.homename %>">
             <input type="hidden" name="duration" value="<%= items.duration %>">
             <input type="hidden" name="price" value="<%= items.price %>">
@@ -56,11 +54,16 @@
             <input type="hidden" name="email" value="<%= items.email %>">
             <input type="hidden" name="id" value="<%= items.email %>">
             
-        </div>
-        </div>
+       
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Book Now</button>
+         </div>
     </form>
         <%})%>
-     
+        
+     <footer>
+        <div class="bg-red-600 fixed text-white text-center bottom-4 py-4">
+            <p>&copy; 2023 Your Company Name. All rights reserved.</p>
+        </div>
+     </footer>
 </body>
 </html>
