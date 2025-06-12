@@ -18,7 +18,7 @@
                 <a href="/host/profile">Profile</a>
             </li>
             <li>
-                <a href="/host/histry">Transation</a>
+                <a href="/host/transtion">Transation</a>
             </li>
             <li>
                 <a href="/host/homeadd">Addhome</a>
@@ -29,13 +29,11 @@
       <h1>home is add them </h1>
     </div>
     <%homes.map(items => {%>
-       <div class="text-shadow-black border-0.5 md-4 box-border size-100 border-1 flex flex-col gap-2 rounded-md justify-center items-center">
+       <div class="text-shadow-black border-0.5 md-4 box-border size-100 border-1 flex flex-col  rounded-md justify-center items-center m-6">
             <h1 class=" text-black box-border border-0 border-sky-50 size-40"><img src="/<%= items.image.filePath
                 %>" alt="items.image.name" class="w-full h-auto rounded-md object-cover" ></h1>
             <h1 class="text-xl font-bold  text-black"><%= items.homename%></h1>
-            <h1 class="text-lg font-semibold  text-black"><%= items.duration %></h1>
             <h1 class="text-xl font-bold  text-black"><%= items.price %></h1>
-            <h1 class="text-sm  text-black"><%= items.description %></h1>
             <h1 class="text-lg font-semibold  text-black"><%= items.city %></h1>
             <h1 class="text-lg font-semibold  text-black"><%= items.state %></h1>
             <h1 class="text-lg font-semibold  text-black"><%= items.country %></h1>

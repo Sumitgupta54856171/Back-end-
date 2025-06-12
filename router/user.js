@@ -11,10 +11,13 @@ const cookieParser = require('cookie-parser');
 const jwtcontroller = require('../middleware/jwt')
  const housecontorller =require('../controller/housebook')
  const payment = require('../controller/payment')
+user.use(express.static(path.join(__dirname,'../views')));
+
 user.use((req,res,next)=>{
   mongo();
   next();
 });
+
 user.use(express.static(path.join(__dirname,'../views')));
 user.use(cookieParser())
 user.use(jwtcontroller);
@@ -44,9 +47,19 @@ user.post('/payment',payment)
   });
  user.post('/auth',controller.auth)
  user.post('/book',housecontorller.housebook);
- user.get('/book',(req,res)=>{
-  res.render('book')
+ user.get('/book',async(req,res)=>{
+  const cook = req.cookies.book
+  console.log(cook.homename)
+  const home = await homeModel.findOne({productid:cook.homename})
+  console.log(home)
+  res.render('book',{home})
  })
+ user.get('/transtion',(req,res)=>{
+  res.render('transtion')
+ })
+user.get('/permeium',(req,res)=>{
+  res.sendFile(path.join(__dirname,'../views','premeium.html'))
+})
  user.get('/productdetail',(req,res)=>{
  res.sendFile(path.join(__dirname,'../views','homedetail.html'))
  })
@@ -56,5 +69,7 @@ user.post('/payment',payment)
   res.sendFile(path.join(__dirname,'../views','signup.html'))
   });
   user.post('/signup',controller.signup);
+
+user.get('/logout',controller.logout);
 
 module.exports = user;

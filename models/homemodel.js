@@ -41,5 +41,9 @@ const homeSigma =new mongoose.Schema({
        },
        filePath:{type:String}
     },
+    productid:{
+        type:String,
+        required:true
+    }
 });
 module.exports = mongoose.model('home',homeSigma);

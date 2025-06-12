@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const sendEmail =require('../utils/Otp');
 const hosttemp = require('../models/hosttempUser');
 const homemodel = require('../models/homemodel')
-const {setsession,setsessionfue,getsessionfue}  = require('../models/session')
+const {setsession,getsession}  = require('../models/session')
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken');
 const { CancellationToken } = require('mongodb');
@@ -34,6 +34,7 @@ async function loginl(req, res) {
         console.log('user')
         const user = await hosttemp.findOne({email: email});
         if(!user) return res.status(401).send('inval email/password');
+        
         const ismatch = await user.comparePassword(password);
         if(!ismatch) return res.status(401).send('inval email/password');
        payload ={
@@ -54,36 +55,19 @@ async function loginl(req, res) {
 }
 const auth = async(req,res)=>{
   const {otp,role}= req.body
-  if(role === "business"){
-    const cook  = req.cookies.email;
-    console.log(cook)
-  console.log( getsessionfue(cook));
- 
-  console.log('business')
-  if(user){
-    console.log('business1')
-    const host = await hosttemp.findOne({email:user.email});
-    if(!host) return res.status(401).send('inval email/password');
-  const hostdataupdate = await hosttemp.findOneAndUpdate({isverified:true,otp:otp});
-
-  console.log(hostdataupdate);
-          console.log('say')
-          res.redirect('/login')
-  }else{
-    res.redirect('/hostotp')
-  }
-  }else{
    const cook = req.cookies.email;
    console.log(cook)
    console.log('cookies is data')
-   
+   const cooks = getsession(cook);
+   console.log('step on')
+  console.log(cooks)
     console.log('user')
-    if(cook){
+    if(cooks){
         console.log('user1')
     const users = await hosttemp.findOne({email:cook});
     if(!users) return res.status(401).send('inval email/password');
     if(users.otp == otp){
-  const hostdataupdate = await hosttemp.findByIdAndUpdate({_id:users._id,isverified:true});
+  const hostdataupdate = await hosttemp.findByIdAndUpdate({_id:users._id},{$set:{isverified:true}});
    console.log(hostdataupdate);
           console.log('say')
           res.redirect('/login');
@@ -92,7 +76,7 @@ const auth = async(req,res)=>{
         res.redirect('/otp')
     }
   
-  }
+  
 }
     
 
@@ -129,8 +113,8 @@ const signup = async(req, res) => {
             role:role,
             otp:otp,
         }
-   setsessionfue(email,userredis)
-        res.redirect('/hostotp')
+   setsession(email,userredis)
+        res.redirect('/otp')
     }else{
         let exithost = await hosttemp.findOne({email});
         if(exithost) {
@@ -159,7 +143,7 @@ const signup = async(req, res) => {
             otp:otp
         }
 
-        setsessionfue(email,userredis)
+        setsession(email,userredis)
        res.redirect('/otp')
     }
 };

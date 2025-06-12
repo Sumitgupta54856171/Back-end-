@@ -57,8 +57,9 @@
 <body>
     <form action="/user/payment" method="post">
     <div class="container">
+               <div class=" text-black md-4 box-border  border-red-100 "><img src="/<%= home.image.filePath %>" alt="home.image.name" class="w-full h-auto rounded-md object-cover size-20 "  ></div>
         <div class="header">
-            <h1><%= homename %></h1>
+           
             <p>Booking Confirmation</p>
         </div>
 
@@ -66,29 +67,24 @@
         <div class="details-grid">
             <div class="detail-item">
                 <h3>Location</h3>
-                <p><%= city %>, <%= state %></p>
-                <p><%= country %></p>
+                <p><%= home.city %>, <%= home.state %></p>
+                <p><%= home.country %></p>
             </div>
 
             <div class="detail-item">
                 <h3>Duration</h3>
-                <p><%= duration %></p>
+                <p><%= home.duration %></p>
             </div>
 
             <div class="detail-item">
                 <h3>Price</h3>
-                <input type="text"  name="amount" value='<%= price %>'></input>
+                <input type="text"  name="amount" value='<%= home.price %>'></input>
             </div>
 
             <div class="detail-item">
                 <h3>Contact Email</h3>
-                <p><%= email %></p>
+                <p><%= home.email %></p>
             </div>
-        </div>
-
-        <div class="detail-item" style="margin-top: 20px;">
-            <h3>Description</h3>
-            <p><%= description %></p>
         </div>
         <button>Book</button>
     </div>

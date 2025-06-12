@@ -7,7 +7,6 @@ const client = require('./config/mongoose');
 const path= require("path");
 const reid = require('./config/redis')
 const bodyParser= require('body-parser');
-const multer=require('multer');
 const host = require('./router/host');
 const user = require('./router/user');
 const sql = require('./config/postgresql');
