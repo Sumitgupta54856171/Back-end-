@@ -7,10 +7,14 @@ function home_add(req,res){
         name: req.file.filename,
         filePath: req.file.path
     };
+    const productid = (price)=>{
+        return Math.floor(Math.random() * price)
+    }
     const home = new homeModel({
         homename,
         duration,
         state,
+        productid,
         country,
         city,
         description,

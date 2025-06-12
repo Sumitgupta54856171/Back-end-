@@ -11,6 +11,7 @@ const MongoStore = require('connect-mongo')
 const mongo = require('../config/mongoose')
 const jwtcontroller = require('../middleware/jwts');
 const cookieParser = require('cookie-parser');
+host.use(express.static(path.join(__dirname,'/views')));
 host.use((req,res,next)=>{
   mongo;
   next();
@@ -43,9 +44,14 @@ host.use((req,res,next)=>{
 host.get('/homeadd',(req,res)=>{
     res.sendFile(path.join(__dirname,'../views','home_add.html'));
   })
+  host.get('/transtion',(req,res)=>{
+    res.render('transtion')
+  })
   host.post('/homeadd',upload.single('image'),homecontroller.home_add);
   host.get('/profile',controller.profile);
-
+  host.get('/hostotp',(req,res)=>{
+    res.sendFile(path.join(__dirname,'..views','hostotp.html'))
+  })
   host.get('/',async(req,res)=>{
     console.log('host home is SharedWorker',req.user.email)
   if(req.user.role == "business"){

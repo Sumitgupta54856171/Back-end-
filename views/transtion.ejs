@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Transition Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom fade-in animation */
+        @keyframes fadeInSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-slide-up {
+            animation: fadeInSlideUp 0.8s ease forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+    <div class="fade-in-slide-up bg-white rounded-lg shadow-lg p-10 max-w-md w-full text-center">
+        <h1 class="text-3xl font-semibold text-gray-800 mb-4">Welcome to the Transition Page</h1>
+        <p class="text-gray-600 mb-6">This page uses Tailwind CSS for a clean and modern look with smooth transitions.</p>
+        <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300">Get Started</button>
+    </div>
+</body>
+</html>

@@ -3,44 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Detail</title>
-    <link rel="stylesheet" href="./output.css">
+    <title>Cozy Lakeside Cabin - Airbnb Clone</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for a clean look */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        /* Custom styles for subtle shadows and effects */
+        .card-container {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        }
+        .cta-button {
+            background-color: #FF5A5F; /* Airbnb red */
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .cta-button:hover {
+            background-color: #E0484C; /* Darker red on hover */
+            transform: translateY(-2px);
+        }
+    </style>
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
-    <div class="max-w-4xl mx-auto py-12 px-4">
-        <div class="bg-white rounded-lg shadow-lg flex flex-col md:flex-row overflow-hidden">
-            <!-- Product Image -->
-            <div class="md:w-1/2 flex items-center justify-center bg-gray-50 p-6">
-                <img src="https://via.placeholder.com/350x350" alt="Product Image" class="rounded-lg object-cover w-full h-72 md:h-96">
+<body class="flex items-center justify-center min-h-screen p-4 sm:p-6 md:p-8">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-xl card-container p-6 sm:p-8 lg:p-10 max-w-4xl mx-auto">
+            <!-- Home Image Section -->
+            <div class="mb-8 rounded-lg overflow-hidden">
+                <img
+                    src="https://placehold.co/1200x600/b0c4de/ffffff?text=Cozy+Lakeside+Cabin"
+                    alt="Cozy Lakeside Cabin"
+                    class="w-full h-auto object-cover rounded-lg"
+                    onerror="this.onerror=null;this.src='https://placehold.co/1200x600/b0c4de/ffffff?text=Image+Unavailable';"
+                >
             </div>
-            <!-- Product Details -->
-            <div class="md:w-1/2 p-8 flex flex-col justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-800 mb-2">Product Name</h1>
-                    <p class="text-lg text-gray-600 mb-4">Short description of the product goes here. Highlight key features and benefits to attract customers.</p>
-                    <div class="flex items-center mb-4">
-                        <span class="text-yellow-400 text-xl mr-2">&#9733;&#9733;&#9733;&#9733;&#9734;</span>
-                        <span class="text-gray-500 text-sm">(120 reviews)</span>
-                    </div>
-                    <div class="mb-6">
-                        <span class="text-2xl font-semibold text-blue-600">$99.99</span>
-                        <span class="text-gray-400 line-through ml-2">$129.99</span>
-                    </div>
-                    <ul class="mb-6 space-y-2 text-gray-700">
-                        <li>• Feature 1 of the product</li>
-                        <li>• Feature 2 of the product</li>
-                        <li>• Feature 3 of the product</li>
-                    </ul>
+
+            <div class="flex flex-col md:flex-row md:justify-between md:items-start mb-6">
+                <!-- Title and Location -->
+                <div class="mb-4 md:mb-0">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">
+                        Charming Lakeside Retreat
+                    </h1>
+                    <p class="text-gray-600 text-lg sm:text-xl mt-2 flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        </svg>
+                        Lake Placid, New York, USA
+                    </p>
                 </div>
-                <div>
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors duration-300 mb-3">
-                        Add to Cart
-                    </button>
-                    <button class="w-full border border-blue-600 text-blue-600 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors duration-300">
-                        Buy Now
-                    </button>
+
+                <!-- Price -->
+                <div class="text-right flex items-center md:flex-col md:items-end">
+                    <span class="text-4xl sm:text-5xl font-bold text-gray-800">₹8,500</span>
+                    <span class="text-xl sm:text-2xl text-gray-600 ml-2 md:ml-0 md:mt-1">/ night</span>
                 </div>
             </div>
+
+            <!-- Description -->
+            <div class="mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">About this home</h2>
+                <p class="text-gray-700 text-base sm:text-lg leading-relaxed mb-4">
+                    Escape to our enchanting lakeside cabin, nestled amidst the serene beauty of Lake Placid. This newly renovated retreat offers the perfect blend of rustic charm and modern comfort, ideal for families or couples seeking a peaceful getaway. Enjoy breathtaking lake views from the spacious deck, perfect for morning coffee or evening stargazing.
+                </p>
+                <p class="text-gray-700 text-base sm:text-lg leading-relaxed">
+                    The cabin features three cozy bedrooms, two full bathrooms, a fully equipped gourmet kitchen, and a warm, inviting living area with a stone fireplace. Just steps away from private lake access, you can enjoy swimming, kayaking, and fishing. Nearby hiking trails, charming local shops, and exquisite dining options await your exploration. Create unforgettable memories in this idyllic setting.
+                </p>
+            </div>
+
+            <!-- Call to Action Button -->
+            <a href='/book' class="text-center">
+                <button class="cta-button text-white font-semibold py-3 px-10 rounded-full text-xl shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FF5A5F] w-full sm:w-auto">
+                    Book Now
+                </button>
+            </a>
         </div>
     </div>
 </body>

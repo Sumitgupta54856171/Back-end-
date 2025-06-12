@@ -27,7 +27,7 @@
 }
  async function setsessionfue(sessionid,sessiondata){
     const session = JSON.stringify(sessiondata);
-   await redis.hSetAll(sessionid,session);
+   await redis.hSet(sessionid,session);
    console.log('redis')
    console.log(session);
 }

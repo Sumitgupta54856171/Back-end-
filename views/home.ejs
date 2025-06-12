@@ -18,6 +18,9 @@
             <li>
                 <a href="/user/profile">Profile</a>
             </li>
+            <li>
+                <a href="/user/transition">Transation</a>
+            </li>
                  <%}else{%>
             <li>
                 <a href="/login">Login</a>
@@ -33,33 +36,17 @@
     </div>
       <% homes.map(items => {%>
         <form action="/user/book" method="POST" class="flex flex-col justify-center">
-        <div class="text-shadow-black border-0.5 md-4 box-border size-100 border-1 flex flex-col gap-2 rounded-md justify-center items-center">
+        <div class="text-shadow-black border-0.5 md-4 box-border size-100 border-1 flex flex-col m-6 rounded-md justify-center items-center">
             <div class=" text-black md-4 box-border size-40 border-red-100 "><img src="/<%= items.image.filePath %>" alt="items.image.name" class="w-full h-auto rounded-md object-cover size-4"  ></div>
             <small class="text-xl font-bold  text-black"><%= items.homename%></small>
             <small class="text-lg font-semibold  text-black"><%= items.duration %></small>
             <small class="text-xl font-bold  text-black"><%= items.price %></small>
-            <small class="text-sm  text-black"><%= items.description %></small>
             <small class="text-lg font-semibold  text-black"><%= items.city %></small>
-            <small class="text-lg font-semibold  text-black"><%= items.state %></small>
-            <small class="text-lg font-semibold  text-black">Country : <%= items.country %></small>
-           
-            <input type="hidden" name="homename" value="<%= items.homename %>">
-            <input type="hidden" name="duration" value="<%= items.duration %>">
-            <input type="hidden" name="price" value="<%= items.price %>">
-            <input type="hidden" name="description" value="<%= items.description %>">
-            <input type="hidden" name="city" value="<%= items.city %>">
-            <input type="hidden" name="state" value="<%= items.state %>">
-            <input type="hidden" name="country" value="<%= items.country %>">
-            <input type="hidden" name="image" value="<%= JSON.stringify(items.image) %>">
-            <input type="hidden" name="email" value="<%= items.email %>">
-            <input type="hidden" name="id" value="<%= items.email %>">
-            
-       
+            <input type="hidden" name="homename" value="<%= items.productid %>">
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Book Now</button>
          </div>
     </form>
         <%})%>
-        
      <footer>
         <div class="bg-red-600 fixed text-white text-center bottom-4 py-4">
             <p>&copy; 2023 Your Company Name. All rights reserved.</p>

@@ -1,26 +1,11 @@
 const homemode =require('../models/homemodel')
 function housebook(req, res){
   console.log(req.body)
-  
-    const {  homename,
-        duration,
-        state,
-        country,
-        city,
-        description,
-        price,
-        email} = req.body
-     
-    res.render('book', {
-        homename,
-        duration,
-        state,
-        country,
-        city,
-        description,
-        price,
-        email
-    });
+  res.cookie('book',req.body,{
+    httpOnly:true,
+    maxAge:60*60*24*7*1000
+  })
+  res.redirect('/user/book')
 }
 
 module.exports = { housebook };
