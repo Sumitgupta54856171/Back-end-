@@ -4,90 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Booking Details</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .details-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        .detail-item {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 4px;
-        }
-        .detail-item h3 {
-            margin: 0 0 10px 0;
-            color: #333;
-        }
-        .detail-item p {
-            margin: 0;
-            color: #666;
-        }
-        .image-container {
-            margin: 20px 0;
-            text-align: center;
-        }
-        .image-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-    </style>
+    <link rel="stylesheet" href="./output.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
-<body>
-    <form action="/user/payment" method="post">
-    <div class="container">
-               <div class=" text-black md-4 box-border  border-red-100 "><img src="/<%= home.image.filePath %>" alt="home.image.name" class="w-full h-auto rounded-md object-cover size-20 "  ></div>
-        <div class="header">
-           
-            <p>Booking Confirmation</p>
+<body class="flex justify-center items-center min-h-screen bg-gray-100">
+    <div class="border border-gray-300 rounded-md shadow-lg bg-white p-6 w-full max-w-md">
+        <div class="mb-4 text-center">
+            <img src="/<%= home.image.filePath %>" alt="<%= home.image.name %>" class="w-full h-48 object-cover rounded-md mb-4">
+            <h2 class="text-2xl font-bold text-gray-800">Booking Confirmation</h2>
         </div>
 
-
-        <div class="details-grid">
-            <div class="detail-item">
-                <h3>Location</h3>
-                <p><%= home.city %>, <%= home.state %></p>
-                <p><%= home.country %></p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div class="border border-gray-300 rounded-md p-3">
+                <h3 class="font-semibold text-gray-700">Location</h3>
+                <p class="text-gray-600"><%= home.city %>, <%= home.state %></p>
+                <p class="text-gray-600"><%= home.country %></p>
             </div>
 
-            <div class="detail-item">
-                <h3>Duration</h3>
-                <p><%= home.duration %></p>
+            <div class="border border-gray-300 rounded-md p-3">
+                <h3 class="font-semibold text-gray-700">Duration</h3>
+                <p class="text-gray-600"><%= home.duration %></p>
             </div>
 
-            <div class="detail-item">
-                <h3>Price</h3>
-                <input type="text"  name="amount" value='<%= home.price %>'></input>
+            <div class="border border-gray-300 rounded-md p-3 col-span-1 md:col-span-2">
+                <h3 class="font-semibold text-gray-700">Price</h3>
+                <input type="hidden" id="bookingAmount" value="<%= home.price %>">
+                <p class="text-gray-800 text-lg font-bold">INR <%= home.price %></p>
             </div>
 
-            <div class="detail-item">
-                <h3>Contact Email</h3>
-                <p><%= home.email %></p>
+            <div class="border border-gray-300 rounded-md p-3 col-span-1 md:col-span-2">
+                <h3 class="font-semibold text-gray-700">Contact Email</h3>
+                <p class="text-gray-600"><%= home.email %></p>
             </div>
         </div>
-        <button>Book</button>
+
+        <button id="bookNowButton" class="bg-blue-600 text-white w-full px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Proceed to Payment
+        </button>
     </div>
-    </form>
+
+    <script>
+        const bookNowButton = document.getElementById('bookNowButton');
+        const bookingAmount = document.getElementById('bookingAmount').value; // Get the amount from the hidden input
+
+        bookNowButton.addEventListener('click', async () => {
+            try {
+                // 1. Make an AJAX request to your backend to create the Razorpay order
+                const response = await fetch('/user/payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: parseFloat(bookingAmount), // Ensure amount is a number
+                        currency: 'INR', // Or dynamic based on your app
+                        receipt: `receipt_booking_<%= home._id %>` // Example receipt, use a unique one
+                    }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to create Razorpay order');
+                }
+
+                const orderData = await response.json();
+                console.log("Order Data from Backend:", orderData);
+
+                // 2. Configure Razorpay Checkout options
+                const options = {
+                    key: "rzp_test_1RskomhcGa1lAD", // Using the environment variable
+                    amount: orderData.amount,
+                    currency: orderData.currency,
+                    name: "Airbnb Clone Booking",
+                    description: "Booking for " + "<%= home.city %>",
+                    order_id: orderData.id, // The order ID obtained from your backend
+                    handler: function (response) {
+                
+                        fetch('/verify-payment', { 
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_signature: response.razorpay_signature,
+                                // You might also send home._id or booking ID here
+                                bookingId: "<%= home._id %>" // Example: Pass booking ID to update its status
+                            }),
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.verified) {
+                                alert('Payment successful and verified!');
+                                // Redirect to a success page or update UI
+                                window.location.href = '/book?paymentId=' + response.razorpay_payment_id;
+                            } else {
+                                alert('Payment failed verification on server. Please contact support.');
+                                // Handle verification failure
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error during payment verification:', error);
+                            alert('An error occurred during payment verification. Please try again.');
+                        });
+                    },
+                    prefill: {
+                        name: "Guest User", // Dynamically populate with user's name
+                        email: "guest@example.com", // Dynamically populate with user's email
+                        contact: "9999999999" // Dynamically populate with user's phone
+                    },
+                    notes: {
+                        address: "Airbnb Clone Booking"
+                    },
+                    theme: {
+                        color: "#3B82F6" // A nice blue color
+                    }
+                };
+
+                // 4. Open the Razorpay Checkout
+                const rzp1 = new Razorpay(options);
+                rzp1.on('payment.failed', function (response) {
+                    alert('Payment failed: ' + response.error.description);
+                    console.error('Payment failed:', response.error);
+                    // You might want to log this error to your backend
+                });
+                rzp1.open();
+
+            } catch (error) {
+                console.error('Error initiating payment:', error);
+                alert('Could not initiate payment: ' + error.message);
+            }
+        });
+    </script>
 </body>
 </html>

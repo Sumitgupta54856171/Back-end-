@@ -1,0 +1,32 @@
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  function payNow() {
+    const options = {
+      "key": "<%= process.env.RAZORPAY_KEY %>", // Enter the Key ID generated from the Dashboard
+      "amount": "<%= home.price %> * 100", // Amount is in currency subunits. Default currency is INR. Hence, 1 INR = 100 paise
+      "currency": "INR",
+      "name": "Your Company Name",
+      "description": "Test Transaction",
+      "image": "/your_logo.png",
+      "order_id": "<%= order.id %>", // Pass the order ID returned from the server
+      "handler": function (response){
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature)
+      },
+      "prefill": {
+        "name": "Your Name",
+        "email": "your.email@example.com",
+        "contact": "9999999999"
+      },
+      "notes": {
+        "address": "Razorpay Corporate Office"
+      },
+      "theme": {
+        "color": "#F37254"
+      }
+    };
+    const rzp1 = new Razorpay(options);
+    rzp1.open();
+  }
+</script>

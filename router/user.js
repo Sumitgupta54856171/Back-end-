@@ -10,7 +10,7 @@ const mongo = require('../config/mongoose')
 const cookieParser = require('cookie-parser');
 const jwtcontroller = require('../middleware/jwt')
  const housecontorller =require('../controller/housebook')
- const payment = require('../controller/payment')
+ const { payment, verifyPayment } = require('../controller/payment')
 user.use(express.static(path.join(__dirname,'../views')));
 
 user.use((req,res,next)=>{
@@ -35,40 +35,41 @@ user.use((req,res,next)=>{
   res.locals.user = req.user || null;
   next();
 })
-user.post('/payment',payment)
-  user.get('/profile',controller.profile);
-  user.get('/',async(req,res)=>{
-    const homes = await homeModel.find();
-    console.log(homes);
-   res.render('home',{homes});
-  });
-  user.get('/otp',(req,res)=>{
-  res.sendFile(path.join(__dirname,'../views','opt.html'))
-  });
- user.post('/auth',controller.auth)
- user.post('/book',housecontorller.housebook);
- user.get('/book',async(req,res)=>{
-  const cook = req.cookies.book
-  console.log(cook.homename)
-  const home = await homeModel.findOne({productid:cook.homename})
-  console.log(home)
-  res.render('book',{home})
- })
- user.get('/transtion',(req,res)=>{
-  res.render('transtion')
- })
+user.post('/payment', payment)
+user.post('/verify-payment', verifyPayment)
+user.get('/profile',controller.profile);
+user.get('/',async(req,res)=>{
+  const homes = await homeModel.find();
+  console.log(homes);
+ res.render('home',{homes});
+});
+user.get('/otp',(req,res)=>{
+res.sendFile(path.join(__dirname,'../views','opt.html'))
+});
+user.post('/auth',controller.auth)
+user.post('/book',housecontorller.housebook);
+user.get('/book',async(req,res)=>{
+ const cook = req.cookies.book
+ console.log(cook.homename)
+ const home = await homeModel.findOne({_id:cook.homename})
+ console.log(home)
+ res.render('book',{home})
+})
+user.get('/transtion',(req,res)=>{
+ res.render('transtion')
+})
 user.get('/permeium',(req,res)=>{
   res.sendFile(path.join(__dirname,'../views','premeium.html'))
 })
- user.get('/productdetail',(req,res)=>{
+user.get('/productdetail',(req,res)=>{
  res.sendFile(path.join(__dirname,'../views','homedetail.html'))
- })
-  user.get('/logout',controller.logout);
-  user.get('/signup',(req,res)=>{
-  console.log("hello");
-  res.sendFile(path.join(__dirname,'../views','signup.html'))
-  });
-  user.post('/signup',controller.signup);
+})
+ user.get('/logout',controller.logout);
+ user.get('/signup',(req,res)=>{
+ console.log("hello");
+ res.sendFile(path.join(__dirname,'../views','signup.html'))
+ });
+ user.post('/signup',controller.signup);
 
 user.get('/logout',controller.logout);
 
