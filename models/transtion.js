@@ -6,6 +6,11 @@ const TransactionSchema = new mongoose.Schema({
     ref: 'Booking',
     required: [true, 'Transaction must belong to a booking']
   },
+  bookingType: {
+    type: String,
+    enum: ['property', 'service', 'transportation'],
+    required: true
+  },
   hostid:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

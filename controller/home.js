@@ -1,4 +1,4 @@
-const homeModel = require('../models/homemodel');
+const homeModel = require('../models/add');
 function home_add(req,res){
     console.log(req.body);
     const {homename,duration,country,city,state,description,price,email} = req.body;

@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import LocationSelector from './LocationSelector';
 
 interface Listing {
@@ -102,13 +102,13 @@ export default function HomeListings() {
     );
   });
 
-  const handleLocationSelect = (newLocation: {
+  const handleLocationSelect = useCallback((newLocation: {
     country: string;
     state: string;
     city: string;
   }) => {
     setLocation(newLocation);
-  };
+  }, []);
 
   return (
    

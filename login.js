@@ -9,9 +9,9 @@ const reid = require('./config/redis')
 const bodyParser= require('body-parser');
 const host = require('./router/host');
 const user = require('./router/user');
-const sql = require('./config/postgresql');
+
 const session = require('express-session');
-const homeModel = require('./models/homemodel');
+const homeModel = require('./models/add');
 const { OAuth2Client } = require('google-auth-library');
 const {google} = require('googleapis');
 const controller = require('./controller/sign');
@@ -64,5 +64,5 @@ app.listen(port,()=>{
     console.log(`server is running ${port}`)
     client();
     reid;
-    sql;
+    
 });

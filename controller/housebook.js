@@ -1,4 +1,4 @@
-const homemode =require('../models/homemodel')
+const homemode =require('../models/add')
 function housebook(req, res){
   console.log(req.body)
   res.cookie('book',req.body,{

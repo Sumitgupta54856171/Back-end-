@@ -1,6 +1,6 @@
 const Razorpay = require('razorpay')
 const  razorpays = new Razorpay({
-    key_id:process.env.key,
+    key_id:process.env.key_id,
     key_secret:process.env.key_secret
 })
 const payment = async(req,res)=>{

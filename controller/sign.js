@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const sendEmail =require('../utils/Otp');
-const hosttemp = require('../models/hosttempUser');
-const homemodel = require('../models/homemodel')
+const hosttemp = require('../models/user');
+const homemodel = require('../models/add')
 const {setsession,getsession}  = require('../models/session')
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken');
@@ -114,7 +114,9 @@ const signup = async(req, res) => {
             otp:otp,
         }
    setsession(email,userredis)
-        res.redirect('/otp')
+      
+    }else if(role == "service"){
+
     }else{
         let exithost = await hosttemp.findOne({email});
         if(exithost) {
@@ -144,7 +146,7 @@ const signup = async(req, res) => {
         }
 
         setsession(email,userredis)
-       res.redirect('/otp')
+       
     }
 };
 async function profile(req,res){

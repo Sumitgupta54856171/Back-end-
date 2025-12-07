@@ -61,28 +61,57 @@ export default function LocationSelector({ onLocationSelect }: LocationSelectorP
         setStates([]);
         setSelectedState('');
         setSelectedCity('');
+        setCities([]);
         return;
       }
       
       setIsLoading(prev => ({ ...prev, states: true }));
       try {
-        const response = await axios.post('https://countriesnow.space/api/v0.1/countries/states', {
-          country: selectedCountry
-        });
-        setStates(response.data.data?.states || []);
+        const response = await axios.post(
+          'https://countriesnow.space/api/v0.1/countries/states',
+          {
+            country: selectedCountry
+          },
+          {
+            timeout: 10000
+          }
+        );
+        
+        // Log the response to debug
+        console.log('States API Response:', response.data);
+        
+        // Handle different possible response structures
+        // The API typically returns: { data: { states: [...] } }
+        let statesData: State[] = [];
+        if (response.data?.data?.states && Array.isArray(response.data.data.states)) {
+          statesData = response.data.data.states;
+        } else if (Array.isArray(response.data?.data)) {
+          statesData = response.data.data;
+        }
+        console.log('Parsed states:', statesData);
+        
+        setStates(statesData);
         setSelectedState('');
         setSelectedCity('');
+        setCities([]);
         onLocationSelect({ country: selectedCountry, state: '', city: '' });
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching states:', error);
+        console.error('Country selected:', selectedCountry);
+        console.error('Error response:', error.response?.data);
+        console.error('Error message:', error.message);
         setStates([]);
+        setSelectedState('');
+        setSelectedCity('');
+        setCities([]);
       } finally {
         setIsLoading(prev => ({ ...prev, states: false }));
       }
     };
 
     fetchStates();
-  }, [selectedCountry, onLocationSelect]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCountry]);
 
   // Fetch cities when state is selected
   useEffect(() => {
@@ -118,7 +147,8 @@ export default function LocationSelector({ onLocationSelect }: LocationSelectorP
     };
 
     fetchCities();
-  }, [selectedCountry, selectedState, onLocationSelect]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCountry, selectedState]);
 
   const handleCityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const city = e.target.value;
