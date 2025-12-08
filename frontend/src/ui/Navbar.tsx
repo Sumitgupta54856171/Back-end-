@@ -1,0 +1,106 @@
+import {
+  Home,
+  Calendar,
+  DollarSign,
+  Star,
+  LayoutDashboard,
+  type LucideIcon,
+} from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+
+// Define navigation item type
+interface NavItem {
+  name: string;
+  icon: LucideIcon;
+  path: string;
+}
+
+// Define the navigation items
+const navItems: NavItem[] = [
+  { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
+  { name: 'Listings', icon: Home, path: '/listings' },
+  { name: 'Calendar', icon: Calendar, path: '/calendar' },
+  { name: 'Earnings', icon: DollarSign, path: '/earnings' },
+  { name: 'Reviews', icon: Star, path: '/reviews' },
+];
+
+// Profile data type
+interface Profile {
+  name: string;
+  role: string;
+  imageUrl: string;
+}
+
+// Profile data
+const profile: Profile = {
+  name: 'Sarah',
+  role: 'Host',
+  imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAeocac0uG7zlYBDdAP7r8y71ykXGzuG2p0yTT_J3oBVWtqmcyhMVSunz-mIpvsfMxwyCNlnEMW067KBfBvLmz4qdAgHLxZZfkEL52HktWKM_vjv3IbI04eGxEmC4y9_QYGuxX5o_s2K0h108BQ99jO3ETUNeKUAUtVoWDmcKG2BIvlH5gs1U_Ph-0RnccTPrf5-7fvl84RxK-ZPoM67daFKAxtX4GoPPWdvsznHN5ucVaMdxHhyh3fmESKrE1dlw9TfT_IQjBYi6YU',
+};
+
+const Sidebar = () => {
+  const location = useLocation();
+  
+  return (
+    <div className="flex flex-col w-80">
+      <div className="flex h-full min-h-[700px] flex-col justify-between bg-white p-4">
+        <div className="flex flex-col gap-4">
+          {/* 1. Host Profile Section */}
+          <div className="flex gap-3">
+            <div
+              className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10"
+              style={{ backgroundImage: `url("${profile.imageUrl}")` }}
+              role="img"
+              aria-label={`${profile.name}'s profile picture`}
+            ></div>
+            <div className="flex flex-col">
+              <h1 className="text-[#181111] text-base font-medium leading-normal">
+                {profile.name}
+              </h1>
+              <p className="text-[#886364] text-sm font-normal leading-normal">
+                {profile.role}
+              </p>
+            </div>
+          </div>
+
+          {/* 2. Navigation Links */}
+          <nav className="flex flex-col gap-2" aria-label="Main navigation">
+            {navItems.map((item) => {
+              const isSelected = location.pathname === item.path;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                    isSelected 
+                      ? 'bg-[#f4f0f0]' 
+                      : 'hover:bg-gray-50'
+                  }`}
+                  aria-current={isSelected ? 'page' : undefined}
+                >
+                  <item.icon
+                    size={24}
+                    className={`${
+                      isSelected ? 'text-[#ea2a33]' : 'text-[#181111]'
+                    }`}
+                    strokeWidth={isSelected ? 2.5 : 2}
+                    aria-hidden="true"
+                  />
+                  <span className={`text-sm font-medium leading-normal ${
+                    isSelected ? 'text-[#ea2a33]' : 'text-[#181111]'
+                  }`}>
+                    {item.name}
+                  </span>
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+        {/* Footer */}
+        <div className="text-xs text-gray-400">© 2025 Stitch Design</div>
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;
