@@ -16,7 +16,7 @@ const token = req.cookies.token;
             return res.status(401).json({error:'Invalid token'})
         }
         console.log("the data of session is fetch",decoded)
-        req.user = decoded;
+        res.json(decoded,{message:"this is authenticated"},{isverfied:true})
         next();
 };
 module.exports = verifytoken;

@@ -1,7 +1,7 @@
 const homeModel = require('../models/add');
 function home_add(req,res){
     console.log(req.body);
-    const {homename,duration,country,city,state,description,price,email} = req.body;
+    const {title,description,price,location,type,stats,amenities,rating,availability,user_id} = req.body;
     console.log(req.file)
     const image = {
         name: req.file.filename,
@@ -11,20 +11,22 @@ function home_add(req,res){
         return Math.floor(Math.random() * price)
     }
     const home = new homeModel({
-        homename,
-        duration,
-        state,
-        productid,
-        country,
-        city,
+        title,
+        stats,
+        location,
+        user_id,
         description,
         price,
         image,
-        email
+        rating,
+        availability,
+        amenities,
+        type,
+        
     });
     home.save()
     .then(() => {
-        res.redirect('/host/');
+       res.json({message:"Home added successfully"})
     })
     .catch((err) => {
         console.log(err)

@@ -50,7 +50,7 @@ const homeSigma =new mongoose.Schema({
     type: [String],
     default: []
   },
-  productid:{
+ user_id:{
     type:mongoose.Schema.Types.ObjectId,
     ref:'user',
     required:true

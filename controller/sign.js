@@ -5,7 +5,6 @@ const homemodel = require('../models/add')
 const {setsession,getsession}  = require('../models/session')
 const otpGenerator = require('otp-generator');
 const jwt = require('jsonwebtoken');
-const { CancellationToken } = require('mongodb');
 async function loginl(req, res) {
     const {email, password,role} = req.body;
     const jwts = process.env.jwt_sceret;
@@ -22,13 +21,13 @@ async function loginl(req, res) {
    };
     const token = jwt.sign(payload,jwts,{expiresIn:24*60 *60*100})
   console.log(user);
-  setsession(user.email,payload)
+  
   res.cookie('session',token, {
     httpOnly: true,
     secure: process.env.jwt_sceret,
     maxAge: 30*24*60*60*1000,
 });
- res.redirect('/host/')
+ res.json({message:"Login successful"})
   }else{
         console.log(req.body);
         console.log('user')
@@ -44,12 +43,12 @@ async function loginl(req, res) {
         const token = jwt.sign(payload,jwts,{expiresIn:24*60 *60*100})
       console.log(user);
       setsession(user.email,payload)
-      res.cookie('token', token, {
+      res.cookie('token',token, {
         httpOnly: true,
         secure: process.env.jwt_sceret,
         maxAge: 30*24*60*60*1000,
     });
-     res.redirect('/user/')
+     res.json({message:"Login successful"})
     }
    
 }
@@ -99,53 +98,38 @@ const signup = async(req, res) => {
           });
         console.log(req.body);
         sendEmail(email,otp);
-        otpExpires = new Date(Date.now() + 60*10*1000);
-        const hosttemps = new hosttemp({email,password,role,otp,otpExpires,username});
-        console.log(email,password,role,otp,otpExpires,username)
+        const hosttemps = new hosttemp({email,password,role,username});
+        console.log(email,password,role,username)
         hosttemps.save();
-        res.cookie('email',email,{
+        const data ={
+            email:email,
+            role:role   
+        }
+        res.cookie('email',data,{
             httpOnly: true,
             secure: process.env.jwt_sceret,
             maxAge: 60*60*1000,
         })
-        const userredis  = {
-            email:email,
-            role:role,
-            otp:otp,
-        }
-   setsession(email,userredis)
-      
-    }else if(role == "service"){
-
+        
+   
     }else{
         let exithost = await hosttemp.findOne({email});
         if(exithost) {
             return res.send("email already exists");
         }
-        const otp = otpGenerator.generate(6, { 
-            upperCase: false, 
-            specialChars: false, 
-            alphabets: false,
-            numbers: true 
-          });
-             
-        sendEmail(email,otp);
-        otpExpires = new Date(Date.now() + 60*10*1000);
-        const hosttemps = new hosttemp({email,password,role,otp,otpExpires,username });
-        console.log(email,password,role,otp,otpExpires,username )
+        
+        const hosttemps = new hosttemp({email,password,role,username });
+        console.log(email,password,role,username )
         hosttemps.save()
-          res.cookie('email',email,{
+        const data = {
+            email:email,
+            role:role
+        }
+          res.cookie('email',data,{
             httpOnly: true,
             secure: process.env.jwt_sceret,
             maxAge: 60*60*1000,
         })
-        const userredis={
-            email:email,
-            role:role,
-            otp:otp
-        }
-
-        setsession(email,userredis)
        
     }
 };

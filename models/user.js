@@ -6,18 +6,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-   otp:{
-    type:String,
-    required:true
-   },
-
    isverified:{
     type:Boolean,
     default:false
    },
-   otpExpires: { 
-    type: Date, default: () => new Date(Date.now() + 10 * 60 * 1000) 
-},
+
     email: {
         type: String,
         required: true,
