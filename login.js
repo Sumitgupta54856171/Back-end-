@@ -77,6 +77,15 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+const checkRole = (role)=>{
+  return (req,res,next)=>{
+    if(!role.includes(req.user.role)){
+      return res.status(403).json({message:"Acccess Deniedd: You don.t have the required permissionss"})
+    }
+    next();
+  }
+}
+
 app.use('/user',user);
 app.use('/host',host);
 
@@ -90,22 +99,24 @@ app.use((req,res,next)=>{
 });
 
 app.get("/auth/google",passport.authenticate("google",{scope:["profile","email"]}))
-app.get("/auth/google/callback",passport.authenticate("google",{failureRedirect:"/login"}),async(req,res)=>{
+app.get("/auth/google/callback",passport.authenticate("google",{failureRedirect:"http://localhost:5173/login"}),async(req,res)=>{
  
   res.redirect("http://localhost:5173/");
 })
 
+
+
 app.get('/login',(req,res)=>{
   res.sendFile(path.join(__dirname,'views','login.html'));
 })
-app.post('/login',controller.loginl);
+app.post('/api/v1/login',controller.loginl);
 app.get('/',async(req,res)=>{
   const homes = await homeModel.find();
   console.log('hello');
   console.log(homes);
  res.render('home',{homes});
 });
-app.get('/signup',(req,res)=>{
+app.get('/api/v1/signup',(req,res)=>{
   res.sendFile(path.join(__dirname,'/views','signup.html'))
 });
 app.get('/otp',(req,res)=>{

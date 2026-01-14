@@ -1,6 +1,7 @@
 import { useState,useEffect } from "react";
 import { Link } from "react-router-dom";
 import {Eye,EyeOff} from "lucide-react";
+import axios from "axios";
 
 export default function Login(){
     const[showPassword,setShowPassword] = useState(false);
@@ -22,6 +23,9 @@ export default function Login(){
         try {
           
             console.log('Login submitted:', formData);
+             const oauthsign = () => {
+                  window.location.href = "http://localhost:3004/auth/google";
+             }
         } catch (error) {
             console.error('Login error:', error);
         } finally {

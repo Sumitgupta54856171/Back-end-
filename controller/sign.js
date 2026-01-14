@@ -22,7 +22,7 @@ async function loginl(req, res) {
     const token = jwt.sign(payload,jwts,{expiresIn:24*60 *60*100})
   console.log(user);
   
-  res.cookie('session',token, {
+  res.cookie('hosttoken',token, {
     httpOnly: true,
     secure: process.env.jwt_sceret,
     maxAge: 30*24*60*60*1000,
@@ -43,7 +43,7 @@ async function loginl(req, res) {
         const token = jwt.sign(payload,jwts,{expiresIn:24*60 *60*100})
       console.log(user);
       setsession(user.email,payload)
-      res.cookie('token',token, {
+      res.cookie('usertoken',token, {
         httpOnly: true,
         secure: process.env.jwt_sceret,
         maxAge: 30*24*60*60*1000,
@@ -91,11 +91,7 @@ const signup = async(req, res) => {
         if(exithost) {
             return res.send("email already exists");
         }
-        const otp = otpGenerator.generate(6, { 
-            upperCase: false, 
-            specialChars: false, 
-            alphabets: false 
-          });
+        
         console.log(req.body);
         sendEmail(email,otp);
         const hosttemps = new hosttemp({email,password,role,username});
@@ -105,7 +101,7 @@ const signup = async(req, res) => {
             email:email,
             role:role   
         }
-        res.cookie('email',data,{
+        res.cookie('hostdata',data,{
             httpOnly: true,
             secure: process.env.jwt_sceret,
             maxAge: 60*60*1000,
@@ -125,7 +121,7 @@ const signup = async(req, res) => {
             email:email,
             role:role
         }
-          res.cookie('email',data,{
+          res.cookie('userdata',data,{
             httpOnly: true,
             secure: process.env.jwt_sceret,
             maxAge: 60*60*1000,
@@ -150,6 +146,8 @@ async function logout(req, res) {
             return res.status(500).send('Error logging out');
         }
         res.clearCookie('token');
+        res.clearCookie('hostdata');
+        res.clearCookie('userdata');
         res.redirect('/');
     });
 }

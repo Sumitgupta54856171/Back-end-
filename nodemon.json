@@ -1,0 +1,26 @@
+{
+  "restartable": "rs",
+  "ignore": [
+    "node_modules/**",
+    "frontend/**",
+    "views/**",
+    ".git/**",
+    "*.log",
+    "package-lock.json",
+    "npm-debug.log"
+  ],
+  "watch": [
+    ".env",
+    "login.js",
+    "config/",
+    "controller/",
+    "middleware/",
+    "models/",
+    "router/",
+    "utils/"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js,json"
+}

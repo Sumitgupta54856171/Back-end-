@@ -58,13 +58,7 @@ export default function Navbar() {
                     </button>
 
                     {/* Profile Image */}
-                    <div
-                        className="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 cursor-pointer border border-gray-200"
-                        style={{
-                            backgroundImage:
-                                'url("https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80")',
-                        }}
-                    ></div>
+                    <img src="" alt="hello" />
                 </div>
             </header>
            

@@ -3,7 +3,6 @@ const user =express.Router();
 const path = require('path');
 const controller = require('../controller/sign');
 const homeModel = require('../models/add');
-
 const MongoStore =require('connect-mongo');
 const mongoose = require('../config/mongoose');
 const mongo = require('../config/mongoose')
@@ -19,7 +18,7 @@ user.use((req,res,next)=>{
 });
 
 user.use(express.static(path.join(__dirname,'../views')));
-user.use(cookieParser())
+user.use(cookieParser());
 user.use(jwtcontroller);
 
 user.use((req,res,next)=>{

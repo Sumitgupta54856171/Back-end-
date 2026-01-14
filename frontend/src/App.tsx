@@ -9,12 +9,16 @@ import DataTableDemo from './ui/Datatable.tsx';
 import Sidebar from './ui/Navbar.tsx';
 
 import { Routes, Route } from 'react-router-dom';
+import HostLogin from './component/Host/HostLogin.tsx';
+import HostSigin from './component/Host/HostSigin.tsx';
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />}></Route>
+        <Route path="/host/login" element={<HostLogin/>}></Route>
+        <Route path="/host/sigin" element={<HostSigin/>}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/bookingform" element={<Bookingform />}></Route>
