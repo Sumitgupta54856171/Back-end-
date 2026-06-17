@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -8,15 +11,68 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  
+  /* Design System Colors */
+  --color-inverse-primary: #ffb2b6;
+  --color-inverse-on-surface: #f2f0f0;
+  --color-primary-container: #e21e4a;
+  --color-tertiary-container: #008379;
+  --color-outline: #906f70;
+  --color-on-secondary: #ffffff;
+  --color-surface-container-highest: #e3e2e2;
+  --color-on-tertiary-fixed-variant: #005049;
+  --color-on-secondary-container: #636262;
+  --color-on-primary-fixed: #40000d;
+  --color-error-container: #ffdad6;
+  --color-on-tertiary: #ffffff;
+  --color-surface-dim: #dbdad9;
+  --color-background: #fbf9f9;
+  --color-secondary-fixed-dim: #c8c6c5;
+  --color-primary-fixed-dim: #ffb2b6;
+  --color-primary-fixed: #ffdada;
+  --color-on-tertiary-fixed: #00201d;
+  --color-error: #ba1a1a;
+  --color-outline-variant: #e5bdbe;
+  --color-on-primary-fixed-variant: #920029;
+  --color-surface-tint: #be0038;
+  --color-secondary: #5f5e5e;
+  --color-surface: #fbf9f9;
+  --color-primary: #ba0036;
+  --color-on-error-container: #93000a;
+  --color-surface-container-low: #f5f3f3;
+  --color-on-secondary-fixed-variant: #474746;
+  --color-on-background: #1b1c1c;
+  --color-tertiary-fixed: #7af7e8;
+  --color-tertiary: #00685f;
+  --color-tertiary-fixed-dim: #5bdacc;
+  --color-secondary-fixed: #e5e2e1;
+  --color-inverse-surface: #303031;
+  --color-surface-bright: #fbf9f9;
+  --color-on-secondary-fixed: #1b1c1c;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface: #1b1c1c;
+  --color-on-error: #ffffff;
+  --color-on-primary-container: #fffbff;
+  --color-surface-container-high: #e9e8e7;
+  --color-on-primary: #ffffff;
+  --color-secondary-container: #e2dfde;
+  --color-on-surface-variant: #5c3f41;
+  --color-surface-variant: #e3e2e2;
+  --color-on-tertiary-container: #f4fffc;
+  --color-surface-container: #efeded;
+
+  /* Design System Fonts */
+  --font-headline: "Inter", sans-serif;
+  --font-display: "Inter", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-label: "Inter", sans-serif;
+
+  /* shadcn/ui variables mapping */
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
@@ -39,6 +95,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-foreground: var(--foreground);
 }
 
 :root {
@@ -117,4 +174,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }

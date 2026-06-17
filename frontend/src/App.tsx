@@ -1,4 +1,3 @@
-
 import Home from './Home'
 import Login from './Login';
 import Signup from './Signup';
@@ -19,6 +18,8 @@ import { ConditionContext } from './context/context.tsx';
 import HostDashboard from './Pages/HostDashboard.tsx';
 import Dashboard from './component/Host/Dashboard.tsx';
 import Listings from './component/Host/Listings.tsx';
+import AddHomePage from './Pages/AddHomePage.tsx';
+
 function App() {
   const checkrole = useContext(ConditionContext)
 
@@ -36,6 +37,7 @@ function App() {
         <Route path="/loginpage" element={<Loginpage />}></Route>
         <Route path="/data" element={<DataTableDemo />}></Route>
         <Route path="/side" element={<Sidebar />}></Route>
+        <Route path="/add-homepage" element={<AddHomePage />}></Route>
       </Routes>
     </PublicNavbar>
   ) : (
