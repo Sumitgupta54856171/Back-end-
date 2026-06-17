@@ -37,7 +37,7 @@ function App() {
         <Route path="/loginpage" element={<Loginpage />}></Route>
         <Route path="/data" element={<DataTableDemo />}></Route>
         <Route path="/side" element={<Sidebar />}></Route>
-        <Route path="/add-homepage" element={<AddHomePage />}></Route>
+        
       </Routes>
     </PublicNavbar>
   ) : (
@@ -45,6 +45,7 @@ function App() {
       <Routes>
         <Route path="/host/dashboard" element={<HostDashboard />}></Route>
         <Route path='/host/listings' element={<Listings/>}></Route>
+        <Route path="/add-homepage" element={<AddHomePage />}></Route>
     
     </Routes>
     </Layout>
