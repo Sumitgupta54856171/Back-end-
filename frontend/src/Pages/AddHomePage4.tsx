@@ -148,7 +148,7 @@ const AddHomePage4: React.FC = () => {
             <span className="font-label hidden sm:inline">Save as draft</span>
           </button>
           <button 
-            onClick={() => navigate('/add-homepage-5')}
+            onClick={() => navigate('/add-homepage-6')}
             className="bg-primary text-on-primary rounded-lg sm:rounded-xl px-6 sm:px-8 py-2.5 sm:py-3 font-bold font-label text-sm sm:text-base hover:bg-primary/90 transition-all active:scale-95 flex items-center gap-2 shadow-sm"
           >
             <span>Continue</span>

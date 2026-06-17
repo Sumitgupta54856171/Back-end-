@@ -123,7 +123,7 @@ const AddHomePage5: React.FC = () => {
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-4 sm:px-6 py-4 md:px-20 bg-surface border-t border-outline-variant shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] lg:pl-[22rem]">
         <button 
-          onClick={() => navigate('/add-homepage-4')}
+          onClick={() => navigate('/add-homepage-6')}
           className="text-secondary font-medium px-3 sm:px-4 py-2 flex items-center gap-2 hover:bg-surface-container-low transition-all rounded-lg"
         >
           <span className="material-symbols-outlined text-lg">arrow_back</span>
@@ -135,7 +135,7 @@ const AddHomePage5: React.FC = () => {
             <span className="hidden sm:inline">Save as draft</span>
           </button>
           <button 
-            onClick={() => navigate('/add-homepage-6')}
+            onClick={() => navigate('/add-homepage-7')}
             className="bg-primary text-on-primary rounded-lg sm:rounded-xl px-6 py-3 font-bold flex items-center gap-2 hover:bg-primary/90 transition-all active:scale-95 duration-200 shadow-md"
           >
             <span>Continue</span>
