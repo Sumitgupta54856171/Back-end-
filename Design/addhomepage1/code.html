@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StayHub - Tell us about your place</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#ffb2b6",
+                    "inverse-on-surface": "#f2f0f0",
+                    "primary-container": "#e21e4a",
+                    "tertiary-container": "#008379",
+                    "outline": "#906f70",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e3e2e2",
+                    "on-tertiary-fixed-variant": "#005049",
+                    "on-secondary-container": "#636262",
+                    "on-primary-fixed": "#40000d",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#dbdad9",
+                    "background": "#fbf9f9",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary-fixed-dim": "#ffb2b6",
+                    "primary-fixed": "#ffdada",
+                    "on-tertiary-fixed": "#00201d",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#e5bdbe",
+                    "on-primary-fixed-variant": "#920029",
+                    "surface-tint": "#be0038",
+                    "secondary": "#5f5e5e",
+                    "surface": "#fbf9f9",
+                    "primary": "#ba0036",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f5f3f3",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-background": "#1b1c1c",
+                    "tertiary-fixed": "#7af7e8",
+                    "tertiary": "#00685f",
+                    "tertiary-fixed-dim": "#5bdacc",
+                    "secondary-fixed": "#e5e2e1",
+                    "inverse-surface": "#303031",
+                    "surface-bright": "#fbf9f9",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1b1c1c",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#fffbff",
+                    "surface-container-high": "#e9e8e7",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#e2dfde",
+                    "on-surface-variant": "#5c3f41",
+                    "surface-variant": "#e3e2e2",
+                    "on-tertiary-container": "#f4fffc",
+                    "surface-container": "#efeded"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {},
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "display": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            },
+            "fontSize": {}
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide native radio button but keep it focusable */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest font-body text-on-surface antialiased min-h-screen flex flex-col relative">
+<!-- Sticky Header & Progress Bar -->
+<header class="fixed top-0 left-0 w-full bg-surface-container-lowest z-50 transition-shadow shadow-sm">
+<div class="max-w-[1280px] mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-2 text-primary font-headline font-extrabold text-2xl tracking-tighter">
+                StayHub
+            </div>
+<button class="px-4 py-2 rounded-full hover:bg-surface-container-low transition-colors text-sm font-label font-semibold border border-surface-variant">
+                Save &amp; exit
+            </button>
+</div>
+<!-- Progress Segments -->
+<div class="w-full h-1 bg-surface-variant flex gap-1 px-4 mb-2">
+<div class="h-full w-full bg-on-surface rounded-full"></div>
+<div class="h-full w-full bg-surface-container-high rounded-full"></div>
+<div class="h-full w-full bg-surface-container-high rounded-full"></div>
+<div class="h-full w-full bg-surface-container-high rounded-full"></div>
+<div class="h-full w-full bg-surface-container-high rounded-full"></div>
+<div class="h-full w-full bg-surface-container-high rounded-full"></div>
+<div class="h-full w-full bg-surface-container-high rounded-full"></div>
+<div class="h-full w-full bg-surface-container-high rounded-full"></div>
+</div>
+<div class="text-center pb-2 text-xs font-label text-secondary tracking-widest uppercase">
+            Step 1: Property Type
+        </div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-32 pb-40 px-6 max-w-[720px] mx-auto w-full flex flex-col gap-12">
+<!-- Headers -->
+<div class="flex flex-col gap-2">
+<h1 class="text-4xl md:text-5xl font-headline font-semibold tracking-tight text-on-surface">Tell us about your place</h1>
+<p class="text-lg text-secondary font-body">Choose the property type and what guests will have access to</p>
+</div>
+<!-- Section 1: Property Type -->
+<section aria-labelledby="property-type-heading" class="flex flex-col gap-6">
+<h2 class="text-xl font-headline font-semibold" id="property-type-heading">What type of property do you have?</h2>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<!-- Option 1 -->
+<label class="cursor-pointer group relative">
+<input checked="" class="visually-hidden peer" name="property_type" type="radio" value="house"/>
+<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-3xl text-on-surface">house</span>
+<span class="font-label font-semibold text-base">House</span>
+</div>
+</label>
+<!-- Option 2 -->
+<label class="cursor-pointer group relative">
+<input class="visually-hidden peer" name="property_type" type="radio" value="apartment"/>
+<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-3xl text-on-surface">apartment</span>
+<span class="font-label font-semibold text-base">Apartment</span>
+</div>
+</label>
+<!-- Option 3 -->
+<label class="cursor-pointer group relative">
+<input class="visually-hidden peer" name="property_type" type="radio" value="condo"/>
+<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-3xl text-on-surface">domain</span>
+<span class="font-label font-semibold text-base">Condo</span>
+</div>
+</label>
+<!-- Option 4 -->
+<label class="cursor-pointer group relative">
+<input class="visually-hidden peer" name="property_type" type="radio" value="villa"/>
+<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-3xl text-on-surface">holiday_village</span>
+<span class="font-label font-semibold text-base">Villa</span>
+</div>
+</label>
+<!-- Option 5 -->
+<label class="cursor-pointer group relative">
+<input class="visually-hidden peer" name="property_type" type="radio" value="cabin"/>
+<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-3xl text-on-surface">cabin</span>
+<span class="font-label font-semibold text-base">Cabin</span>
+</div>
+</label>
+<!-- Option 6 -->
+<label class="cursor-pointer group relative">
+<input class="visually-hidden peer" name="property_type" type="radio" value="unique"/>
+<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-3xl text-on-surface">castle</span>
+<span class="font-label font-semibold text-base">Unique space</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Section 2: Space Access -->
+<section aria-labelledby="space-type-heading" class="flex flex-col gap-6">
+<h2 class="text-xl font-headline font-semibold" id="space-type-heading">What best describes your place?</h2>
+<div class="flex flex-col gap-4">
+<!-- Option 1 -->
+<label class="cursor-pointer group relative">
+<input checked="" class="visually-hidden peer" name="space_type" type="radio" value="entire"/>
+<div class="border border-surface-variant rounded-xl p-6 flex items-center justify-between transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-low hover:border-on-surface bg-surface-container-lowest">
+<div class="flex flex-col gap-1">
+<span class="font-label font-semibold text-lg">An entire place</span>
+<span class="text-secondary text-sm">Guests have the whole place to themselves.</span>
+</div>
+<span class="material-symbols-outlined text-4xl text-on-surface">door_front</span>
+</div>
+</label>
+<!-- Option 2 -->
+<label class="cursor-pointer group relative">
+<input class="visually-hidden peer" name="space_type" type="radio" value="private"/>
+<div class="border border-surface-variant rounded-xl p-6 flex items-center justify-between transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-low hover:border-on-surface bg-surface-container-lowest">
+<div class="flex flex-col gap-1">
+<span class="font-label font-semibold text-lg">A private room</span>
+<span class="text-secondary text-sm">Guests sleep in a private room but some areas may be shared.</span>
+</div>
+<span class="material-symbols-outlined text-4xl text-on-surface">meeting_room</span>
+</div>
+</label>
+<!-- Option 3 -->
+<label class="cursor-pointer group relative">
+<input class="visually-hidden peer" name="space_type" type="radio" value="shared"/>
+<div class="border border-surface-variant rounded-xl p-6 flex items-center justify-between transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-low hover:border-on-surface bg-surface-container-lowest">
+<div class="flex flex-col gap-1">
+<span class="font-label font-semibold text-lg">A shared room</span>
+<span class="text-secondary text-sm">Guests sleep in a room or common area that may be shared.</span>
+</div>
+<span class="material-symbols-outlined text-4xl text-on-surface">chair</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Section 3: Capacity Stepper -->
+<section aria-labelledby="capacity-heading" class="flex flex-col gap-6">
+<h2 class="text-xl font-headline font-semibold" id="capacity-heading">How many guests can your place accommodate?</h2>
+<div class="flex items-center justify-between py-6 border-b border-surface-variant">
+<span class="font-label font-semibold text-lg">Guests</span>
+<div class="flex items-center gap-4">
+<button aria-label="Decrease guests" class="w-10 h-10 rounded-full border border-surface-variant flex items-center justify-center text-on-surface hover:border-on-surface transition-colors disabled:opacity-30 disabled:hover:border-surface-variant" disabled="" id="btn-decrease">
+<span class="material-symbols-outlined text-xl">remove</span>
+</button>
+<span class="font-body text-lg w-6 text-center" id="guest-count">1</span>
+<button aria-label="Increase guests" class="w-10 h-10 rounded-full border border-surface-variant flex items-center justify-center text-on-surface hover:border-on-surface transition-colors" id="btn-increase">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Bottom Navigation (Transactional Layout) -->
+<footer class="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-surface-variant py-4 px-6 z-50">
+<div class="max-w-[720px] mx-auto w-full flex items-center justify-between">
+<button class="px-6 py-3 rounded-xl font-label font-semibold text-on-surface hover:bg-surface-container-low transition-colors border border-transparent underline hover:border-surface-variant underline-offset-4 decoration-2">
+                Back
+            </button>
+<div class="flex items-center gap-4">
+<button class="hidden md:block px-6 py-3 rounded-xl font-label font-semibold text-secondary hover:bg-surface-container-low transition-colors">
+                    Save as draft
+                </button>
+<button class="px-8 py-3 rounded-xl font-label font-semibold text-on-primary bg-primary hover:brightness-95 transition-all shadow-sm active:scale-[0.98]">
+                    Continue
+                </button>
+</div>
+</div>
+</footer>
+<!-- Simple JS for Stepper Demo -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnDecrease = document.getElementById('btn-decrease');
+            const btnIncrease = document.getElementById('btn-increase');
+            const countDisplay = document.getElementById('guest-count');
+            let count = 1;
+
+            btnIncrease.addEventListener('click', () => {
+                count++;
+                updateDisplay();
+            });
+
+            btnDecrease.addEventListener('click', () => {
+                if (count > 1) {
+                    count--;
+                    updateDisplay();
+                }
+            });
+
+            function updateDisplay() {
+                countDisplay.textContent = count;
+                btnDecrease.disabled = count <= 1;
+            }
+        });
+    </script>
+</body></html>
