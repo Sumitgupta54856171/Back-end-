@@ -11,7 +11,7 @@ const OnboardingLayout: React.FC = () => {
     { name: 'Basic Info', icon: 'info', path: '/add-homepage-3' },
     { name: 'Amenities', icon: 'grid_view', path: '/add-homepage-4' },
     { name: 'Photos', icon: 'photo_library', path: '#' },
-    { name: 'Description', icon: 'description', path: '#' },
+    { name: 'Description', icon: 'description', path: '/add-homepage-5' },
     { name: 'Pricing', icon: 'payments', path: '#' },
     { name: 'House Rules', icon: 'gavel', path: '#' },
   ];
@@ -36,7 +36,7 @@ const OnboardingLayout: React.FC = () => {
         {/* SideNavBar */}
         <nav className="hidden lg:flex flex-col fixed left-0 top-20 bottom-0 py-8 bg-surface border-r border-outline-variant h-full w-80 overflow-y-auto">
           <div className="px-6 mb-8">
-            <p className="text-secondary text-sm font-medium mb-1">Step {currentStepIndex !== -1 ? currentStepIndex + 1 : 4} of 8</p>
+            <p className="text-secondary text-sm font-medium mb-1">Step {currentStepIndex !== -1 ? currentStepIndex + 1 : 6} of 8</p>
             <h2 className="text-2xl font-headline font-semibold text-on-surface">Create your listing</h2>
           </div>
           <ul className="flex flex-col space-y-1 font-body w-full">
