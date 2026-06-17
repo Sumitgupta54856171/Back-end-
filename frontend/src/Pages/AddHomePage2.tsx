@@ -5,17 +5,8 @@ const AddHomePage2: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-surface text-on-surface min-h-screen flex flex-col">
-      {/* Top Navigation (Simplified for transactional flow) */}
-      <header className="w-full bg-surface shadow-sm px-4 sm:px-6 h-16 sm:h-20 flex justify-between items-center z-50 sticky top-0">
-        <div className="text-xl sm:text-2xl font-extrabold text-primary tracking-tight">StayHub</div>
-        <button className="text-secondary hover:bg-surface-container-low rounded-full p-2 transition-colors">
-          <span className="material-symbols-outlined text-on-surface">close</span>
-        </button>
-      </header>
-
-      {/* Main Content Canvas */}
-      <main className="flex-grow flex flex-col max-w-[800px] mx-auto w-full px-4 sm:px-6 py-6 sm:py-8 pb-32">
+    <>
+      <div className="flex flex-col max-w-[800px] mx-auto w-full py-6 sm:py-8">
         {/* Header */}
         <div className="mb-6 sm:mb-10 text-center md:text-left">
           <h1 className="text-[28px] sm:text-[32px] md:text-[48px] font-bold text-on-surface leading-tight tracking-tight mb-2">Where's your place located?</h1>
@@ -85,10 +76,10 @@ const AddHomePage2: React.FC = () => {
             </button>
           </div>
         </div>
-      </main>
+      </div>
 
       {/* Bottom Transactional Bar */}
-      <div className="fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant px-4 sm:px-6 py-4 z-50 flex justify-between items-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+      <div className="fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant px-4 sm:px-6 py-4 z-50 flex justify-between items-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] lg:pl-[22rem]">
         <button 
           onClick={() => navigate('/add-homepage')}
           className="text-on-surface font-semibold underline hover:text-secondary transition-colors"
@@ -104,7 +95,7 @@ const AddHomePage2: React.FC = () => {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

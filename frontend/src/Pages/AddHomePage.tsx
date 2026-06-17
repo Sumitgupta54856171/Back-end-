@@ -8,35 +8,8 @@ const AddHomePage: React.FC = () => {
   const [guestCount, setGuestCount] = useState(1);
 
   return (
-    <div className="bg-surface-container-lowest font-body text-on-surface antialiased min-h-screen flex flex-col relative">
-      {/* Sticky Header & Progress Bar */}
-      <header className="fixed top-0 left-0 w-full bg-surface-container-lowest z-50 transition-shadow shadow-sm">
-        <div className="max-w-[1280px] mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-primary font-headline font-extrabold text-xl md:text-2xl tracking-tighter">
-            StayHub
-          </div>
-          <button className="px-3 md:px-4 py-2 rounded-full hover:bg-surface-container-low transition-colors text-xs md:text-sm font-label font-semibold border border-surface-variant">
-            Save &amp; exit
-          </button>
-        </div>
-        {/* Progress Segments */}
-        <div className="w-full h-1 bg-surface-variant flex gap-1 px-4 mb-2">
-          <div className="h-full w-full bg-on-surface rounded-full"></div>
-          <div className="h-full w-full bg-surface-container-high rounded-full"></div>
-          <div className="h-full w-full bg-surface-container-high rounded-full"></div>
-          <div className="h-full w-full bg-surface-container-high rounded-full"></div>
-          <div className="h-full w-full bg-surface-container-high rounded-full"></div>
-          <div className="h-full w-full bg-surface-container-high rounded-full"></div>
-          <div className="h-full w-full bg-surface-container-high rounded-full"></div>
-          <div className="h-full w-full bg-surface-container-high rounded-full"></div>
-        </div>
-        <div className="text-center pb-2 text-xs font-label text-secondary tracking-widest uppercase">
-          Step 1: Property Type
-        </div>
-      </header>
-
-      {/* Main Content Canvas */}
-      <main className="flex-grow pt-28 md:pt-32 pb-32 md:pb-40 px-4 md:px-6 max-w-[720px] mx-auto w-full flex flex-col gap-8 md:gap-12">
+    <>
+      <div className="w-full flex flex-col gap-8 md:gap-12">
         {/* Headers */}
         <div className="flex flex-col gap-2">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-headline font-semibold tracking-tight text-on-surface">Tell us about your place</h1>
@@ -226,10 +199,10 @@ const AddHomePage: React.FC = () => {
             </div>
           </div>
         </section>
-      </main>
+      </div>
 
       {/* Fixed Bottom Navigation (Transactional Layout) */}
-      <footer className="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-surface-variant py-3 md:py-4 px-4 md:px-6 z-50">
+      <footer className="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-surface-variant py-3 md:py-4 px-4 md:px-6 z-50 lg:pl-[22rem]">
         <div className="max-w-[720px] mx-auto w-full flex items-center justify-between gap-3">
           <button className="px-4 md:px-6 py-3 rounded-xl font-label font-semibold text-on-surface hover:bg-surface-container-low transition-colors border border-transparent underline hover:border-surface-variant underline-offset-4 decoration-2 text-sm md:text-base">
             Back
@@ -246,7 +219,7 @@ const AddHomePage: React.FC = () => {
           </div>
         </div>
       </footer>
-    </div>
+    </>
   );
 };
 

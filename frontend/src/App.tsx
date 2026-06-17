@@ -22,6 +22,7 @@ import AddHomePage from './Pages/AddHomePage.tsx';
 import AddHomePage2 from './Pages/AddHomePage2.tsx';
 import AddHomePage3 from './Pages/AddHomePage3.tsx';
 import AddHomePage4 from './Pages/AddHomePage4.tsx';
+import OnboardingLayout from './component/Host/OnboardingLayout.tsx';
 
 function App() {
   const checkrole = useContext(ConditionContext)
@@ -45,12 +46,14 @@ function App() {
     </PublicNavbar>
   ) : (
     <>
-      {/* Onboarding flows rendered outside of Layout to hide the main Navbar/Sidebar */}
+      {/* Onboarding flows rendered with OnboardingLayout to show the step sidebar */}
       <Routes>
-        <Route path="/add-homepage" element={<AddHomePage />} />
-        <Route path="/add-homepage-2" element={<AddHomePage2 />} />
-        <Route path="/add-homepage-3" element={<AddHomePage3 />} />
-        <Route path="/add-homepage-4" element={<AddHomePage4 />} />
+        <Route element={<OnboardingLayout />}>
+          <Route path="/add-homepage" element={<AddHomePage />} />
+          <Route path="/add-homepage-2" element={<AddHomePage2 />} />
+          <Route path="/add-homepage-3" element={<AddHomePage3 />} />
+          <Route path="/add-homepage-4" element={<AddHomePage4 />} />
+        </Route>
       </Routes>
       
       {/* Host Dashboard routes wrapped in Layout */}

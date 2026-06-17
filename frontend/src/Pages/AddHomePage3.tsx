@@ -34,15 +34,8 @@ const AddHomePage3: React.FC = () => {
   };
 
   return (
-    <div className="bg-surface text-on-surface min-h-screen flex flex-col antialiased">
-      {/* Header */}
-      <header className="w-full flex justify-between items-center px-4 sm:px-6 py-4 sm:py-6 max-w-[1280px] mx-auto sticky top-0 bg-surface z-50">
-        <div className="text-xl sm:text-2xl font-extrabold text-primary tracking-tight font-headline cursor-pointer">StayHub</div>
-        <button className="px-3 sm:px-4 py-2 rounded-full font-label text-xs sm:text-sm font-semibold hover:bg-surface-container-low transition-colors text-on-surface border border-surface-variant">Save &amp; exit</button>
-      </header>
-
-      {/* Main Content */}
-      <main className="flex-grow flex flex-col items-center justify-center w-full px-4 sm:px-6 py-8 sm:py-12 lg:py-24 max-w-[640px] mx-auto pb-32">
+    <>
+      <div className="flex flex-col items-center justify-center w-full max-w-[640px] mx-auto">
         <div className="w-full space-y-8 sm:space-y-12">
           {/* Header Section */}
           <div className="space-y-3 sm:space-y-4">
@@ -119,14 +112,10 @@ const AddHomePage3: React.FC = () => {
             )}
           </div>
         </div>
-      </main>
+      </div>
 
       {/* Fixed Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 w-full bg-surface border-t border-surface-dim z-50 px-4 sm:px-6 py-4">
-        {/* Progress Bar */}
-        <div className="absolute top-0 left-0 w-full h-[3px] bg-surface-container-highest">
-          <div className="h-full bg-on-surface transition-all duration-300" style={{ width: '30%' }}></div>
-        </div>
+      <div className="fixed bottom-0 left-0 w-full bg-surface border-t border-surface-dim z-50 px-4 sm:px-6 py-4 lg:pl-[22rem]">
         <div className="max-w-[1280px] mx-auto flex justify-between items-center h-12">
           <button
             onClick={() => navigate('/add-homepage-2')}
@@ -141,7 +130,7 @@ const AddHomePage3: React.FC = () => {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
