@@ -134,7 +134,9 @@ const AddHomePage3: React.FC = () => {
           >
             Back
           </button>
-          <button className="bg-primary hover:bg-primary-container text-on-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-label text-sm sm:text-base font-semibold transition-all duration-200 transform hover:scale-[1.02] active:scale-95 shadow-md hover:shadow-lg">
+          <button 
+            onClick={() => navigate('/add-homepage-4')}
+            className="bg-primary hover:bg-primary-container text-on-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-label text-sm sm:text-base font-semibold transition-all duration-200 transform hover:scale-[1.02] active:scale-95 shadow-md hover:shadow-lg">
             Next
           </button>
         </div>

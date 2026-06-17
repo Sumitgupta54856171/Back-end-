@@ -97,7 +97,9 @@ const AddHomePage2: React.FC = () => {
         </button>
         <div className="flex items-center gap-4">
           <button className="hidden sm:block text-secondary hover:text-on-surface font-semibold transition-colors">Save as draft</button>
-          <button className="bg-primary text-on-primary px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-on-primary-fixed-variant transition-colors shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-95 duration-200">
+          <button 
+            onClick={() => navigate('/add-homepage-3')}
+            className="bg-primary text-on-primary px-6 sm:px-8 py-3 rounded-lg font-semibold hover:bg-on-primary-fixed-variant transition-colors shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-95 duration-200">
             Continue
           </button>
         </div>

@@ -44,19 +44,23 @@ function App() {
       </Routes>
     </PublicNavbar>
   ) : (
-      <Layout>
+    <>
+      {/* Onboarding flows rendered outside of Layout to hide the main Navbar/Sidebar */}
       <Routes>
-        <Route path="/host/dashboard" element={<HostDashboard />}></Route>
-        <Route path='/host/listings' element={<Listings/>}></Route>
-        <Route path="/add-homepage" element={<AddHomePage />}></Route>
-        <Route path="/add-homepage-2" element={<AddHomePage2 />}></Route>
-        <Route path="/add-homepage-3" element={<AddHomePage3 />}></Route>
-        <Route path="/add-homepage-4" element={<AddHomePage4 />}></Route>
-    
-    </Routes>
-    </Layout>
-    
-    
+        <Route path="/add-homepage" element={<AddHomePage />} />
+        <Route path="/add-homepage-2" element={<AddHomePage2 />} />
+        <Route path="/add-homepage-3" element={<AddHomePage3 />} />
+        <Route path="/add-homepage-4" element={<AddHomePage4 />} />
+      </Routes>
+      
+      {/* Host Dashboard routes wrapped in Layout */}
+      <Layout>
+        <Routes>
+          <Route path="/host/dashboard" element={<HostDashboard />}></Route>
+          <Route path='/host/listings' element={<Listings/>}></Route>
+        </Routes>
+      </Layout>
+    </>
   )
   
 }

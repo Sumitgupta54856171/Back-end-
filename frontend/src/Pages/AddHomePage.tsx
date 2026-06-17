@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AddHomePage: React.FC = () => {
+  const navigate = useNavigate();
   const [propertyType, setPropertyType] = useState('house');
   const [spaceType, setSpaceType] = useState('entire');
   const [guestCount, setGuestCount] = useState(1);
@@ -236,7 +238,9 @@ const AddHomePage: React.FC = () => {
             <button className="hidden md:block px-6 py-3 rounded-xl font-label font-semibold text-secondary hover:bg-surface-container-low transition-colors">
               Save as draft
             </button>
-            <button className="px-6 md:px-8 py-3 rounded-xl font-label font-semibold text-on-primary bg-primary hover:brightness-95 transition-all shadow-sm active:scale-[0.98] text-sm md:text-base">
+            <button 
+              onClick={() => navigate('/add-homepage-2')}
+              className="px-6 md:px-8 py-3 rounded-xl font-label font-semibold text-on-primary bg-primary hover:brightness-95 transition-all shadow-sm active:scale-[0.98] text-sm md:text-base">
               Continue
             </button>
           </div>

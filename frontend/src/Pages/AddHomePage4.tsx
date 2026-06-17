@@ -62,6 +62,17 @@ const AddHomePage4: React.FC = () => {
     { name: 'House Rules', icon: 'gavel', done: false },
   ];
 
+  const stepPaths = [
+    '/add-homepage',
+    '/add-homepage-2',
+    '/add-homepage-3',
+    '/add-homepage-4',
+    '#',
+    '#',
+    '#',
+    '#'
+  ];
+
   return (
     <div className="bg-surface text-on-surface h-full flex flex-col font-body antialiased min-h-screen">
       {/* TopNavBar */}
@@ -86,12 +97,18 @@ const AddHomePage4: React.FC = () => {
             {sidebarSteps.map((step, idx) => (
               <li key={idx}>
                 <a 
-                  className={`flex items-center gap-4 py-3 pl-5 transition-colors w-full ${
+                  className={`flex items-center gap-4 py-3 pl-5 transition-colors w-full cursor-pointer ${
                     step.active 
                       ? 'text-primary font-bold border-l-4 border-primary pl-4 bg-primary/5' 
                       : 'text-secondary hover:bg-surface-container-low'
                   }`} 
-                  href="#"
+                  href={stepPaths[idx]}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (stepPaths[idx] !== '#') {
+                      navigate(stepPaths[idx]);
+                    }
+                  }}
                 >
                   <span className="material-symbols-outlined text-xl" style={step.done || step.active ? { fontVariationSettings: "'FILL' 1" } : {}}>
                     {step.icon}
