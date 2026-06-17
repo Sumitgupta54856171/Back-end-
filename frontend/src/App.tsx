@@ -25,6 +25,7 @@ import AddHomePage4 from './Pages/AddHomePage4.tsx';
 import AddHomePage5 from './Pages/AddHomePage5.tsx';
 import AddHomePage6 from './Pages/AddHomePage6.tsx';
 import AddHomePage7 from './Pages/AddHomePage7.tsx';
+import AddHomePage8 from './Pages/AddHomePage8.tsx';
 import OnboardingLayout from './component/Host/OnboardingLayout.tsx';
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
           <Route path="/add-homepage-6" element={<AddHomePage6 />} />
           <Route path="/add-homepage-5" element={<AddHomePage5 />} />
           <Route path="/add-homepage-7" element={<AddHomePage7 />} />
+          <Route path="/add-homepage-8" element={<AddHomePage8 />} />
         </Route>
       </Routes>
       
