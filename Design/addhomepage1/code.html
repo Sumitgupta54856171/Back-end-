@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -103,11 +102,11 @@
 <body class="bg-surface-container-lowest font-body text-on-surface antialiased min-h-screen flex flex-col relative">
 <!-- Sticky Header & Progress Bar -->
 <header class="fixed top-0 left-0 w-full bg-surface-container-lowest z-50 transition-shadow shadow-sm">
-<div class="max-w-[1280px] mx-auto px-6 h-20 flex items-center justify-between">
-<div class="flex items-center gap-2 text-primary font-headline font-extrabold text-2xl tracking-tighter">
+<div class="max-w-[1280px] mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between">
+<div class="flex items-center gap-2 text-primary font-headline font-extrabold text-xl md:text-2xl tracking-tighter">
                 StayHub
             </div>
-<button class="px-4 py-2 rounded-full hover:bg-surface-container-low transition-colors text-sm font-label font-semibold border border-surface-variant">
+<button class="px-3 md:px-4 py-2 rounded-full hover:bg-surface-container-low transition-colors text-xs md:text-sm font-label font-semibold border border-surface-variant">
                 Save &amp; exit
             </button>
 </div>
@@ -127,133 +126,133 @@
         </div>
 </header>
 <!-- Main Content Canvas -->
-<main class="flex-grow pt-32 pb-40 px-6 max-w-[720px] mx-auto w-full flex flex-col gap-12">
+<main class="flex-grow pt-28 md:pt-32 pb-32 md:pb-40 px-4 md:px-6 max-w-[720px] mx-auto w-full flex flex-col gap-8 md:gap-12">
 <!-- Headers -->
 <div class="flex flex-col gap-2">
-<h1 class="text-4xl md:text-5xl font-headline font-semibold tracking-tight text-on-surface">Tell us about your place</h1>
-<p class="text-lg text-secondary font-body">Choose the property type and what guests will have access to</p>
+<h1 class="text-3xl md:text-4xl lg:text-5xl font-headline font-semibold tracking-tight text-on-surface">Tell us about your place</h1>
+<p class="text-base md:text-lg text-secondary font-body">Choose the property type and what guests will have access to</p>
 </div>
 <!-- Section 1: Property Type -->
-<section aria-labelledby="property-type-heading" class="flex flex-col gap-6">
-<h2 class="text-xl font-headline font-semibold" id="property-type-heading">What type of property do you have?</h2>
-<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<section aria-labelledby="property-type-heading" class="flex flex-col gap-4 md:gap-6">
+<h2 class="text-lg md:text-xl font-headline font-semibold" id="property-type-heading">What type of property do you have?</h2>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
 <!-- Option 1 -->
 <label class="cursor-pointer group relative">
 <input checked="" class="visually-hidden peer" name="property_type" type="radio" value="house"/>
-<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
-<span class="material-symbols-outlined text-3xl text-on-surface">house</span>
-<span class="font-label font-semibold text-base">House</span>
+<div class="border border-surface-variant rounded-xl p-4 md:p-6 flex flex-col items-start gap-3 md:gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-2xl md:text-3xl text-on-surface">house</span>
+<span class="font-label font-semibold text-sm md:text-base">House</span>
 </div>
 </label>
 <!-- Option 2 -->
 <label class="cursor-pointer group relative">
 <input class="visually-hidden peer" name="property_type" type="radio" value="apartment"/>
-<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
-<span class="material-symbols-outlined text-3xl text-on-surface">apartment</span>
-<span class="font-label font-semibold text-base">Apartment</span>
+<div class="border border-surface-variant rounded-xl p-4 md:p-6 flex flex-col items-start gap-3 md:gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-2xl md:text-3xl text-on-surface">apartment</span>
+<span class="font-label font-semibold text-sm md:text-base">Apartment</span>
 </div>
 </label>
 <!-- Option 3 -->
 <label class="cursor-pointer group relative">
 <input class="visually-hidden peer" name="property_type" type="radio" value="condo"/>
-<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
-<span class="material-symbols-outlined text-3xl text-on-surface">domain</span>
-<span class="font-label font-semibold text-base">Condo</span>
+<div class="border border-surface-variant rounded-xl p-4 md:p-6 flex flex-col items-start gap-3 md:gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-2xl md:text-3xl text-on-surface">domain</span>
+<span class="font-label font-semibold text-sm md:text-base">Condo</span>
 </div>
 </label>
 <!-- Option 4 -->
 <label class="cursor-pointer group relative">
 <input class="visually-hidden peer" name="property_type" type="radio" value="villa"/>
-<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
-<span class="material-symbols-outlined text-3xl text-on-surface">holiday_village</span>
-<span class="font-label font-semibold text-base">Villa</span>
+<div class="border border-surface-variant rounded-xl p-4 md:p-6 flex flex-col items-start gap-3 md:gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-2xl md:text-3xl text-on-surface">holiday_village</span>
+<span class="font-label font-semibold text-sm md:text-base">Villa</span>
 </div>
 </label>
 <!-- Option 5 -->
 <label class="cursor-pointer group relative">
 <input class="visually-hidden peer" name="property_type" type="radio" value="cabin"/>
-<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
-<span class="material-symbols-outlined text-3xl text-on-surface">cabin</span>
-<span class="font-label font-semibold text-base">Cabin</span>
+<div class="border border-surface-variant rounded-xl p-4 md:p-6 flex flex-col items-start gap-3 md:gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-2xl md:text-3xl text-on-surface">cabin</span>
+<span class="font-label font-semibold text-sm md:text-base">Cabin</span>
 </div>
 </label>
 <!-- Option 6 -->
 <label class="cursor-pointer group relative">
 <input class="visually-hidden peer" name="property_type" type="radio" value="unique"/>
-<div class="border border-surface-variant rounded-xl p-6 flex flex-col items-start gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
-<span class="material-symbols-outlined text-3xl text-on-surface">castle</span>
-<span class="font-label font-semibold text-base">Unique space</span>
+<div class="border border-surface-variant rounded-xl p-4 md:p-6 flex flex-col items-start gap-3 md:gap-4 transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-lowest hover:border-on-surface bg-surface-container-lowest">
+<span class="material-symbols-outlined text-2xl md:text-3xl text-on-surface">castle</span>
+<span class="font-label font-semibold text-sm md:text-base">Unique space</span>
 </div>
 </label>
 </div>
 </section>
 <!-- Section 2: Space Access -->
-<section aria-labelledby="space-type-heading" class="flex flex-col gap-6">
-<h2 class="text-xl font-headline font-semibold" id="space-type-heading">What best describes your place?</h2>
-<div class="flex flex-col gap-4">
+<section aria-labelledby="space-type-heading" class="flex flex-col gap-4 md:gap-6">
+<h2 class="text-lg md:text-xl font-headline font-semibold" id="space-type-heading">What best describes your place?</h2>
+<div class="flex flex-col gap-3 md:gap-4">
 <!-- Option 1 -->
 <label class="cursor-pointer group relative">
 <input checked="" class="visually-hidden peer" name="space_type" type="radio" value="entire"/>
-<div class="border border-surface-variant rounded-xl p-6 flex items-center justify-between transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-low hover:border-on-surface bg-surface-container-lowest">
-<div class="flex flex-col gap-1">
-<span class="font-label font-semibold text-lg">An entire place</span>
-<span class="text-secondary text-sm">Guests have the whole place to themselves.</span>
+<div class="border border-surface-variant rounded-xl p-4 md:p-6 flex items-center justify-between transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-low hover:border-on-surface bg-surface-container-lowest">
+<div class="flex flex-col gap-1 pr-4">
+<span class="font-label font-semibold text-base md:text-lg">An entire place</span>
+<span class="text-secondary text-xs md:text-sm">Guests have the whole place to themselves.</span>
 </div>
-<span class="material-symbols-outlined text-4xl text-on-surface">door_front</span>
+<span class="material-symbols-outlined text-3xl md:text-4xl text-on-surface shrink-0">door_front</span>
 </div>
 </label>
 <!-- Option 2 -->
 <label class="cursor-pointer group relative">
 <input class="visually-hidden peer" name="space_type" type="radio" value="private"/>
-<div class="border border-surface-variant rounded-xl p-6 flex items-center justify-between transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-low hover:border-on-surface bg-surface-container-lowest">
-<div class="flex flex-col gap-1">
-<span class="font-label font-semibold text-lg">A private room</span>
-<span class="text-secondary text-sm">Guests sleep in a private room but some areas may be shared.</span>
+<div class="border border-surface-variant rounded-xl p-4 md:p-6 flex items-center justify-between transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-low hover:border-on-surface bg-surface-container-lowest">
+<div class="flex flex-col gap-1 pr-4">
+<span class="font-label font-semibold text-base md:text-lg">A private room</span>
+<span class="text-secondary text-xs md:text-sm">Guests sleep in a private room but some areas may be shared.</span>
 </div>
-<span class="material-symbols-outlined text-4xl text-on-surface">meeting_room</span>
+<span class="material-symbols-outlined text-3xl md:text-4xl text-on-surface shrink-0">meeting_room</span>
 </div>
 </label>
 <!-- Option 3 -->
 <label class="cursor-pointer group relative">
 <input class="visually-hidden peer" name="space_type" type="radio" value="shared"/>
-<div class="border border-surface-variant rounded-xl p-6 flex items-center justify-between transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-low hover:border-on-surface bg-surface-container-lowest">
-<div class="flex flex-col gap-1">
-<span class="font-label font-semibold text-lg">A shared room</span>
-<span class="text-secondary text-sm">Guests sleep in a room or common area that may be shared.</span>
+<div class="border border-surface-variant rounded-xl p-4 md:p-6 flex items-center justify-between transition-all duration-200 peer-checked:border-[2px] peer-checked:border-on-surface peer-checked:bg-surface-container-low hover:border-on-surface bg-surface-container-lowest">
+<div class="flex flex-col gap-1 pr-4">
+<span class="font-label font-semibold text-base md:text-lg">A shared room</span>
+<span class="text-secondary text-xs md:text-sm">Guests sleep in a room or common area that may be shared.</span>
 </div>
-<span class="material-symbols-outlined text-4xl text-on-surface">chair</span>
+<span class="material-symbols-outlined text-3xl md:text-4xl text-on-surface shrink-0">chair</span>
 </div>
 </label>
 </div>
 </section>
 <!-- Section 3: Capacity Stepper -->
-<section aria-labelledby="capacity-heading" class="flex flex-col gap-6">
-<h2 class="text-xl font-headline font-semibold" id="capacity-heading">How many guests can your place accommodate?</h2>
-<div class="flex items-center justify-between py-6 border-b border-surface-variant">
-<span class="font-label font-semibold text-lg">Guests</span>
-<div class="flex items-center gap-4">
-<button aria-label="Decrease guests" class="w-10 h-10 rounded-full border border-surface-variant flex items-center justify-center text-on-surface hover:border-on-surface transition-colors disabled:opacity-30 disabled:hover:border-surface-variant" disabled="" id="btn-decrease">
-<span class="material-symbols-outlined text-xl">remove</span>
+<section aria-labelledby="capacity-heading" class="flex flex-col gap-4 md:gap-6">
+<h2 class="text-lg md:text-xl font-headline font-semibold" id="capacity-heading">How many guests can your place accommodate?</h2>
+<div class="flex items-center justify-between py-4 md:py-6 border-b border-surface-variant">
+<span class="font-label font-semibold text-base md:text-lg">Guests</span>
+<div class="flex items-center gap-3 md:gap-4">
+<button aria-label="Decrease guests" class="w-9 h-9 md:w-10 md:h-10 rounded-full border border-surface-variant flex items-center justify-center text-on-surface hover:border-on-surface transition-colors disabled:opacity-30 disabled:hover:border-surface-variant" disabled="" id="btn-decrease">
+<span class="material-symbols-outlined text-lg md:text-xl">remove</span>
 </button>
-<span class="font-body text-lg w-6 text-center" id="guest-count">1</span>
-<button aria-label="Increase guests" class="w-10 h-10 rounded-full border border-surface-variant flex items-center justify-center text-on-surface hover:border-on-surface transition-colors" id="btn-increase">
-<span class="material-symbols-outlined text-xl">add</span>
+<span class="font-body text-base md:text-lg w-6 text-center" id="guest-count">1</span>
+<button aria-label="Increase guests" class="w-9 h-9 md:w-10 md:h-10 rounded-full border border-surface-variant flex items-center justify-center text-on-surface hover:border-on-surface transition-colors" id="btn-increase">
+<span class="material-symbols-outlined text-lg md:text-xl">add</span>
 </button>
 </div>
 </div>
 </section>
 </main>
 <!-- Fixed Bottom Navigation (Transactional Layout) -->
-<footer class="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-surface-variant py-4 px-6 z-50">
-<div class="max-w-[720px] mx-auto w-full flex items-center justify-between">
-<button class="px-6 py-3 rounded-xl font-label font-semibold text-on-surface hover:bg-surface-container-low transition-colors border border-transparent underline hover:border-surface-variant underline-offset-4 decoration-2">
+<footer class="fixed bottom-0 left-0 w-full bg-surface-container-lowest border-t border-surface-variant py-3 md:py-4 px-4 md:px-6 z-50">
+<div class="max-w-[720px] mx-auto w-full flex items-center justify-between gap-3">
+<button class="px-4 md:px-6 py-3 rounded-xl font-label font-semibold text-on-surface hover:bg-surface-container-low transition-colors border border-transparent underline hover:border-surface-variant underline-offset-4 decoration-2 text-sm md:text-base">
                 Back
             </button>
-<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 md:gap-4">
 <button class="hidden md:block px-6 py-3 rounded-xl font-label font-semibold text-secondary hover:bg-surface-container-low transition-colors">
                     Save as draft
                 </button>
-<button class="px-8 py-3 rounded-xl font-label font-semibold text-on-primary bg-primary hover:brightness-95 transition-all shadow-sm active:scale-[0.98]">
+<button class="px-6 md:px-8 py-3 rounded-xl font-label font-semibold text-on-primary bg-primary hover:brightness-95 transition-all shadow-sm active:scale-[0.98] text-sm md:text-base">
                     Continue
                 </button>
 </div>
