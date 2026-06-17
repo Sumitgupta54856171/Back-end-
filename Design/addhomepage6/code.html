@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StayHub - Step 5: Photos</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "inverse-primary": "#ffb2b6",
+                        "inverse-on-surface": "#f2f0f0",
+                        "primary-container": "#e21e4a",
+                        "tertiary-container": "#008379",
+                        "outline": "#906f70",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e3e2e2",
+                        "on-tertiary-fixed-variant": "#005049",
+                        "on-secondary-container": "#636262",
+                        "on-primary-fixed": "#40000d",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#dbdad9",
+                        "background": "#fbf9f9",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "primary-fixed-dim": "#ffb2b6",
+                        "primary-fixed": "#ffdada",
+                        "on-tertiary-fixed": "#00201d",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#e5bdbe",
+                        "on-primary-fixed-variant": "#920029",
+                        "surface-tint": "#be0038",
+                        "secondary": "#5f5e5e",
+                        "surface": "#fbf9f9",
+                        "primary": "#ba0036",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f5f3f3",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-background": "#1b1c1c",
+                        "tertiary-fixed": "#7af7e8",
+                        "tertiary": "#00685f",
+                        "tertiary-fixed-dim": "#5bdacc",
+                        "secondary-fixed": "#e5e2e1",
+                        "inverse-surface": "#303031",
+                        "surface-bright": "#fbf9f9",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1c1c",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#fffbff",
+                        "surface-container-high": "#e9e8e7",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e2dfde",
+                        "on-surface-variant": "#5c3f41",
+                        "surface-variant": "#e3e2e2",
+                        "on-tertiary-container": "#f4fffc",
+                        "surface-container": "#efeded"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "display": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-20 bg-surface border-b border-outline-variant transition-all duration-200">
+<div class="flex items-center gap-2 text-primary font-bold text-xl">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span>StayHub</span>
+</div>
+<div class="hidden"></div>
+<button class="text-on-surface-variant hover:text-primary transition-colors font-headline text-headline-sm font-semibold">Save and exit</button>
+</header>
+<div class="flex flex-1 pt-20 pb-24">
+<!-- SideNavBar -->
+<nav class="hidden lg:flex flex-col fixed left-0 top-20 bottom-0 py-8 h-full w-80 bg-surface border-r border-outline-variant font-body text-body-md overflow-y-auto">
+<div class="px-5 mb-8">
+<h2 class="text-primary font-bold text-xl mb-1">Create your listing</h2>
+<p class="text-on-surface-variant">Step 1 of 8</p>
+</div>
+<ul class="flex flex-col w-full">
+<li class="flex items-center gap-3 py-3 w-full text-secondary pl-5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="material-symbols-outlined">home_work</span>
+<span>Property Type</span>
+</li>
+<li class="flex items-center gap-3 py-3 w-full text-secondary pl-5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="material-symbols-outlined">location_on</span>
+<span>Location</span>
+</li>
+<li class="flex items-center gap-3 py-3 w-full text-secondary pl-5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="material-symbols-outlined">info</span>
+<span>Basic Info</span>
+</li>
+<li class="flex items-center gap-3 py-3 w-full text-secondary pl-5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="material-symbols-outlined">grid_view</span>
+<span>Amenities</span>
+</li>
+<li class="flex items-center gap-3 py-3 w-full text-primary font-bold border-l-4 border-primary pl-4 bg-primary-container/10 cursor-pointer">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">photo_library</span>
+<span>Photos</span>
+</li>
+<li class="flex items-center gap-3 py-3 w-full text-secondary pl-5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="material-symbols-outlined">description</span>
+<span>Description</span>
+</li>
+<li class="flex items-center gap-3 py-3 w-full text-secondary pl-5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="material-symbols-outlined">payments</span>
+<span>Pricing</span>
+</li>
+<li class="flex items-center gap-3 py-3 w-full text-secondary pl-5 hover:bg-surface-container-low transition-colors cursor-pointer">
+<span class="material-symbols-outlined">gavel</span>
+<span>House Rules</span>
+</li>
+</ul>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 w-full lg:ml-80 px-6 lg:px-12 xl:px-24 py-12 flex justify-center">
+<div class="w-full max-w-3xl">
+<!-- Progress Indicator -->
+<div class="mb-8">
+<p class="text-sm text-secondary font-medium mb-3">Step 5 of 8</p>
+<div class="flex gap-2">
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-primary rounded-full"></div>
+<div class="h-1.5 flex-1 bg-surface-variant rounded-full"></div>
+<div class="h-1.5 flex-1 bg-surface-variant rounded-full"></div>
+<div class="h-1.5 flex-1 bg-surface-variant rounded-full"></div>
+</div>
+</div>
+<!-- Header -->
+<div class="mb-10">
+<h1 class="text-3xl md:text-4xl font-headline font-bold text-on-surface mb-3 tracking-tight">Showcase your space with photos</h1>
+<p class="text-lg text-secondary font-body">Upload at least 5 photos for best results</p>
+</div>
+<!-- Photo Tips Card -->
+<div class="bg-tertiary-container/10 border border-tertiary/20 rounded-xl p-5 mb-8 flex gap-4 items-start">
+<div class="bg-tertiary/10 p-2 rounded-full text-tertiary">
+<span class="material-symbols-outlined">lightbulb</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface mb-1">Photo Tips</h3>
+<p class="text-secondary text-sm">Use natural light when possible. Tidy up beforehand and capture the unique features that make your place special. Landscape orientation (horizontal) works best.</p>
+</div>
+</div>
+<!-- Upload Area -->
+<div class="border-2 border-dashed border-outline-variant hover:border-primary transition-colors bg-surface-container-lowest rounded-xl p-12 mb-8 flex flex-col items-center justify-center text-center cursor-pointer group">
+<div class="bg-surface-variant group-hover:bg-primary/10 transition-colors p-4 rounded-full mb-4">
+<span class="material-symbols-outlined text-4xl text-secondary group-hover:text-primary transition-colors">cloud_upload</span>
+</div>
+<h3 class="text-xl font-bold text-on-surface mb-2">Drag and drop photos here</h3>
+<p class="text-secondary mb-6">or browse your device to upload</p>
+<button class="bg-surface border border-outline text-on-surface font-semibold py-2 px-6 rounded-lg hover:bg-surface-container-low transition-colors">
+                        Choose Photos
+                    </button>
+<p class="text-xs text-secondary mt-4">JPG, PNG, HEIC up to 10MB each</p>
+</div>
+<!-- Photo Grid -->
+<div>
+<div class="flex justify-between items-end mb-4">
+<h3 class="font-bold text-lg text-on-surface">Uploaded Photos (3)</h3>
+<span class="text-sm text-secondary">Drag to reorder</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Cover Photo -->
+<div class="relative group rounded-xl overflow-hidden border border-outline-variant aspect-video bg-surface-container">
+<img alt="Modern bright living room with large windows, light grey sofa, and minimalist coffee table. Natural light streams in, illuminating the clean wooden floors and contemporary artwork on the wall. The space feels airy, welcoming, and high-end." class="w-full h-full object-cover" data-alt="A brightly lit, modern living room showcasing clean lines and minimalist furniture. A plush light grey sofa sits invitingly near expansive windows that allow soft, natural sunlight to flood the space. The wooden flooring is immaculate, complementing subtle, contemporary art pieces on the pristine white walls. The overall mood is airy, sophisticated, and warmly welcoming, perfectly capturing a high-end residential aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjNok4_lRmZguLXzRS2FT8Z52Td9-E4xMKJYQl1GVHb-g21_bpq5txrpMEKDRiXgcc4BAxm6eyzn3fe7VsbfCFKMY7m6AzK2lzEGBXN3fG6-kdt9K57UZ22p3Gj--whAwMY123eD0MM5_dhZfO2qsBPqL5Xme9MGrL_dKfthQ2p0HMFCVf3p2VFMQ5IH8KFR3tEm11w6_RfYH2KKV1YaAB-a598qw9UZmgpjHHVWySSu1C9ANnOu_EgVfCqbydlr57BZskzG7EXA"/>
+<!-- Badges -->
+<div class="absolute top-3 left-3 bg-surface text-on-surface text-xs font-bold px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+                                Cover Photo
+                            </div>
+<!-- Controls overlay -->
+<div class="absolute inset-0 bg-inverse-surface/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3">
+<div class="flex justify-end gap-2">
+<button aria-label="Edit" class="bg-surface text-on-surface p-2 rounded-full hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button aria-label="Delete" class="bg-surface text-error p-2 rounded-full hover:bg-error-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+<div class="flex justify-between items-center">
+<div class="relative">
+<select class="appearance-none bg-surface text-on-surface text-sm font-medium py-1.5 pl-3 pr-8 rounded-lg border-none shadow-sm focus:ring-2 focus:ring-primary outline-none">
+<option>Living Room</option>
+<option>Bedroom</option>
+<option>Kitchen</option>
+<option>Bathroom</option>
+<option>Exterior</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-secondary pointer-events-none text-[20px]">expand_more</span>
+</div>
+<div class="cursor-move text-surface p-1">
+<span class="material-symbols-outlined">drag_indicator</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Photo 2 -->
+<div class="relative group rounded-xl overflow-hidden border border-outline-variant aspect-video bg-surface-container">
+<img alt="Sleek modern kitchen with dark grey cabinets, white marble countertops, and stainless steel appliances. A large island dominates the center, featuring stylish bar stools. The lighting is bright and even, highlighting the clean surfaces." class="w-full h-full object-cover" data-alt="A sleek, modern kitchen space featuring striking dark grey cabinetry paired elegantly with pristine white marble countertops. State-of-the-art stainless steel appliances are seamlessly integrated into the design. A generous central island serves as a focal point, accompanied by stylish minimalist bar stools. The room is bathed in bright, even lighting that emphasizes the immaculate, clean surfaces and sophisticated high-end culinary environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9Kt9lBpnlT6awHs0WE0MyDNb5f-9yVkBW9MLUOclUWpOjYfKq8J3m4T-hd4dkFDgb7s141gvvxCyr8lMrWUVvWAX41h1Ku3pFH0_LDmZUPt6d9h6CRZtul23OzKgnVcUYj2cziOzy93pwrpUsfIWMm0uMmwxN_9a1f5ffeS8iyOR4hZ-FBlFuH-gPnZEfg82vLkxH11biAWfOPOVfdiKghB0JP8z4BwF_n0vL7qFKKoGxrmMdpjc0a4Sa-k-NK445-xDbIJ1YmQ"/>
+<!-- Controls overlay -->
+<div class="absolute inset-0 bg-inverse-surface/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3">
+<div class="flex justify-between items-start">
+<button class="bg-surface text-on-surface text-xs font-bold px-3 py-1.5 rounded-full shadow-sm hover:bg-surface-container transition-colors">
+                                        Make cover
+                                    </button>
+<div class="flex gap-2">
+<button aria-label="Edit" class="bg-surface text-on-surface p-2 rounded-full hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button aria-label="Delete" class="bg-surface text-error p-2 rounded-full hover:bg-error-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="relative">
+<select class="appearance-none bg-surface text-on-surface text-sm font-medium py-1.5 pl-3 pr-8 rounded-lg border-none shadow-sm focus:ring-2 focus:ring-primary outline-none">
+<option>Kitchen</option>
+<option>Living Room</option>
+<option>Bedroom</option>
+<option>Bathroom</option>
+<option>Exterior</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-secondary pointer-events-none text-[20px]">expand_more</span>
+</div>
+<div class="cursor-move text-surface p-1">
+<span class="material-symbols-outlined">drag_indicator</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Photo 3 -->
+<div class="relative group rounded-xl overflow-hidden border border-outline-variant aspect-video bg-surface-container">
+<img alt="Cozy contemporary bedroom with a large bed, crisp white linens, and soft warm lighting. A bedside table with a modern lamp sits next to the bed. The atmosphere is relaxing and inviting." class="w-full h-full object-cover" data-alt="A cozy yet contemporary bedroom setting centered around a large, plush bed dressed in crisp, inviting white linens. Soft, warm ambient lighting casts a relaxing and intimate glow across the room. A sleek bedside table holds a modern, minimalist lamp, adding functional elegance. The overall atmosphere is deeply relaxing, tranquil, and perfectly styled to suggest a premium, restful retreat." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA80NmCx1WSXNMZPwi8Nx_QjSmOXkaCuUrACzrLg-eLb4Q8m2ZA1HMBkpvxr-6Y8RzqZrUV9ha5A2iOEzlBAQ7vgWCqw-gz6Db28Lync4aGz6cNxmB9G5hyUQ74NtCjiV7rb-4oRJC9DpXD9JI66QUC8q5SDtxXe571ihNiivdY6jq0LO8qV3EqGa-xbSaaVuM7atKAW0swwIgeiqSxiQM7pdtAuWkdbObG7ucKWVKQUQA66Ia4tX6LNCTGVcOgknoPTYybLNjrNQ"/>
+<!-- Controls overlay -->
+<div class="absolute inset-0 bg-inverse-surface/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-between p-3">
+<div class="flex justify-between items-start">
+<button class="bg-surface text-on-surface text-xs font-bold px-3 py-1.5 rounded-full shadow-sm hover:bg-surface-container transition-colors">
+                                        Make cover
+                                    </button>
+<div class="flex gap-2">
+<button aria-label="Edit" class="bg-surface text-on-surface p-2 rounded-full hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button aria-label="Delete" class="bg-surface text-error p-2 rounded-full hover:bg-error-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="relative">
+<select class="appearance-none bg-surface text-on-surface text-sm font-medium py-1.5 pl-3 pr-8 rounded-lg border-none shadow-sm focus:ring-2 focus:ring-primary outline-none">
+<option>Bedroom</option>
+<option>Living Room</option>
+<option>Kitchen</option>
+<option>Bathroom</option>
+<option>Exterior</option>
+</select>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-secondary pointer-events-none text-[20px]">expand_more</span>
+</div>
+<div class="cursor-move text-surface p-1">
+<span class="material-symbols-outlined">drag_indicator</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 md:px-20 bg-surface shadow-floating border-t border-outline-variant font-label text-label-md">
+<button class="flex items-center gap-2 text-secondary font-medium px-4 py-2 hover:bg-secondary-container transition-all rounded-lg group">
+<span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+            Back
+        </button>
+<button class="flex items-center gap-2 text-secondary font-medium px-4 py-2 hover:bg-secondary-container transition-all rounded-lg">
+<span class="material-symbols-outlined">save</span>
+            Save as draft
+        </button>
+<button class="flex items-center gap-2 bg-primary text-on-primary rounded-xl px-6 py-3 font-bold hover:bg-surface-tint active:scale-95 transition-all shadow-sm">
+            Continue
+            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</footer>
+</body></html>

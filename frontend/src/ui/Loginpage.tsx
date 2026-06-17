@@ -17,7 +17,7 @@ const Loginpage = () => {
         e.preventDefault();
         setError("");
         
-        // Basic validation
+       
         if (!email || !password) {
             setError("Please fill in all fields");
             return;
@@ -36,17 +36,17 @@ const Loginpage = () => {
                 {
                     email,
                     password,
-                    role: "user" // Default to user role, can be made configurable
+                    role: "user" 
                 },
                 {
-                    withCredentials: true, // Important for cookies
+                    withCredentials: true, 
                     headers: {
                         "Content-Type": "application/json",
                     },
                 }
             );
 
-            // If login successful, redirect
+         
             if (response.status === 200 || response.status === 302) {
                 navigate("/");
                 window.location.reload(); // Reload to update auth state

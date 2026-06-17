@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StayHub - Share some basics</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#ffb2b6",
+                    "inverse-on-surface": "#f2f0f0",
+                    "primary-container": "#e21e4a",
+                    "tertiary-container": "#008379",
+                    "outline": "#906f70",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e3e2e2",
+                    "on-tertiary-fixed-variant": "#005049",
+                    "on-secondary-container": "#636262",
+                    "on-primary-fixed": "#40000d",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#dbdad9",
+                    "background": "#fbf9f9",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary-fixed-dim": "#ffb2b6",
+                    "primary-fixed": "#ffdada",
+                    "on-tertiary-fixed": "#00201d",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#e5bdbe",
+                    "on-primary-fixed-variant": "#920029",
+                    "surface-tint": "#be0038",
+                    "secondary": "#5f5e5e",
+                    "surface": "#fbf9f9",
+                    "primary": "#ba0036",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f5f3f3",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-background": "#1b1c1c",
+                    "tertiary-fixed": "#7af7e8",
+                    "tertiary": "#00685f",
+                    "tertiary-fixed-dim": "#5bdacc",
+                    "secondary-fixed": "#e5e2e1",
+                    "inverse-surface": "#303031",
+                    "surface-bright": "#fbf9f9",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1b1c1c",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#fffbff",
+                    "surface-container-high": "#e9e8e7",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#e2dfde",
+                    "on-surface-variant": "#5c3f41",
+                    "surface-variant": "#e3e2e2",
+                    "on-tertiary-container": "#f4fffc",
+                    "surface-container": "#efeded"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter", "sans-serif"],
+                    "display": ["Inter", "sans-serif"],
+                    "body": ["Inter", "sans-serif"],
+                    "label": ["Inter", "sans-serif"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .stepper-btn:hover:not(:disabled) { border-color: theme('colors.on-surface'); color: theme('colors.on-surface'); }
+        .stepper-btn:disabled { opacity: 0.3; cursor: not-allowed; border-color: theme('colors.outline-variant'); }
+        .highlight-chip.active { border-color: theme('colors.on-surface'); background-color: theme('colors.surface-container-highest'); }
+        .highlight-chip { transition: all 0.2s ease-in-out; }
+        .highlight-chip:hover:not(.active) { border-color: theme('colors.on-surface'); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col antialiased">
+<!-- Header (Simplified for transactional flow) -->
+<header class="w-full flex justify-between items-center px-6 py-6 max-w-[1280px] mx-auto sticky top-0 bg-surface z-50">
+<div class="text-2xl font-extrabold text-primary tracking-tight font-headline cursor-pointer">StayHub</div>
+<button class="px-4 py-2 rounded-full font-label text-sm font-semibold hover:bg-surface-container-low transition-colors text-on-surface">Save &amp; exit</button>
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center justify-center w-full px-6 py-12 lg:py-24 max-w-[640px] mx-auto pb-32">
+<div class="w-full space-y-12">
+<!-- Header Section -->
+<div class="space-y-4">
+<h1 class="text-[32px] md:text-[48px] font-bold leading-tight tracking-tight font-headline text-on-surface">Share some basics about your place</h1>
+<p class="text-[18px] text-secondary font-body">Help guests know what to expect</p>
+</div>
+<!-- Steppers Section -->
+<div class="space-y-6 w-full pb-8 border-b border-surface-container-highest">
+<!-- Guests (Added for logical flow) -->
+<div class="flex items-center justify-between py-2">
+<span class="text-lg font-body">Guests</span>
+<div class="flex items-center space-x-4">
+<button class="stepper-btn w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-secondary transition-colors" onclick="updateCounter('guests', -1)">
+<span class="material-symbols-outlined" style="font-size: 20px;">remove</span>
+</button>
+<span class="text-lg w-4 text-center font-body" id="guests-count">4</span>
+<button class="stepper-btn w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-secondary transition-colors" onclick="updateCounter('guests', 1)">
+<span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+</button>
+</div>
+</div>
+<!-- Bedrooms -->
+<div class="flex items-center justify-between py-2">
+<span class="text-lg font-body">Bedrooms</span>
+<div class="flex items-center space-x-4">
+<button class="stepper-btn w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-secondary transition-colors" onclick="updateCounter('bedrooms', -1)">
+<span class="material-symbols-outlined" style="font-size: 20px;">remove</span>
+</button>
+<span class="text-lg w-4 text-center font-body" id="bedrooms-count">2</span>
+<button class="stepper-btn w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-secondary transition-colors" onclick="updateCounter('bedrooms', 1)">
+<span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+</button>
+</div>
+</div>
+<!-- Beds -->
+<div class="flex items-center justify-between py-2">
+<span class="text-lg font-body">Beds</span>
+<div class="flex items-center space-x-4">
+<button class="stepper-btn w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-secondary transition-colors" onclick="updateCounter('beds', -1)">
+<span class="material-symbols-outlined" style="font-size: 20px;">remove</span>
+</button>
+<span class="text-lg w-4 text-center font-body" id="beds-count">3</span>
+<button class="stepper-btn w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-secondary transition-colors" onclick="updateCounter('beds', 1)">
+<span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+</button>
+</div>
+</div>
+<!-- Bathrooms -->
+<div class="flex items-center justify-between py-2">
+<span class="text-lg font-body">Bathrooms</span>
+<div class="flex items-center space-x-4">
+<button class="stepper-btn w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-secondary transition-colors" onclick="updateCounter('bathrooms', -1)">
+<span class="material-symbols-outlined" style="font-size: 20px;">remove</span>
+</button>
+<span class="text-lg w-4 text-center font-body" id="bathrooms-count">1.5</span>
+<button class="stepper-btn w-10 h-10 rounded-full border border-outline-variant flex items-center justify-center text-secondary transition-colors" onclick="updateCounter('bathrooms', 0.5)">
+<span class="material-symbols-outlined" style="font-size: 20px;">add</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Property Highlights (Bento-style chips) -->
+<div class="space-y-6 pb-8 border-b border-surface-container-highest">
+<h2 class="text-xl font-bold font-headline">Property highlights</h2>
+<div class="flex flex-wrap gap-4">
+<button class="highlight-chip px-6 py-3 rounded-full border border-surface-dim bg-surface flex items-center space-x-2 text-sm font-label font-semibold text-on-surface cursor-pointer" onclick="this.classList.toggle('active')">
+<span class="material-symbols-outlined" style="font-size: 18px;">kitchen</span>
+<span>Kitchen</span>
+</button>
+<button class="highlight-chip px-6 py-3 rounded-full border border-surface-dim bg-surface flex items-center space-x-2 text-sm font-label font-semibold text-on-surface cursor-pointer" onclick="this.classList.toggle('active')">
+<span class="material-symbols-outlined" style="font-size: 18px;">wifi</span>
+<span>WiFi</span>
+</button>
+<button class="highlight-chip px-6 py-3 rounded-full border border-surface-dim bg-surface flex items-center space-x-2 text-sm font-label font-semibold text-on-surface cursor-pointer" onclick="this.classList.toggle('active')">
+<span class="material-symbols-outlined" style="font-size: 18px;">pool</span>
+<span>Pool</span>
+</button>
+<button class="highlight-chip px-6 py-3 rounded-full border border-surface-dim bg-surface flex items-center space-x-2 text-sm font-label font-semibold text-on-surface cursor-pointer" onclick="this.classList.toggle('active')">
+<span class="material-symbols-outlined" style="font-size: 18px;">directions_car</span>
+<span>Free parking</span>
+</button>
+<button class="highlight-chip px-6 py-3 rounded-full border border-surface-dim bg-surface flex items-center space-x-2 text-sm font-label font-semibold text-on-surface cursor-pointer" onclick="this.classList.toggle('active')">
+<span class="material-symbols-outlined" style="font-size: 18px;">ac_unit</span>
+<span>Air conditioning</span>
+</button>
+<button class="highlight-chip px-6 py-3 rounded-full border border-surface-dim bg-surface flex items-center space-x-2 text-sm font-label font-semibold text-on-surface cursor-pointer" onclick="this.classList.toggle('active')">
+<span class="material-symbols-outlined" style="font-size: 18px;">pets</span>
+<span>Pets allowed</span>
+</button>
+</div>
+</div>
+<!-- Expandable Bedroom Details -->
+<div class="space-y-4">
+<button class="w-full flex justify-between items-center py-4 text-left group" onclick="toggleDetails('bedroom-details', this)">
+<span class="text-xl font-bold font-headline text-on-surface group-hover:text-primary transition-colors">Bedroom details</span>
+<span class="material-symbols-outlined text-on-surface transition-transform duration-200" id="bedroom-details-icon">expand_more</span>
+</button>
+<div class="hidden space-y-6 pt-2 pb-4" id="bedroom-details">
+<div class="p-6 border border-surface-dim rounded-xl bg-surface-container-lowest">
+<h3 class="font-semibold text-lg mb-4 font-headline">Bedroom 1</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-base text-secondary font-body">Double bed</span>
+<div class="flex items-center space-x-3">
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-secondary hover:border-on-surface hover:text-on-surface"><span class="material-symbols-outlined" style="font-size: 16px;">remove</span></button>
+<span class="w-4 text-center text-sm font-body">1</span>
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-secondary hover:border-on-surface hover:text-on-surface"><span class="material-symbols-outlined" style="font-size: 16px;">add</span></button>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-base text-secondary font-body">Queen bed</span>
+<div class="flex items-center space-x-3">
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-secondary opacity-30 cursor-not-allowed" disabled=""><span class="material-symbols-outlined" style="font-size: 16px;">remove</span></button>
+<span class="w-4 text-center text-sm font-body">0</span>
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-secondary hover:border-on-surface hover:text-on-surface"><span class="material-symbols-outlined" style="font-size: 16px;">add</span></button>
+</div>
+</div>
+</div>
+</div>
+<div class="p-6 border border-surface-dim rounded-xl bg-surface-container-lowest">
+<h3 class="font-semibold text-lg mb-4 font-headline">Bedroom 2</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-base text-secondary font-body">Single bed</span>
+<div class="flex items-center space-x-3">
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-secondary hover:border-on-surface hover:text-on-surface"><span class="material-symbols-outlined" style="font-size: 16px;">remove</span></button>
+<span class="w-4 text-center text-sm font-body">2</span>
+<button class="w-8 h-8 rounded-full border border-outline-variant flex items-center justify-center text-secondary hover:border-on-surface hover:text-on-surface"><span class="material-symbols-outlined" style="font-size: 16px;">add</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Action Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface border-t border-surface-dim z-50 px-6 py-4">
+<!-- Progress Bar -->
+<div class="absolute top-0 left-0 w-full h-[3px] bg-surface-container-highest">
+<!-- Steps 1-2 completed, Step 3 current (~30% progress) -->
+<div class="h-full bg-on-surface transition-all duration-300" style="width: 30%;"></div>
+</div>
+<div class="max-w-[1280px] mx-auto flex justify-between items-center h-12">
+<button class="font-label text-sm font-semibold underline text-on-surface hover:bg-surface-container-low px-4 py-2 rounded-full transition-colors -ml-4">Back</button>
+<button class="bg-primary hover:bg-primary-container text-on-primary px-8 py-3 rounded-lg font-label text-base font-semibold transition-all duration-200 transform hover:scale-[1.02] active:scale-95 shadow-md hover:shadow-lg">Next</button>
+</div>
+</div>
+<script>
+        // Simple counter logic
+        const limits = {
+            guests: { min: 1, max: 16 },
+            bedrooms: { min: 0, max: 50 },
+            beds: { min: 1, max: 50 },
+            bathrooms: { min: 0, max: 50 }
+        };
+
+        function updateCounter(id, change) {
+            const el = document.getElementById(`${id}-count`);
+            let current = parseFloat(el.innerText);
+            let newVal = current + change;
+            
+            // Handle float precision issues for 0.5 increments
+            newVal = Math.round(newVal * 10) / 10;
+
+            if (newVal >= limits[id].min && newVal <= limits[id].max) {
+                el.innerText = newVal;
+            }
+            
+            // Update button states (basic implementation)
+            const parent = el.parentElement;
+            const buttons = parent.querySelectorAll('.stepper-btn');
+            
+            if(newVal <= limits[id].min) {
+                buttons[0].setAttribute('disabled', 'true');
+            } else {
+                buttons[0].removeAttribute('disabled');
+            }
+
+            if(newVal >= limits[id].max) {
+                buttons[1].setAttribute('disabled', 'true');
+            } else {
+                buttons[1].removeAttribute('disabled');
+            }
+        }
+
+        // Initialize button states on load
+        ['guests', 'bedrooms', 'beds', 'bathrooms'].forEach(id => {
+            updateCounter(id, 0); 
+        });
+
+        function toggleDetails(id, btn) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById(`${id}-icon`);
+            
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                el.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+    </script>
+</body></html>

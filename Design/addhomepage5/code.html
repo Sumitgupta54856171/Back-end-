@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StayHub - Create your listing description</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#ffb2b6",
+                        "inverse-on-surface": "#f2f0f0",
+                        "primary-container": "#e21e4a",
+                        "tertiary-container": "#008379",
+                        "outline": "#906f70",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e3e2e2",
+                        "on-tertiary-fixed-variant": "#005049",
+                        "on-secondary-container": "#636262",
+                        "on-primary-fixed": "#40000d",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#dbdad9",
+                        "background": "#fbf9f9",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "primary-fixed-dim": "#ffb2b6",
+                        "primary-fixed": "#ffdada",
+                        "on-tertiary-fixed": "#00201d",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#e5bdbe",
+                        "on-primary-fixed-variant": "#920029",
+                        "surface-tint": "#be0038",
+                        "secondary": "#5f5e5e",
+                        "surface": "#fbf9f9",
+                        "primary": "#ba0036",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f5f3f3",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-background": "#1b1c1c",
+                        "tertiary-fixed": "#7af7e8",
+                        "tertiary": "#00685f",
+                        "tertiary-fixed-dim": "#5bdacc",
+                        "secondary-fixed": "#e5e2e1",
+                        "inverse-surface": "#303031",
+                        "surface-bright": "#fbf9f9",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1c1c",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#fffbff",
+                        "surface-container-high": "#e9e8e7",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e2dfde",
+                        "on-surface-variant": "#5c3f41",
+                        "surface-variant": "#e3e2e2",
+                        "on-tertiary-container": "#f4fffc",
+                        "surface-container": "#efeded"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .editor-toolbar button { @apply p-2 rounded hover:bg-surface-variant transition-colors text-secondary; }
+        .editor-toolbar button.active { @apply bg-surface-variant text-on-surface; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- Top Navigation (from JSON) -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-20 bg-surface border-b border-outline-variant dark:border-outline transition-all duration-200">
+<div class="text-primary dark:text-inverse-primary font-bold text-xl font-headline">StayHub</div>
+<button class="text-on-surface-variant font-semibold hover:text-primary transition-colors duration-200">Save and exit</button>
+</nav>
+<div class="flex flex-1 pt-20 pb-24 md:pb-20 h-full">
+<!-- Side Navigation (from JSON) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-20 bottom-0 py-8 h-full w-80 bg-surface border-r border-outline-variant dark:border-outline font-body text-body-md transition-all duration-200 z-40">
+<div class="px-6 mb-8">
+<h2 class="font-bold text-lg text-on-surface mb-1">Create your listing</h2>
+<p class="text-secondary text-sm">Step 6 of 8</p>
+<!-- Progress Bar -->
+<div class="w-full bg-surface-variant h-2 rounded-full mt-4 overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-500" style="width: 75%"></div>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto space-y-1">
+<a class="flex items-center gap-3 py-3 text-secondary dark:text-secondary-fixed-dim pl-5 hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home_work">home_work</span>
+<span>Property Type</span>
+<span class="material-symbols-outlined ml-auto mr-4 text-tertiary-container text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-secondary dark:text-secondary-fixed-dim pl-5 hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+<span>Location</span>
+<span class="material-symbols-outlined ml-auto mr-4 text-tertiary-container text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-secondary dark:text-secondary-fixed-dim pl-5 hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="info">info</span>
+<span>Basic Info</span>
+<span class="material-symbols-outlined ml-auto mr-4 text-tertiary-container text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-secondary dark:text-secondary-fixed-dim pl-5 hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span>Amenities</span>
+<span class="material-symbols-outlined ml-auto mr-4 text-tertiary-container text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-secondary dark:text-secondary-fixed-dim pl-5 hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="photo_library">photo_library</span>
+<span>Photos</span>
+<span class="material-symbols-outlined ml-auto mr-4 text-tertiary-container text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-primary font-bold border-l-4 border-primary pl-4 bg-primary-container/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span>Description</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-secondary dark:text-secondary-fixed-dim pl-5 hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span>Pricing</span>
+</a>
+<a class="flex items-center gap-3 py-3 text-secondary dark:text-secondary-fixed-dim pl-5 hover:bg-surface-container-low transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+<span>House Rules</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 lg:ml-80 max-w-4xl mx-auto px-6 py-12 md:py-16 w-full">
+<div class="space-y-8 animate-[fadeIn_0.5s_ease-out]">
+<header class="space-y-2">
+<h1 class="text-4xl md:text-5xl font-bold font-headline tracking-tight text-on-surface">Create your listing description</h1>
+<p class="text-lg text-secondary">Make your place stand out to guests.</p>
+</header>
+<div class="bg-surface-container-lowest border border-surface-variant rounded-xl p-6 md:p-8 space-y-8 shadow-sm">
+<!-- AI Assistant Banner -->
+<div class="bg-primary-container/10 border border-primary-container/20 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="bg-primary-container text-on-primary-container p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+</div>
+<div>
+<h3 class="font-semibold text-on-surface">Writer's block?</h3>
+<p class="text-sm text-secondary">Let AI generate a professional description based on your basic info and amenities.</p>
+</div>
+</div>
+<button class="bg-primary text-on-primary font-semibold px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2 whitespace-nowrap">
+<span class="material-symbols-outlined text-sm">magic_button</span>
+                            ✨ Improve with AI
+                        </button>
+</div>
+<!-- Listing Title -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<label class="block font-semibold text-on-surface" for="listing-title">Listing title</label>
+<span class="text-xs text-secondary"><span id="title-count">0</span>/50</span>
+</div>
+<p class="text-sm text-secondary mb-2">Catch guests' attention with a listing title that highlights what makes your place special.</p>
+<input class="w-full bg-surface-bright border border-outline-variant rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-on-surface" id="listing-title" maxlength="50" onkeyup="document.getElementById('title-count').innerText = this.value.length;" placeholder="e.g. Cozy Cabin with Mountain Views" type="text"/>
+</div>
+<hr class="border-surface-variant"/>
+<!-- Summary -->
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<label class="block font-semibold text-on-surface" for="listing-summary">Summary</label>
+<span class="text-xs text-secondary"><span id="summary-count">0</span>/500</span>
+</div>
+<p class="text-sm text-secondary mb-2">Provide a brief overview of your property. This appears in search results.</p>
+<textarea class="w-full bg-surface-bright border border-outline-variant rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-on-surface resize-none" id="listing-summary" maxlength="500" onkeyup="document.getElementById('summary-count').innerText = this.value.length;" placeholder="Describe the vibe, key features, and neighborhood..." rows="4"></textarea>
+</div>
+<hr class="border-surface-variant"/>
+<!-- Detailed Description (Rich Text Simulator) -->
+<div class="space-y-2">
+<label class="block font-semibold text-on-surface">Detailed description</label>
+<p class="text-sm text-secondary mb-2">Share more details about your place, what makes it unique, and any special amenities.</p>
+<div class="border border-outline-variant rounded-lg overflow-hidden flex flex-col bg-surface-bright">
+<div class="editor-toolbar flex flex-wrap items-center gap-1 p-2 bg-surface border-b border-outline-variant">
+<button class="active" type="button"><span class="material-symbols-outlined text-sm">format_bold</span></button>
+<button type="button"><span class="material-symbols-outlined text-sm">format_italic</span></button>
+<button type="button"><span class="material-symbols-outlined text-sm">format_underlined</span></button>
+<div class="w-px h-6 bg-outline-variant mx-1"></div>
+<button type="button"><span class="material-symbols-outlined text-sm">format_list_bulleted</span></button>
+<button type="button"><span class="material-symbols-outlined text-sm">format_list_numbered</span></button>
+<div class="w-px h-6 bg-outline-variant mx-1"></div>
+<button type="button"><span class="material-symbols-outlined text-sm">link</span></button>
+</div>
+<textarea class="w-full p-4 border-none focus:ring-0 outline-none resize-y min-h-[150px] text-on-surface bg-transparent" placeholder="Tell guests about the layout, sleeping arrangements, and any quirks..." rows="6"></textarea>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- The Space -->
+<div class="space-y-2">
+<label class="block font-semibold text-on-surface" for="the-space">The space (optional)</label>
+<textarea class="w-full bg-surface-bright border border-outline-variant rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-on-surface resize-none" id="the-space" placeholder="Provide details about rooms and spaces." rows="3"></textarea>
+</div>
+<!-- Guest Access -->
+<div class="space-y-2">
+<label class="block font-semibold text-on-surface" for="guest-access">Guest access (optional)</label>
+<textarea class="w-full bg-surface-bright border border-outline-variant rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-on-surface resize-none" id="guest-access" placeholder="Let guests know what parts of the space they can use." rows="3"></textarea>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Bottom Navigation (from JSON) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 md:px-20 bg-surface shadow-floating transition-all duration-200">
+<button class="text-secondary font-medium px-4 py-2 flex items-center gap-2 hover:bg-secondary-container dark:hover:bg-secondary transition-all rounded-lg">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+            Back
+        </button>
+<div class="flex gap-4">
+<button class="text-secondary font-medium px-4 py-2 hidden md:flex items-center gap-2 hover:bg-secondary-container dark:hover:bg-secondary transition-all rounded-lg">
+<span class="material-symbols-outlined" data-icon="save">save</span>
+                Save as draft
+            </button>
+<button class="bg-primary text-on-primary rounded-xl px-6 py-3 font-bold flex items-center gap-2 hover:bg-primary-container transition-all active:scale-95 duration-200 shadow-md">
+                Continue
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</nav>
+<style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</body></html>

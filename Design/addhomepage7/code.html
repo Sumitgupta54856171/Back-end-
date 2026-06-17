@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StayHub - Step 7: Pricing &amp; Availability</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#ffb2b6",
+                        "inverse-on-surface": "#f2f0f0",
+                        "primary-container": "#e21e4a",
+                        "tertiary-container": "#008379",
+                        "outline": "#906f70",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#e3e2e2",
+                        "on-tertiary-fixed-variant": "#005049",
+                        "on-secondary-container": "#636262",
+                        "on-primary-fixed": "#40000d",
+                        "error-container": "#ffdad6",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#dbdad9",
+                        "background": "#fbf9f9",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "primary-fixed-dim": "#ffb2b6",
+                        "primary-fixed": "#ffdada",
+                        "on-tertiary-fixed": "#00201d",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#e5bdbe",
+                        "on-primary-fixed-variant": "#920029",
+                        "surface-tint": "#be0038",
+                        "secondary": "#5f5e5e",
+                        "surface": "#fbf9f9",
+                        "primary": "#ba0036",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f5f3f3",
+                        "on-secondary-fixed-variant": "#474746",
+                        "on-background": "#1b1c1c",
+                        "tertiary-fixed": "#7af7e8",
+                        "tertiary": "#00685f",
+                        "tertiary-fixed-dim": "#5bdacc",
+                        "secondary-fixed": "#e5e2e1",
+                        "inverse-surface": "#303031",
+                        "surface-bright": "#fbf9f9",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1b1c1c",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#fffbff",
+                        "surface-container-high": "#e9e8e7",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#e2dfde",
+                        "on-surface-variant": "#5c3f41",
+                        "surface-variant": "#e3e2e2",
+                        "on-tertiary-container": "#f4fffc",
+                        "surface-container": "#efeded"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "sm": "0.25rem",
+                        "md": "0.75rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #ba0036;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #ba0036;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #dbdad9;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            background-color: #dbdad9;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased min-h-screen flex flex-col pt-20 pb-24 md:pb-0 md:pl-80 lg:pl-80">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-20 bg-surface border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<span class="text-primary font-bold text-xl font-headline tracking-tight">StayHub</span>
+</div>
+<div class="flex items-center">
+<button class="text-on-surface-variant hover:text-primary transition-colors font-label text-sm font-semibold px-4 py-2 rounded-lg hover:bg-surface-container-low">Save and exit</button>
+</div>
+</header>
+<!-- SideNavBar (Desktop) -->
+<nav class="hidden md:flex flex-col fixed left-0 top-20 bottom-0 py-8 h-full w-80 bg-surface border-r border-outline-variant overflow-y-auto pb-32 z-40">
+<div class="px-6 mb-8">
+<h2 class="font-headline text-lg font-bold text-on-surface mb-1">Create your listing</h2>
+<p class="text-on-surface-variant text-sm">Step 7 of 8</p>
+</div>
+<div class="flex flex-col gap-2">
+<!-- Completed Steps -->
+<a class="flex items-center gap-3 py-3 px-6 text-on-surface-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined text-primary text-xl group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body text-md flex-1">Property Type</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-6 text-on-surface-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined text-primary text-xl group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body text-md flex-1">Location</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-6 text-on-surface-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined text-primary text-xl group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body text-md flex-1">Basic Info</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-6 text-on-surface-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined text-primary text-xl group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body text-md flex-1">Amenities</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-6 text-on-surface-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined text-primary text-xl group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body text-md flex-1">Photos</span>
+</a>
+<a class="flex items-center gap-3 py-3 px-6 text-on-surface-variant hover:bg-surface-container-low transition-colors group" href="#">
+<span class="material-symbols-outlined text-primary text-xl group-hover:scale-110 transition-transform" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body text-md flex-1">Description</span>
+</a>
+<!-- Active Step -->
+<div class="flex items-center gap-3 py-3 px-6 text-primary font-bold border-l-4 border-primary bg-primary-container/10">
+<span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings: 'FILL' 1;">payments</span>
+<span class="font-body text-md flex-1">Pricing</span>
+</div>
+<!-- Upcoming Step -->
+<a class="flex items-center gap-3 py-3 px-6 text-secondary hover:bg-surface-container-low transition-colors group ml-1" href="#">
+<span class="material-symbols-outlined text-secondary text-xl group-hover:scale-110 transition-transform">gavel</span>
+<span class="font-body text-md flex-1">House Rules</span>
+</a>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-6 py-8 lg:py-12 flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+<!-- Form Section -->
+<div class="flex-1 w-full max-w-3xl space-y-12">
+<!-- Header -->
+<div class="space-y-3">
+<h1 class="font-headline text-3xl md:text-4xl font-bold text-on-surface tracking-tight">Set your price and availability</h1>
+<p class="text-on-surface-variant text-lg">You can change this anytime after publishing.</p>
+</div>
+<!-- Pricing Section -->
+<section class="space-y-8 bg-surface-container-lowest p-6 md:p-8 rounded-xl border border-outline-variant shadow-sm">
+<h2 class="font-headline text-2xl font-semibold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">sell</span>
+                    Pricing Details
+                </h2>
+<!-- Base Price -->
+<div class="space-y-4">
+<label class="block font-label text-md font-semibold text-on-surface">Base price per night</label>
+<div class="relative flex items-center max-w-sm">
+<span class="absolute left-4 text-on-surface-variant font-bold text-lg">$</span>
+<input class="w-full pl-10 pr-4 py-4 bg-surface rounded-lg border-2 border-outline-variant focus:border-primary focus:ring-0 text-xl font-bold text-on-surface transition-colors" placeholder="0" type="number" value="150"/>
+<span class="absolute right-4 text-on-surface-variant text-sm font-medium">USD</span>
+</div>
+<!-- Smart Pricing Toggle -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg border border-surface-dim mt-4">
+<div class="space-y-1">
+<h3 class="font-semibold text-on-surface">Use smart pricing</h3>
+<p class="text-sm text-on-surface-variant">Automatically adjust price based on demand to maximize earnings.</p>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" id="smart-pricing" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer" for="smart-pricing"></label>
+</div>
+</div>
+</div>
+<hr class="border-outline-variant"/>
+<!-- Additional Fees -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="block font-label text-sm font-semibold text-on-surface">Cleaning fee (optional)</label>
+<div class="relative flex items-center">
+<span class="absolute left-4 text-on-surface-variant">$</span>
+<input class="w-full pl-8 pr-4 py-3 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-0 text-md text-on-surface transition-colors" type="number" value="50"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block font-label text-sm font-semibold text-on-surface">Security deposit (optional)</label>
+<div class="relative flex items-center">
+<span class="absolute left-4 text-on-surface-variant">$</span>
+<input class="w-full pl-8 pr-4 py-3 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-0 text-md text-on-surface transition-colors" type="number" value="200"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Discounts Section -->
+<section class="space-y-6">
+<h2 class="font-headline text-2xl font-semibold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">percent</span>
+                    Discounts
+                </h2>
+<p class="text-on-surface-variant">Encourage longer stays by offering discounts.</p>
+<div class="space-y-4">
+<!-- Weekly Discount -->
+<div class="flex items-start gap-4 p-5 bg-surface-container-lowest rounded-xl border border-outline-variant hover:border-outline transition-colors cursor-pointer group">
+<div class="mt-1">
+<input checked="" class="w-5 h-5 text-primary border-outline-variant rounded focus:ring-primary" type="checkbox"/>
+</div>
+<div class="flex-1">
+<h3 class="font-semibold text-on-surface group-hover:text-primary transition-colors">Weekly discount</h3>
+<p class="text-sm text-on-surface-variant mt-1">For stays of 7 nights or more.</p>
+<div class="mt-3 flex items-center gap-2 w-32">
+<input class="w-full px-3 py-2 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-0 text-md text-center" type="number" value="10"/>
+<span class="text-on-surface-variant font-medium">%</span>
+</div>
+</div>
+</div>
+<!-- Monthly Discount -->
+<div class="flex items-start gap-4 p-5 bg-surface-container-lowest rounded-xl border border-outline-variant hover:border-outline transition-colors cursor-pointer group">
+<div class="mt-1">
+<input checked="" class="w-5 h-5 text-primary border-outline-variant rounded focus:ring-primary" type="checkbox"/>
+</div>
+<div class="flex-1">
+<h3 class="font-semibold text-on-surface group-hover:text-primary transition-colors">Monthly discount</h3>
+<p class="text-sm text-on-surface-variant mt-1">For stays of 28 nights or more.</p>
+<div class="mt-3 flex items-center gap-2 w-32">
+<input class="w-full px-3 py-2 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-0 text-md text-center" type="number" value="20"/>
+<span class="text-on-surface-variant font-medium">%</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Availability Section -->
+<section class="space-y-8 bg-surface-container-lowest p-6 md:p-8 rounded-xl border border-outline-variant shadow-sm">
+<h2 class="font-headline text-2xl font-semibold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+                    Availability
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Minimum Stay -->
+<div class="space-y-4">
+<label class="block font-label text-md font-semibold text-on-surface">Minimum stay</label>
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="text-on-surface text-sm">Default</span>
+<div class="flex items-center gap-2 w-24">
+<input class="w-full px-3 py-2 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-0 text-center" type="number" value="2"/>
+<span class="text-on-surface-variant text-sm">nights</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface text-sm">Weekends</span>
+<div class="flex items-center gap-2 w-24">
+<input class="w-full px-3 py-2 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-0 text-center" type="number" value="3"/>
+<span class="text-on-surface-variant text-sm">nights</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Prep Time -->
+<div class="space-y-4">
+<label class="block font-label text-md font-semibold text-on-surface">Preparation time</label>
+<p class="text-sm text-on-surface-variant">Block nights between reservations to clean.</p>
+<select class="w-full px-4 py-3 bg-surface rounded-lg border border-outline-variant focus:border-primary focus:ring-0 text-on-surface appearance-none cursor-pointer">
+<option value="0">None</option>
+<option selected="" value="1">1 night before and after each reservation</option>
+<option value="2">2 nights before and after each reservation</option>
+</select>
+</div>
+</div>
+</section>
+</div>
+<!-- Sticky Summary Sidebar -->
+<aside class="w-full lg:w-96 lg:sticky lg:top-28 space-y-6">
+<div class="bg-surface-container-lowest p-6 rounded-2xl border border-outline-variant shadow-lg sticky top-28">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<h3 class="font-headline text-xl font-bold text-on-surface">Price Preview</h3>
+</div>
+<p class="text-sm text-on-surface-variant mb-6 pb-4 border-b border-outline-variant">Sample for a 3-night stay</p>
+<div class="space-y-4 mb-6">
+<div class="flex justify-between items-center text-on-surface">
+<span>$150 x 3 nights</span>
+<span class="font-medium">$450</span>
+</div>
+<div class="flex justify-between items-center text-on-surface">
+<span>Cleaning fee</span>
+<span class="font-medium">$50</span>
+</div>
+<div class="flex justify-between items-center text-on-surface">
+<span>Service fee (10%)</span>
+<span class="font-medium">$45</span>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="font-headline text-lg font-bold text-on-surface">Guest total</span>
+<span class="font-headline text-xl font-bold text-primary">$545</span>
+</div>
+<div class="mt-6 p-4 bg-primary-container/10 rounded-xl flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5">tips_and_updates</span>
+<p class="text-sm text-on-surface-variant leading-relaxed">Hosts who use Smart Pricing earn on average 15% more per year.</p>
+</div>
+</div>
+</aside>
+</main>
+<!-- BottomNavBar (Mobile/Tablet) & Action Bar (Desktop) -->
+<div class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 md:px-8 bg-surface border-t border-outline-variant shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:pl-88 lg:pl-88">
+<button class="flex items-center gap-2 text-secondary font-medium px-4 py-2 hover:bg-surface-container-low rounded-lg transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+            Back
+        </button>
+<div class="flex items-center gap-4">
+<button class="hidden md:block text-secondary font-medium px-4 py-2 hover:bg-surface-container-low rounded-lg transition-colors">
+                Save as draft
+            </button>
+<button class="bg-primary text-on-primary rounded-xl px-8 py-3 font-bold hover:bg-primary-container transition-all hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2">
+                Continue
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>

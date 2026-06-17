@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StayHub - Location</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#ffb2b6",
+                    "inverse-on-surface": "#f2f0f0",
+                    "primary-container": "#e21e4a",
+                    "tertiary-container": "#008379",
+                    "outline": "#906f70",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e3e2e2",
+                    "on-tertiary-fixed-variant": "#005049",
+                    "on-secondary-container": "#636262",
+                    "on-primary-fixed": "#40000d",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#dbdad9",
+                    "background": "#fbf9f9",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary-fixed-dim": "#ffb2b6",
+                    "primary-fixed": "#ffdada",
+                    "on-tertiary-fixed": "#00201d",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#e5bdbe",
+                    "on-primary-fixed-variant": "#920029",
+                    "surface-tint": "#be0038",
+                    "secondary": "#5f5e5e",
+                    "surface": "#fbf9f9",
+                    "primary": "#ba0036",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f5f3f3",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-background": "#1b1c1c",
+                    "tertiary-fixed": "#7af7e8",
+                    "tertiary": "#00685f",
+                    "tertiary-fixed-dim": "#5bdacc",
+                    "secondary-fixed": "#e5e2e1",
+                    "inverse-surface": "#303031",
+                    "surface-bright": "#fbf9f9",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1b1c1c",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#fffbff",
+                    "surface-container-high": "#e9e8e7",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#e2dfde",
+                    "on-surface-variant": "#5c3f41",
+                    "surface-variant": "#e3e2e2",
+                    "on-tertiary-container": "#f4fffc",
+                    "surface-container": "#efeded"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "display": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- Top Navigation (Simplified for transactional flow) -->
+<header class="w-full bg-surface shadow-sm px-6 h-20 flex justify-between items-center z-50 sticky top-0">
+<div class="text-2xl font-extrabold text-primary tracking-tight">StayHub</div>
+<button class="text-secondary hover:bg-surface-container-low rounded-full p-2 transition-colors">
+<span class="material-symbols-outlined text-on-surface">close</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col max-w-[800px] mx-auto w-full px-6 py-8 pb-32">
+<!-- Header -->
+<div class="mb-10 text-center md:text-left">
+<h1 class="text-[32px] md:text-[48px] font-bold text-on-surface leading-tight tracking-tight mb-2">Where's your place located?</h1>
+<p class="text-[16px] text-secondary">Guests will only get your exact address after they book</p>
+</div>
+<!-- Form Layout -->
+<div class="grid grid-cols-1 gap-8 w-full">
+<!-- Address Form Container -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 shadow-sm">
+<form class="space-y-5">
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-1" for="country">Country/Region</label>
+<select class="w-full border-outline-variant rounded-lg focus:border-on-surface focus:ring-1 focus:ring-on-surface bg-surface-bright text-on-surface h-12 px-4 shadow-sm" id="country">
+<option selected="" value="IN">India</option>
+<option value="US">United States</option>
+<option value="UK">United Kingdom</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-1" for="street">Street address</label>
+<input class="w-full border-outline-variant rounded-lg focus:border-on-surface focus:ring-1 focus:ring-on-surface h-12 px-4 shadow-sm placeholder:text-secondary-fixed-dim" id="street" placeholder="House name/number + street/road" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-1" for="apt">Apt, suite, etc. <span class="text-secondary font-normal">(optional)</span></label>
+<input class="w-full border-outline-variant rounded-lg focus:border-on-surface focus:ring-1 focus:ring-on-surface h-12 px-4 shadow-sm placeholder:text-secondary-fixed-dim" id="apt" placeholder="Apt, suite, building access code" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-1" for="city">City / Town</label>
+<input class="w-full border-outline-variant rounded-lg focus:border-on-surface focus:ring-1 focus:ring-on-surface h-12 px-4 shadow-sm" id="city" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-1" for="state">State / Province</label>
+<input class="w-full border-outline-variant rounded-lg focus:border-on-surface focus:ring-1 focus:ring-on-surface h-12 px-4 shadow-sm" id="state" type="text"/>
+</div>
+</div>
+<div>
+<label class="block text-sm font-semibold text-on-surface mb-1" for="zip">ZIP / Postal code</label>
+<input class="w-full border-outline-variant rounded-lg focus:border-on-surface focus:ring-1 focus:ring-on-surface h-12 px-4 shadow-sm" id="zip" type="text"/>
+</div>
+</form>
+</div>
+<!-- Map Placeholder -->
+<div class="w-full h-[300px] md:h-[400px] rounded-xl overflow-hidden relative shadow-sm border border-outline-variant bg-surface-container-low group">
+<img alt="Map View" class="w-full h-full object-cover" data-location="India" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNmRItn8PqqTke34s50cikxSlHRRdEY6qI3W18Hw7XcusXijN9mixJI3ID3dYWjV0-FvOGO7xsrqO-ho5dLWM_eKgckJ7P1I_3Pjr5c6DCpXsrhlQSOc6NH9LOk1UjGEWfEDlwpOcQOXSeEYN6uVQt_1YnUSYLIvpKmruEkXEuvRCQXEUOoVFqpbR6cQGP8rh2LEGkbYSUVGHs0JNyvhR-yME6uyQXgYyyAeS_EdanGp9vYtiM9Pam-uHYvHsjUjzDOLngoEy-ow"/>
+<!-- Draggable Pin Placeholder -->
+<div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-full cursor-pointer hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[48px] text-primary" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<div class="absolute bottom-4 left-0 right-0 flex justify-center px-4">
+<button class="bg-surface-container-lowest text-on-surface px-6 py-2 rounded-full shadow-floating font-semibold text-sm hover:scale-102 transition-transform border border-outline-variant">
+                         Confirm location
+                     </button>
+</div>
+</div>
+<!-- Contextual Actions -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-surface-container-low p-4 rounded-xl border border-outline-variant">
+<div class="flex items-center gap-3 text-secondary">
+<span class="material-symbols-outlined text-2xl">my_location</span>
+<span class="text-sm">Use my current location</span>
+</div>
+<button class="text-sm font-semibold text-on-surface underline hover:text-primary transition-colors">
+                    What3Words info
+                </button>
+</div>
+</div>
+</main>
+<!-- Bottom Transactional Bar -->
+<div class="fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant px-6 py-4 z-50 flex justify-between items-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<button class="text-on-surface font-semibold underline hover:text-secondary transition-colors">Back</button>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block text-secondary hover:text-on-surface font-semibold transition-colors">Save as draft</button>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-lg font-semibold hover:bg-on-primary-fixed-variant transition-colors shadow-sm hover:shadow-md transform hover:scale-[1.02] active:scale-95 duration-200">
+                 Continue
+             </button>
+</div>
+</div>
+</body></html>
