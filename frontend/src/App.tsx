@@ -20,6 +20,7 @@ import Dashboard from './component/Host/Dashboard.tsx';
 import Listings from './component/Host/Listings.tsx';
 import AddHomePage from './Pages/AddHomePage.tsx';
 import AddHomePage2 from './Pages/AddHomePage2.tsx';
+import AddHomePage3 from './Pages/AddHomePage3.tsx';
 
 function App() {
   const checkrole = useContext(ConditionContext)
@@ -48,6 +49,7 @@ function App() {
         <Route path='/host/listings' element={<Listings/>}></Route>
         <Route path="/add-homepage" element={<AddHomePage />}></Route>
         <Route path="/add-homepage-2" element={<AddHomePage2 />}></Route>
+        <Route path="/add-homepage-3" element={<AddHomePage3 />}></Route>
     
     </Routes>
     </Layout>
