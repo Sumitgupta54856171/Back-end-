@@ -26,6 +26,7 @@ import AddHomePage5 from './Pages/AddHomePage5.tsx';
 import AddHomePage6 from './Pages/AddHomePage6.tsx';
 import AddHomePage7 from './Pages/AddHomePage7.tsx';
 import AddHomePage8 from './Pages/AddHomePage8.tsx';
+import AddHomeReviewPage from './Pages/AddHomeReviewPage.tsx';
 import OnboardingLayout from './component/Host/OnboardingLayout.tsx';
 
 function App() {
@@ -61,6 +62,9 @@ function App() {
         <Route path="/add-homepage-7" element={<AddHomePage7 />} />
         <Route path="/add-homepage-8" element={<AddHomePage8 />} />
       </Route>
+
+      {/* Standalone Review Page (Includes its own layout as per the UI design mockup) */}
+      <Route path="/add-home-review" element={<AddHomeReviewPage />} />
       
       {/* Host Dashboard routes wrapped in Layout */}
       <Route element={<Layout />}>
