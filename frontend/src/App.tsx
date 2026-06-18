@@ -49,29 +49,25 @@ function App() {
       </Routes>
     </PublicNavbar>
   ) : (
-    <>
+    <Routes>
       {/* Onboarding flows rendered with OnboardingLayout to show the step sidebar */}
-      <Routes>
-        <Route element={<OnboardingLayout />}>
-          <Route path="/add-homepage" element={<AddHomePage />} />
-          <Route path="/add-homepage-2" element={<AddHomePage2 />} />
-          <Route path="/add-homepage-3" element={<AddHomePage3 />} />
-          <Route path="/add-homepage-4" element={<AddHomePage4 />} />
-          <Route path="/add-homepage-6" element={<AddHomePage6 />} />
-          <Route path="/add-homepage-5" element={<AddHomePage5 />} />
-          <Route path="/add-homepage-7" element={<AddHomePage7 />} />
-          <Route path="/add-homepage-8" element={<AddHomePage8 />} />
-        </Route>
-      </Routes>
+      <Route element={<OnboardingLayout />}>
+        <Route path="/add-homepage" element={<AddHomePage />} />
+        <Route path="/add-homepage-2" element={<AddHomePage2 />} />
+        <Route path="/add-homepage-3" element={<AddHomePage3 />} />
+        <Route path="/add-homepage-4" element={<AddHomePage4 />} />
+        <Route path="/add-homepage-6" element={<AddHomePage6 />} />
+        <Route path="/add-homepage-5" element={<AddHomePage5 />} />
+        <Route path="/add-homepage-7" element={<AddHomePage7 />} />
+        <Route path="/add-homepage-8" element={<AddHomePage8 />} />
+      </Route>
       
       {/* Host Dashboard routes wrapped in Layout */}
-      <Layout>
-        <Routes>
-          <Route path="/host/dashboard" element={<HostDashboard />}></Route>
-          <Route path='/host/listings' element={<Listings/>}></Route>
-        </Routes>
-      </Layout>
-    </>
+      <Route element={<Layout />}>
+        <Route path="/host/dashboard" element={<HostDashboard />} />
+        <Route path="/host/listings" element={<Listings />} />
+      </Route>
+    </Routes>
   )
   
 }
