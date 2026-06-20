@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>StayHub - Preview &amp; Publish</title>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-primary": "#ffb2b6",
+                    "inverse-on-surface": "#f2f0f0",
+                    "primary-container": "#e21e4a",
+                    "tertiary-container": "#008379",
+                    "outline": "#906f70",
+                    "on-secondary": "#ffffff",
+                    "surface-container-highest": "#e3e2e2",
+                    "on-tertiary-fixed-variant": "#005049",
+                    "on-secondary-container": "#636262",
+                    "on-primary-fixed": "#40000d",
+                    "error-container": "#ffdad6",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#dbdad9",
+                    "background": "#fbf9f9",
+                    "secondary-fixed-dim": "#c8c6c5",
+                    "primary-fixed-dim": "#ffb2b6",
+                    "primary-fixed": "#ffdada",
+                    "on-tertiary-fixed": "#00201d",
+                    "error": "#ba1a1a",
+                    "outline-variant": "#e5bdbe",
+                    "on-primary-fixed-variant": "#920029",
+                    "surface-tint": "#be0038",
+                    "secondary": "#5f5e5e",
+                    "surface": "#fbf9f9",
+                    "primary": "#ba0036",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f5f3f3",
+                    "on-secondary-fixed-variant": "#474746",
+                    "on-background": "#1b1c1c",
+                    "tertiary-fixed": "#7af7e8",
+                    "tertiary": "#00685f",
+                    "tertiary-fixed-dim": "#5bdacc",
+                    "secondary-fixed": "#e5e2e1",
+                    "inverse-surface": "#303031",
+                    "surface-bright": "#fbf9f9",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface": "#1b1c1c",
+                    "on-error": "#ffffff",
+                    "on-primary-container": "#fffbff",
+                    "surface-container-high": "#e9e8e7",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#e2dfde",
+                    "on-surface-variant": "#5c3f41",
+                    "surface-variant": "#e3e2e2",
+                    "on-tertiary-container": "#f4fffc",
+                    "surface-container": "#efeded"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased selection:bg-primary-container selection:text-on-primary-container min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 h-20 bg-surface border-b border-outline-variant font-headline text-[18px] font-semibold transition-all duration-200">
+<div class="text-primary font-bold text-xl tracking-tight">StayHub</div>
+<div class="hidden">Search</div>
+<button class="text-primary hover:text-primary transition-colors text-[14px]">Save and exit</button>
+</header>
+<div class="flex flex-1 pt-20 pb-24">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-20 bottom-0 w-80 py-8 bg-surface border-r border-outline-variant font-body text-[16px] overflow-y-auto">
+<div class="px-8 mb-8">
+<h2 class="text-on-surface font-bold text-[24px] mb-1">Create your listing</h2>
+<p class="text-secondary text-[14px]">Step 8 of 8</p>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-4 py-3 text-secondary pl-8 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">home_work</span>
+<span>Property Type</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-secondary pl-8 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">location_on</span>
+<span>Location</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-secondary pl-8 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">info</span>
+<span>Basic Info</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-secondary pl-8 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span>Amenities</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-secondary pl-8 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">photo_library</span>
+<span>Photos</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-secondary pl-8 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">description</span>
+<span>Description</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-secondary pl-8 hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span>Pricing</span>
+</a>
+<a class="flex items-center gap-4 py-3 text-primary font-bold border-l-4 border-primary pl-7 bg-primary-container/10 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">gavel</span>
+<span>House Rules</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 lg:ml-80 px-6 md:px-12 lg:px-24 py-12 max-w-[1280px] mx-auto w-full">
+<header class="mb-12">
+<h1 class="font-headline text-[32px] md:text-[48px] font-bold text-on-surface tracking-tight mb-2">Review your listing</h1>
+<p class="text-[18px] text-secondary">Check everything before publishing to guests.</p>
+</header>
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-12">
+<!-- Left Column: Preview -->
+<div class="xl:col-span-5 flex flex-col gap-8">
+<div>
+<h3 class="font-headline text-[18px] font-semibold text-on-surface mb-4">Preview</h3>
+<!-- Glassmorphism Preview Card -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-4 shadow-[0_8px_28px_rgba(0,0,0,0.08)] border border-surface-variant transition-transform duration-300 hover:shadow-[0_12px_32px_rgba(0,0,0,0.12)] hover:-translate-y-1">
+<div class="relative w-full aspect-[4/3] rounded-[1rem] overflow-hidden mb-4">
+<img alt="Listing Preview" class="w-full h-full object-cover" data-alt="A luxurious modern villa interior featuring floor-to-ceiling windows with a view of a lush tropical garden. The space is bathed in bright, natural light, highlighting the minimalist white furnishings and warm wood accents. The overall aesthetic is high-end, clean, and inviting, perfectly aligning with a premium light-mode UI design. Deep red brand accents are subtly incorporated through a decorative throw pillow." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0jkbCaecsPelXXMcpC4REvJJ_k8ofepvU9AoHdPXNc6eXxNlKJD4xSgfk2Sa-jdWQEUbyHuk1g4CviUnAsaAmwxrKc_MrYuC7bGps4SNbDO4YTzFmK2bDxCwQg0l8IN_TYqJkJSHMOXx1eka3MaDveI6dnajc5rMkTWqUwTeGMkkqcKsMhX8IUMh1Sqz8CxAoeoT7-NpeC8ML-izRol7Qnw0exrEbfWIrtxANuRSnka_nRGSFFJv9-U0SX2e8j1qhdN506lYwgA"/>
+<button class="absolute top-3 right-3 bg-surface-container-lowest/90 backdrop-blur-sm p-2 rounded-full text-on-surface hover:scale-105 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-[20px]">favorite</span>
+</button>
+<div class="absolute bottom-3 left-3 bg-surface-container-lowest/90 backdrop-blur-sm px-3 py-1 rounded-full text-[12px] font-semibold flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px] fill">star</span>
+                                    New
+                                </div>
+</div>
+<div class="px-2">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-headline font-semibold text-[16px] text-on-surface truncate pr-4">Modern Villa with Private Pool</h4>
+</div>
+<p class="text-secondary text-[14px] mb-2">Bali, Indonesia</p>
+<div class="flex items-baseline gap-1 mt-3">
+<span class="font-headline font-bold text-[16px] text-on-surface">$250</span>
+<span class="text-secondary text-[14px]">night</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Details & Publish -->
+<div class="xl:col-span-7 flex flex-col gap-10">
+<!-- Editable Summary -->
+<section>
+<h3 class="font-headline text-[18px] font-semibold text-on-surface mb-4">Listing Details</h3>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[1rem] divide-y divide-outline-variant shadow-sm">
+<div class="flex justify-between items-center p-5 hover:bg-surface-container-low transition-colors rounded-t-[1rem]">
+<div>
+<p class="text-secondary text-[12px] font-semibold uppercase tracking-wider mb-1">Property Type</p>
+<p class="text-on-surface text-[16px]">Entire Villa</p>
+</div>
+<button class="text-on-surface underline text-[14px] font-medium hover:text-primary transition-colors">Edit</button>
+</div>
+<div class="flex justify-between items-center p-5 hover:bg-surface-container-low transition-colors">
+<div>
+<p class="text-secondary text-[12px] font-semibold uppercase tracking-wider mb-1">Location</p>
+<p class="text-on-surface text-[16px]">Ubud, Bali, Indonesia</p>
+</div>
+<button class="text-on-surface underline text-[14px] font-medium hover:text-primary transition-colors">Edit</button>
+</div>
+<div class="flex justify-between items-center p-5 hover:bg-surface-container-low transition-colors">
+<div>
+<p class="text-secondary text-[12px] font-semibold uppercase tracking-wider mb-1">Guests &amp; Rooms</p>
+<p class="text-on-surface text-[16px]">4 guests · 2 bedrooms · 2 baths</p>
+</div>
+<button class="text-on-surface underline text-[14px] font-medium hover:text-primary transition-colors">Edit</button>
+</div>
+<div class="flex justify-between items-center p-5 hover:bg-surface-container-low transition-colors rounded-b-[1rem]">
+<div>
+<p class="text-secondary text-[12px] font-semibold uppercase tracking-wider mb-1">Pricing</p>
+<p class="text-on-surface text-[16px]">$250 / night base price</p>
+</div>
+<button class="text-on-surface underline text-[14px] font-medium hover:text-primary transition-colors">Edit</button>
+</div>
+</div>
+</section>
+<!-- Publish Options -->
+<section>
+<h3 class="font-headline text-[18px] font-semibold text-on-surface mb-4">Publishing Options</h3>
+<div class="grid grid-cols-1 gap-4">
+<label class="relative flex items-start p-5 cursor-pointer rounded-[1rem] border-2 border-primary bg-primary-container/5 transition-all">
+<div class="flex items-center h-6">
+<input checked="" class="w-5 h-5 text-primary border-outline focus:ring-primary focus:ring-offset-surface" name="publish_option" type="radio" value="now"/>
+</div>
+<div class="ml-4 flex-1">
+<span class="block text-on-surface font-semibold text-[16px]">Publish immediately</span>
+<span class="block text-secondary text-[14px] mt-1">Your listing will be visible to guests right away.</span>
+</div>
+</label>
+<label class="relative flex items-start p-5 cursor-pointer rounded-[1rem] border border-outline-variant hover:border-outline bg-surface-container-lowest transition-all">
+<div class="flex items-center h-6">
+<input class="w-5 h-5 text-primary border-outline focus:ring-primary focus:ring-offset-surface" name="publish_option" type="radio" value="later"/>
+</div>
+<div class="ml-4 flex-1">
+<span class="block text-on-surface font-semibold text-[16px]">Schedule for later</span>
+<span class="block text-secondary text-[14px] mt-1">Choose a specific date to make your listing go live.</span>
+</div>
+</label>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full z-50 flex justify-between items-center px-6 py-4 md:px-20 bg-surface border-t border-outline-variant shadow-[0_-4px_16px_rgba(0,0,0,0.05)] font-label text-[14px]">
+<button class="text-secondary font-medium px-4 py-2 hover:bg-secondary-container rounded-[0.5rem] transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+            Back
+        </button>
+<div class="flex items-center gap-4">
+<button class="text-secondary font-medium px-4 py-2 hover:bg-secondary-container rounded-[0.5rem] transition-all hidden md:flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">save</span>
+                Save as draft
+            </button>
+<button class="bg-primary text-on-primary rounded-[0.75rem] px-8 py-3 font-bold hover:scale-95 hover:bg-[#a60030] transition-transform flex items-center gap-2 shadow-sm">
+                Continue
+                <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</footer>
+</body></html>

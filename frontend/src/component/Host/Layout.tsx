@@ -1,8 +1,8 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import HostNavbar from "./Navbar";
-import type { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
 
-const Layout = ({ children }: { children: ReactNode }) => {
+const Layout = () => {
   return (
     <SidebarProvider>
 
@@ -16,7 +16,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
             <p className=" border-[#5F5E5E] w-full h-[50px]"></p>
           </div>
           <div className="w-full">
-            {children}
+            <Outlet />
           </div>
         </main>
       </div>
