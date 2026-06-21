@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumina Motion | Enterprise Animation Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --primary: #f59e0b;
+            --dark: #0a0a0a;
+            --darker: #050505;
+        }
+        
+        * {
+            cursor: none;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--darker);
+            color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Syne', sans-serif;
+        }
+        
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+        }
+        
+        .custom-cursor.hovering {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(245, 158, 11, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9000;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+        
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.15) 0%, rgba(10, 10, 10, 0) 50%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+        
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 30s linear infinite;
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: var(--darker);
+        }
+        
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+        
+        .project-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .service-card:hover .service-icon {
+            transform: rotate(360deg) scale(1.1);
+        }
+        
+        .testimonial-track {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .line-through-animation {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .line-through-animation::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .line-through-animation:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+            color: #0a0a0a;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+        }
+        
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .nav-blur {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+    
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="cursor"></div>
+    
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-6">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tighter hover-trigger" data-hover-text="HOME">
+                LUMINA<span class="text-amber-500">.</span>
+            </a>
+            
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#work" class="text-sm font-medium text-gray-300 hover:text-white transition-colors line-through-animation hover-trigger">Work</a>
+                <a href="#services" class="text-sm font-medium text-gray-300 hover:text-white transition-colors line-through-animation hover-trigger">Services</a>
+                <a href="#about" class="text-sm font-medium text-gray-300 hover:text-white transition-colors line-through-animation hover-trigger">Studio</a>
+                <a href="#testimonials" class="text-sm font-medium text-gray-300 hover:text-white transition-colors line-through-animation hover-trigger">Clients</a>
+                <a href="#contact" class="btn-primary px-6 py-3 rounded-full text-sm font-semibold hover-trigger">Start Project</a>
+            </div>
+            
+            <button id="mobile-menu-btn" class="md:hidden text-white hover-trigger">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black/95 z-40 transform translate-x-full transition-transform duration-500 flex flex-col items-center justify-center gap-8">
+        <a href="#work" class="text-3xl font-bold text-white hover:text-amber-500 transition-colors mobile-link">Work</a>
+        <a href="#services" class="text-3xl font-bold text-white hover:text-amber-500 transition-colors mobile-link">Services</a>
+        <a href="#about" class="text-3xl font-bold text-white hover:text-amber-500 transition-colors mobile-link">Studio</a>
+        <a href="#testimonials" class="text-3xl font-bold text-white hover:text-amber-500 transition-colors mobile-link">Clients</a>
+        <a href="#contact" class="text-3xl font-bold text-amber-500 transition-colors mobile-link">Start Project</a>
+        <button id="mobile-menu-close" class="absolute top-6 right-6 text-white">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div class="absolute inset-0 hero-gradient"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(245,158,11,0.1)_0%,transparent_40%)]"></div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-1/4 left-10 w-32 h-32 border border-amber-500/20 rounded-full floating hidden lg:block" style="animation-delay: 0s;"></div>
+        <div class="absolute bottom-1/4 right-20 w-48 h-48 border border-white/10 rounded-full floating hidden lg:block" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/3 right-1/4 w-4 h-4 bg-amber-500 rounded-full floating hidden lg:block" style="animation-delay: 1s;"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-8 reveal">
+                <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+                <span class="text-xs font-medium tracking-wider uppercase text-gray-300">Award-Winning Animation Studio</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-9xl font-bold leading-none tracking-tighter mb-8 reveal">
+                WE CRAFT<br>
+                <span class="text-gradient">MOTION MAGIC</span>
+            </h1>
+            
+            <p class="max-w-2xl mx-auto text-lg md:text-xl text-gray-400 mb-12 reveal">
+                Enterprise-grade animation, motion design, and visual storytelling for brands that demand excellence.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal">
+                <a href="#work" class="btn-primary px-8 py-4 rounded-full font-semibold text-lg hover-trigger">
+                    View Our Work
+                </a>
+                <a href="#contact" class="px-8 py-4 rounded-full border border-white/20 font-semibold text-lg hover:bg-white/5 transition-colors hover-trigger">
+                    Get in Touch
+                </a>
+            </div>
+            
+            <!-- Hero Stats -->
+            <div class="grid grid-cols-3 gap-8 max-w-3xl mx-auto mt-20 pt-12 border-t border-white/10 reveal">
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-white stat-number" data-target="250">0</div>
+                    <div class="text-sm text-gray-500 mt-2 uppercase tracking-wider">Projects</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-white stat-number" data-target="48">0</div>
+                    <div class="text-sm text-gray-500 mt-2 uppercase tracking-wider">Awards</div>
+                </div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-white stat-number" data-target="120">0</div>
+                    <div class="text-sm text-gray-500 mt-2 uppercase tracking-wider">Clients</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500"></i>
+        </div>
+    </section>
+
+    <!-- Marquee Section -->
+    <section class="py-12 border-y border-white/10 bg-black/50 overflow-hidden">
+        <div class="marquee-container">
+            <div class="marquee-content text-4xl md:text-6xl font-bold text-white/10 tracking-tighter">
+                • 2D ANIMATION • 3D VISUALIZATION • MOTION GRAPHICS • CHARACTER DESIGN • VFX • BRAND STORYTELLING • UI ANIMATION • 
+                • 2D ANIMATION • 3D VISUALIZATION • MOTION GRAPHICS • CHARACTER DESIGN • VFX • BRAND STORYTELLING • UI ANIMATION • 
+            </div>
+        </div>
+    </section>
+
+    <!-- Work Section -->
+    <section id="work" class="py-24 md:py-32 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 reveal">
+                <div>
+                    <h2 class="text-4xl md:text-6xl font-bold mb-4">Selected Work</h2>
+                    <p class="text-gray-400 max-w-xl">A curated collection of our most impactful animation projects for global enterprises.</p>
+                </div>
+                
+                <div class="flex flex-wrap gap-2 mt-6 md:mt-0">
+                    <button class="filter-btn active px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover-trigger" data-filter="all">All</button>
+                    <button class="filter-btn px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover-trigger" data-filter="3d">3D</button>
+                    <button class="filter-btn px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover-trigger" data-filter="2d">2D</button>
+                    <button class="filter-btn px-5 py-2 rounded-full border border-white/20 text-sm font-medium transition-all hover-trigger" data-filter="motion">Motion</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-grid">
+                <!-- Projects will be injected by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 md:py-32 bg-neutral-900/50">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-4xl md:text-6xl font-bold mb-4">What We Do</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">End-to-end animation services tailored for enterprise brands and agencies.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="service-card group p-8 rounded-2xl border border-white/10 bg-black/40 hover:border-amber-500/50 transition-all hover-trigger reveal">
+                    <div class="service-icon w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mb-6 transition-transform duration-700">
+                        <i data-lucide="box" class="w-8 h-8 text-amber-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">3D Animation</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Cinematic 3D animations, product visualizations, and character modeling for maximum impact.</p>
+                </div>
+                
+                <div class="service-card group p-8 rounded-2xl border border-white/10 bg-black/40 hover:border-amber-500/50 transition-all hover-trigger reveal">
+                    <div class="service-icon w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mb-6 transition-transform duration-700">
+                        <i data-lucide="palette" class="w-8 h-8 text-amber-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">2D Animation</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Hand-crafted frame-by-frame and vector animations that bring stories to life.</p>
+                </div>
+                
+                <div class="service-card group p-8 rounded-2xl border border-white/10 bg-black/40 hover:border-amber-500/50 transition-all hover-trigger reveal">
+                    <div class="service-icon w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mb-6 transition-transform duration-700">
+                        <i data-lucide="zap" class="w-8 h-8 text-amber-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Motion Graphics</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Dynamic typographic and graphic animations for brand films, explainers, and social content.</p>
+                </div>
+                
+                <div class="service-card group p-8 rounded-2xl border border-white/10 bg-black/40 hover:border-amber-500/50 transition-all hover-trigger reveal">
+                    <div class="service-icon w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center mb-6 transition-transform duration-700">
+                        <i data-lucide="sparkles" class="w-8 h-8 text-amber-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">VFX & Compositing</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Seamless visual effects, CGI integration, and post-production for film and commercial.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About / Studio Section -->
+    <section id="about" class="py-24 md:py-32 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-amber-500/5 to-transparent pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative reveal">
+                    <div class="relative aspect-[4/5] rounded-2xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=800" alt="Studio Work" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                    </div>
+                    <div class="absolute -bottom-8 -right-8 w-48 h-48 bg-amber-500 rounded-2xl -z-10 hidden lg:block"></div>
+                    <div class="absolute -top-8 -left-8 w-32 h-32 border border-white/20 rounded-2xl hidden lg:block"></div>
+                </div>
+                
+                <div class="reveal">
+                    <div class="inline-block px-4 py-2 rounded-full bg-amber-500/10 text-amber-500 text-xs font-bold uppercase tracking-wider mb-6">The Studio</div>
+                    <h2 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">Where Vision Meets<br><span class="text-gradient">Motion</span></h2>
+                    <p class="text-gray-400 text-lg mb-6 leading-relaxed">
+                        Lumina Motion is a premium animation studio founded on the belief that exceptional storytelling drives business results. We partner with forward-thinking brands to create animation that captivates, communicates, and converts.
+                    </p>
+                    <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+                        Our team of directors, animators, and designers combines artistic craft with strategic thinking, delivering enterprise-grade production value on every project.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <h4 class="text-2xl font-bold text-white mb-1">15+</h4>
+                            <p class="text-sm text-gray-500">Years Experience</p>
+                        </div>
+                        <div>
+                            <h4 class="text-2xl font-bold text-white mb-1">40+</h4>
+                            <p class="text-sm text-gray-500">Creative Minds</p>
+                        </div>
+                    </div>
+                    
+                    <a href="#contact" class="inline-flex items-center gap-2 text-amber-500 font-semibold hover:text-amber-400 transition-colors hover-trigger">
+                        Meet the team <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-24 md:py-32 bg-neutral-900/50 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 reveal">
+                <div>
+                    <h2 class="text-4xl md:text-6xl font-bold mb-4">Client Voices</h2>
+                    <p class="text-gray-400 max-w-xl">What enterprise partners say about working with Lumina Motion.</p>
+                </div>
+                <div class="flex gap-4 mt-6 md:mt-0">
+                    <button id="prev-testimonial" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-amber-500 hover:border-amber-500 hover:text-black transition-all hover-trigger">
+                        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    </button>
+                    <button id="next-testimonial" class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-amber-500 hover:border-amber-500 hover:text-black transition-all hover-trigger">
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="overflow-hidden">
+                <div class="testimonial-track flex gap-6" id="testimonial-track">
+                    <!-- Testimonials injected by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section class="py-24 md:py-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-4xl md:text-6xl font-bold mb-4">Our Process</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">A refined workflow that delivers consistent excellence from concept to final delivery.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="relative p-8 reveal">
+                    <div class="text-8xl font-bold text-white/5 absolute top-0 left-0">01</div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center mb-6">
+                            <i data-lucide="message-square" class="w-6 h-6 text-black"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Discovery</h3>
+                        <p class="text-gray-400 text-sm">We dive deep into your brand, objectives, and audience to define the creative direction.</p>
+                    </div>
+                </div>
+                
+                <div class="relative p-8 reveal">
+                    <div class="text-8xl font-bold text-white/5 absolute top-0 left-0">02</div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center mb-6">
+                            <i data-lucide="pen-tool" class="w-6 h-6 text-black"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Concept</h3>
+                        <p class="text-gray-400 text-sm">Scriptwriting, storyboarding, and style frames that align vision with execution.</p>
+                    </div>
+                </div>
+                
+                <div class="relative p-8 reveal">
+                    <div class="text-8xl font-bold text-white/5 absolute top-0 left-0">03</div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center mb-6">
+                            <i data-lucide="play" class="w-6 h-6 text-black"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Production</h3>
+                        <p class="text-gray-400 text-sm">Full-scale animation, VFX, and motion design with regular milestone reviews.</p>
+                    </div>
+                </div>
+                
+                <div class="relative p-8 reveal">
+                    <div class="text-8xl font-bold text-white/5 absolute top-0 left-0">04</div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center mb-6">
+                            <i data-lucide="check-circle" class="w-6 h-6 text-black"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">Delivery</h3>
+                        <p class="text-gray-400 text-sm">Optimized exports, source files, and ongoing support for every platform.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 md:py-32 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-amber-500/5 to-transparent pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div class="reveal">
+                    <h2 class="text-4xl md:text-6xl font-bold mb-6">Let's Create<br>Something <span class="text-gradient">Extraordinary</span></h2>
+                    <p class="text-gray-400 text-lg mb-12 leading-relaxed">
+                        Ready to elevate your brand with world-class animation? Tell us about your project, and we'll craft a tailored proposal.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
+                                <i data-lucide="mail" class="w-5 h-5 text-amber-500"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Email</p>
+                                <p class="text-white font-medium">hello@luminamotion.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
+                                <i data-lucide="phone" class="w-5 h-5 text-amber-500"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Phone</p>
+                                <p class="text-white font-medium">+1 (555) 123-4567</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-amber-500"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">Location</p>
+                                <p class="text-white font-medium">New York, Los Angeles, London</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <form id="contact-form" class="p-8 md:p-10 rounded-3xl border border-white/10 bg-white/5 backdrop-blur-sm reveal">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Name</label>
+                            <input type="text" required class="w-full px-5 py-4 rounded-xl bg-black/40 border border-white/10 focus:border-amber-500 focus:outline-none text-white transition-colors" placeholder="John Smith">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                            <input type="email" required class="w-full px-5 py-4 rounded-xl bg-black/40 border border-white/10 focus:border-amber-500 focus:outline-none text-white transition-colors" placeholder="john@company.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Project Type</label>
+                            <select class="w-full px-5 py-4 rounded-xl bg-black/40 border border-white/10 focus:border-amber-500 focus:outline-none text-white transition-colors">
+                                <option>3D Animation</option>
+                                <option>2D Animation</option>
+                                <option>Motion Graphics</option>
+                                <option>VFX & Compositing</option>
+                                <option>Brand Film</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Message</label>
+                            <textarea rows="4" required class="w-full px-5 py-4 rounded-xl bg-black/40 border border-white/10 focus:border-amber-500 focus:outline-none text-white transition-colors resize-none" placeholder="Tell us about your project..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full btn-primary py-4 rounded-xl font-semibold text-lg hover-trigger">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/10 bg-black">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div class="md:col-span-2">
+                    <a href="#" class="text-3xl font-bold tracking-tighter mb-4 inline-block hover-trigger">
+                        LUMINA<span class="text-amber-500">.</span>
+                    </a>
+                    <p class="text-gray-400 max-w-md mt-4">
+                        Premium animation studio crafting motion experiences for enterprise brands worldwide.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Navigation</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#work" class="text-gray-400 hover:text-white transition-colors">Work</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition-colors">Services</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">Studio</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Social</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Instagram</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Behance</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Dribbble</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-sm">© 2024 Lumina Motion. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="text-gray-500 text-sm hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 text-sm hover:text-white transition-colors">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 rounded-full bg-amber-500 text-black flex items-center justify-center opacity-0 pointer-events-none transition-all duration-300 z-40 hover:scale-110 hover-trigger">
+        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+    </button>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Project data
+        const projects = [
+            {
+                title: "Nexus Tech Rebrand",
+                category: "3d",
+                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600",
+                tags: ["3D", "Brand Film"]
+            },
+            {
+                title: "Aether Finance",
+                category: "motion",
+                image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&q=80&w=600",
+                tags: ["Motion Graphics", "Explainer"]
+            },
+            {
+                title: "Solaris Stories",
+                category: "2d",
+                image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&q=80&w=600",
+                tags: ["2D", "Character"]
+            },
+            {
+                title: "Quantum Product",
+                category: "3d",
+                image: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&q=80&w=600",
+                tags: ["3D", "Product Viz"]
+            },
+            {
+                title: "Velvet Campaign",
+                category: "2d",
+                image: "https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&q=80&w=600",
+                tags: ["2D", "Social"]
+            },
+            {
+                title: "Horizon VFX",
+                category: "motion",
+                image: "https://images.unsplash.com/photo-1535016120720-40c6874c3b13?auto=format&fit=crop&q=80&w=600",
+                tags: ["VFX", "Commercial"]
+            }
+        ];
+
+        // Testimonials data
+        const testimonials = [
+            {
+                text: "Lumina Motion transformed our product launch into a cinematic experience. Their attention to detail and strategic approach set them apart.",
+                author: "Sarah Chen",
+                role: "CMO, Nexus Technologies",
+                image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100"
+            },
+            {
+                text: "Working with Lumina was seamless from start to finish. They delivered enterprise-grade animation that elevated our entire brand presence.",
+                author: "Michael Torres",
+                role: "Brand Director, Aether Finance",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100"
+            },
+            {
+                text: "The team's creativity and technical expertise are unmatched. They brought our vision to life in ways we didn't think possible.",
+                author: "Emma Williams",
+                role: "Creative Lead, Solaris Media",
+                image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100"
+            }
+        ];
+
+        // Render projects
+        function renderProjects(filter = 'all') {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = '';
+            
+            const filtered = filter === 'all' ? projects : projects.filter(p => p.category === filter);
+            
+            filtered.forEach((project, index) => {
+                const card = document.createElement('div');
+                card.className = 'project-card group relative overflow-hidden rounded-2xl cursor-pointer hover-trigger reveal';
+                card.innerHTML = `
+                    <div class="aspect-[4/3] overflow-hidden">
+                        <img src="${project.image}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-700">
+                    </div>
+                    <div class="project-overlay absolute inset-0 bg-black/80 opacity-0 transition-opacity duration-500 flex flex-col justify-end p-8">
+                        <div class="flex gap-2 mb-3">
+                            ${project.tags.map(tag => `<span class="px-3 py-1 rounded-full border border-white/20 text-xs text-white">${tag}</span>`).join('')}
+                        </div>
+                        <h3 class="text-2xl font-bold text-white">${project.title}</h3>
+                        <div class="flex items-center gap-2 mt-4 text-amber-500 font-medium">
+                            View Project <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            
+            lucide.createIcons();
+            
+            // Re-trigger animations for new elements
+            gsap.fromTo('.project-card.reveal', 
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power2.out', scrollTrigger: {
+                    trigger: '#projects-grid',
+                    start: 'top 80%'
+                }}
+            );
+        }
+
+        // Render testimonials
+        function renderTestimonials() {
+            const track = document.getElementById('testimonial-track');
+            testimonials.forEach(t => {
+                const card = document.createElement('div');
+                card.className = 'testimonial-card min-w-full md:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)] p-8 rounded-2xl border border-white/10 bg-black/40';
+                card.innerHTML = `
+                    <div class="flex gap-1 mb-6">
+                        ${Array(5).fill('<i data-lucide="star" class="w-4 h-4 text-amber-500 fill-amber-500"></i>').join('')}
+                    </div>
+                    <p class="text-gray-300 mb-8 leading-relaxed">"${t.text}"</p>
+                    <div class="flex items-center gap-4">
+                        <img src="${t.image}" alt="${t.author}" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-white">${t.author}</h4>
+                            <p class="text-sm text-gray-500">${t.role}</p>
+                        </div>
+                    </div>
+                `;
+                track.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Initialize
+        renderProjects();
+        renderTestimonials();
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderProjects(btn.dataset.filter);
+            });
+        });
+
+        // Custom cursor
+        const cursor = document.getElementById('cursor');
+        let cursorX = 0, cursorY = 0;
+        let mouseX = 0, mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor hover effect
+        document.querySelectorAll('.hover-trigger, a, button, .project-card, .service-card').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+        });
+
+        // Mobile menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('translate-x-full');
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileMenuClose.addEventListener('click', toggleMobileMenu);
+        mobileLinks.forEach(link => link.addEventListener('click', toggleMobileMenu));
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        const backToTop = document.getElementById('back-to-top');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('nav-blur', 'bg-black/80', 'py-4');
+                navbar.classList.remove('py-6');
+                backToTop.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                navbar.classList.remove('nav-blur', 'bg-black/80', 'py-4');
+                navbar.classList.add('py-6');
+                backToTop.classList.add('opacity-0', 'pointer-events-none');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // GSAP ScrollTrigger animations
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero parallax
+        gsap.to('#hero img, .floating', {
+            yPercent: 20,
+            ease: 'none',
+            scrollTrigger: {
+                trigger: '#hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            }
+        });
+
+        // Reveal animations
+        gsap.utils.toArray('.reveal').forEach(el => {
+            gsap.fromTo(el, 
+                { opacity: 0, y: 30 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                        toggleActions: 'play none none none'
+                    }
+                }
+            );
+        });
+
+        // Animated stats counter
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers.forEach(num => {
+            const target = parseInt(num.dataset.target);
+            gsap.to(num, {
+                innerText: target,
+                duration: 2,
+                snap: { innerText: 1 },
+                ease: 'power2.out',
+                scrollTrigger: {
+                    trigger: num,
+                    start: 'top 80%'
+                }
+            });
+        });
+
+        // Testimonial carousel
+        const track = document.getElementById('testimonial-track');
+        let testimonialIndex = 0;
+        const totalTestimonials = testimonials.length;
+
+        function updateTestimonialCarousel() {
+            const cardWidth = track.children[0].offsetWidth + 24;
+            track.style.transform = `translateX(-${testimonialIndex * cardWidth}px)`;
+        }
+
+        document.getElementById('next-testimonial').addEventListener('click', () => {
+            const visibleCards = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+            testimonialIndex = Math.min(testimonialIndex + 1, totalTestimonials - visibleCards);
+            updateTestimonialCarousel();
+        });
+
+        document.getElementById('prev-testimonial').addEventListener('click', () => {
+            testimonialIndex = Math.max(testimonialIndex - 1, 0);
+            updateTestimonialCarousel();
+        });
+
+        window.addEventListener('resize', updateTestimonialCarousel);
+
+        // Contact form
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+            btn.innerText = 'Message Sent!';
+            btn.classList.add('bg-green-500');
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.classList.remove('bg-green-500');
+                e.target.reset();
+            }, 3000);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // 3D tilt effect for service cards
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+        });
+
+        // Magnetic effect for buttons
+        document.querySelectorAll('.btn-primary, a.inline-flex').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+    </script>
+</body>
+</html>

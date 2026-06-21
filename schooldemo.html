@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduCore — Enterprise School Management System</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{primary:{50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',300:'#5eead4',400:'#2dd4bf',500:'#14b8a6',600:'#0d9488',700:'#0f766e',800:'#115e59',900:'#134e4a',950:'#042f2e'},sidebar:{DEFAULT:'#0B1120',hover:'#141E33',active:'#1A2740'},surface:'#F1F5F9'},fontFamily:{heading:['Outfit','sans-serif'],body:['DM Sans','sans-serif']}}}}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif}
+h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+.sb-scroll::-webkit-scrollbar-thumb{background:#1e3a5f}
+.page-content{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.modal-ov{animation:mFade .2s ease}
+.modal-pn{animation:mSlide .3s ease-out}
+@keyframes mFade{from{opacity:0}to{opacity:1}}
+@keyframes mSlide{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.toast-in{animation:tIn .4s ease-out}
+.toast-out{animation:tOut .3s ease-in forwards}
+@keyframes tIn{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
+@keyframes tOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(100%)}}
+.nav-item.active{background:linear-gradient(90deg,rgba(13,148,136,.15) 0%,transparent 100%);border-left:3px solid #0d9488}
+.nav-item:not(.active){border-left:3px solid transparent}
+.trow{transition:background .15s}.trow:hover{background:#f8fafc}
+.scard{transition:transform .2s,box-shadow .2s}.scard:hover{transform:translateY(-2px);box-shadow:0 8px 25px -5px rgba(0,0,0,.1)}
+.bpress:active{transform:scale(.97)}
+.pulse-d{animation:pls 2s infinite}@keyframes pls{0%,100%{opacity:1}50%{opacity:.4}}
+.ndrop{animation:nSlide .2s ease-out}@keyframes nSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.pfill{transition:width .8s ease}
+.bpulse{animation:bp 2s infinite}@keyframes bp{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 6px rgba(239,68,68,0)}}
+input:focus,select:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(13,148,136,.15);border-color:#0d9488}
+.tt-cell{transition:all .15s}.tt-cell:hover{transform:scale(1.03);z-index:1}
+.mob-ov{animation:fadeIn .2s ease}
+.gtext{background:linear-gradient(135deg,#0d9488,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body class="bg-surface text-slate-800 font-body min-h-screen">
+
+<!-- Mobile Overlay -->
+<div id="mobOv" class="fixed inset-0 bg-black/50 z-40 hidden mob-ov lg:hidden" onclick="toggleMob()"></div>
+
+<!-- Sidebar -->
+<aside id="sidebar" class="fixed left-0 top-0 bottom-0 w-64 bg-sidebar z-50 flex flex-col transition-transform duration-300 -translate-x-full lg:translate-x-0">
+<div class="h-16 flex items-center px-5 border-b border-white/5 flex-shrink-0">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-gradient-to-br from-primary-500 to-cyan-500 flex items-center justify-center"><i class="fas fa-graduation-cap text-white text-sm"></i></div>
+<div><h1 class="font-heading font-bold text-white text-lg leading-none">EduCore</h1><span class="text-[10px] text-slate-500 uppercase tracking-widest">Management</span></div>
+</div>
+</div>
+<nav id="sideNav" class="flex-1 overflow-y-auto sb-scroll py-4 px-3 space-y-1"></nav>
+<div class="p-3 border-t border-white/5 flex-shrink-0">
+<div class="flex items-center gap-3 p-2 rounded-lg hover:bg-sidebar-hover cursor-pointer transition-colors">
+<div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-cyan-500 flex items-center justify-center text-white font-semibold text-sm">AD</div>
+<div class="flex-1 min-w-0"><p class="text-white text-sm font-medium truncate">Admin User</p><p class="text-slate-500 text-xs truncate">admin@educore.com</p></div>
+</div>
+</div>
+</aside>
+
+<!-- Main -->
+<div class="lg:ml-64 min-h-screen flex flex-col">
+<header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-30">
+<div class="flex items-center gap-3">
+<button onclick="toggleMob()" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100"><i class="fas fa-bars text-slate-600"></i></button>
+<div id="breadcrumb" class="hidden sm:flex items-center gap-2 text-sm"><span class="text-slate-400">Home</span><i class="fas fa-chevron-right text-[10px] text-slate-300"></i><span class="text-slate-700 font-medium" id="bcPage">Dashboard</span></div>
+</div>
+<div class="flex items-center gap-2">
+<div class="hidden md:flex items-center bg-slate-100 rounded-lg px-3 py-2 gap-2 w-56"><i class="fas fa-search text-slate-400 text-sm"></i><input type="text" placeholder="Search..." class="bg-transparent text-sm w-full border-none outline-none placeholder:text-slate-400" id="globalSearch" oninput="handleGlobalSearch(this.value)"></div>
+<div class="relative">
+<button onclick="toggleNotif()" class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 relative"><i class="fas fa-bell text-slate-500"></i><span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full bpulse"></span></button>
+<div id="notifDrop" class="hidden absolute right-0 top-12 w-80 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden ndrop z-50"></div>
+</div>
+<div class="relative">
+<button onclick="toggleProf()" class="flex items-center gap-2 pl-2 pr-1 py-1 rounded-lg hover:bg-slate-100"><span class="hidden sm:block text-sm text-slate-700 font-medium">Admin</span><div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-cyan-500 flex items-center justify-center text-white text-xs font-semibold">AD</div></button>
+<div id="profDrop" class="hidden absolute right-0 top-12 w-48 bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden ndrop py-1 z-50">
+<a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50"><i class="fas fa-user-circle text-slate-400 w-4"></i>Profile</a>
+<a href="#" onclick="navigateTo('settings');toggleProf()" class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50"><i class="fas fa-cog text-slate-400 w-4"></i>Settings</a>
+<hr class="my-1 border-slate-100">
+<a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50"><i class="fas fa-sign-out-alt text-red-400 w-4"></i>Logout</a>
+</div>
+</div>
+</div>
+</header>
+<main id="mainContent" class="flex-1 p-4 lg:p-6"></main>
+</div>
+
+<!-- Modal -->
+<div id="modalOv" class="fixed inset-0 bg-black/50 z-[60] hidden modal-ov flex items-center justify-center p-4" onclick="if(event.target===this)closeModal()">
+<div id="modalPn" class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto modal-pn"></div>
+</div>
+
+<!-- Toasts -->
+<div id="toastBox" class="fixed top-4 right-4 z-[70] space-y-2 w-80"></div>
+
+<script>
+/* ========== DATA ========== */
+const classes = ['Class 1','Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10','Class 11','Class 12'];
+const sections = ['A','B','C'];
+const subjects = ['Mathematics','English','Science','History','Geography','Computer Science','Art','Physical Education','Music','Hindi'];
+const subColors = {'Mathematics':'#0d9488','English':'#7c3aed','Science':'#2563eb','History':'#d97706','Geography':'#059669','Computer Science':'#0891b2','Art':'#db2777','Physical Education':'#dc2626','Music':'#ca8a04','Hindi':'#ea580c'};
+
+let students = [
+  {id:1,name:'Aarav Sharma',class:'Class 10',section:'A',roll:'001',gender:'Male',dob:'2009-03-15',parent:'Rajesh Sharma',phone:'9876543210',email:'aarav@mail.com',status:'Active',admission:'2020-04-01'},
+  {id:2,name:'Priya Patel',class:'Class 10',section:'A',roll:'002',gender:'Female',dob:'2009-07-22',parent:'Amit Patel',phone:'9876543211',email:'priya@mail.com',status:'Active',admission:'2020-04-01'},
+  {id:3,name:'Rohan Gupta',class:'Class 9',section:'B',roll:'003',gender:'Male',dob:'2010-01-10',parent:'Suresh Gupta',phone:'9876543212',email:'rohan@mail.com',status:'Active',admission:'2021-04-01'},
+  {id:4,name:'Ananya Singh',class:'Class 8',section:'A',roll:'004',gender:'Female',dob:'2011-05-18',parent:'Vikram Singh',phone:'9876543213',email:'ananya@mail.com',status:'Active',admission:'2022-04-01'},
+  {id:5,name:'Kabir Verma',class:'Class 10',section:'B',roll:'005',gender:'Male',dob:'2009-11-03',parent:'Ajay Verma',phone:'9876543214',email:'kabir@mail.com',status:'Active',admission:'2020-04-01'},
+  {id:6,name:'Ishita Reddy',class:'Class 7',section:'A',roll:'006',gender:'Female',dob:'2012-08-25',parent:'Suresh Reddy',phone:'9876543215',email:'ishita@mail.com',status:'Active',admission:'2023-04-01'},
+  {id:7,name:'Arjun Nair',class:'Class 9',section:'A',roll:'007',gender:'Male',dob:'2010-04-12',parent:'Ramesh Nair',phone:'9876543216',email:'arjun@mail.com',status:'Inactive',admission:'2021-04-01'},
+  {id:8,name:'Meera Joshi',class:'Class 11',section:'A',roll:'008',gender:'Female',dob:'2008-02-28',parent:'Anil Joshi',phone:'9876543217',email:'meera@mail.com',status:'Active',admission:'2019-04-01'},
+  {id:9,name:'Vivaan Kumar',class:'Class 6',section:'B',roll:'009',gender:'Male',dob:'2013-09-14',parent:'Pradeep Kumar',phone:'9876543218',email:'vivaan@mail.com',status:'Active',admission:'2024-04-01'},
+  {id:10,name:'Sara Khan',class:'Class 12',section:'A',roll:'010',gender:'Female',dob:'2007-12-05',parent:'Imran Khan',phone:'9876543219',email:'sara@mail.com',status:'Active',admission:'2018-04-01'},
+  {id:11,name:'Aditya Malhotra',class:'Class 8',section:'B',roll:'011',gender:'Male',dob:'2011-06-30',parent:'Sunil Malhotra',phone:'9876543220',email:'aditya@mail.com',status:'Active',admission:'2022-04-01'},
+  {id:12,name:'Nisha Iyer',class:'Class 11',section:'B',roll:'012',gender:'Female',dob:'2008-10-19',parent:'Ravi Iyer',phone:'9876543221',email:'nisha@mail.com',status:'Active',admission:'2019-04-01'},
+  {id:13,name:'Rahul Deshmukh',class:'Class 7',section:'B',roll:'013',gender:'Male',dob:'2012-03-08',parent:'Mohan Deshmukh',phone:'9876543222',email:'rahul@mail.com',status:'Active',admission:'2023-04-01'},
+  {id:14,name:'Pooja Agarwal',class:'Class 9',section:'A',roll:'014',gender:'Female',dob:'2010-07-11',parent:'Rakesh Agarwal',phone:'9876543223',email:'pooja@mail.com',status:'Active',admission:'2021-04-01'},
+  {id:15,name:'Dev Choudhary',class:'Class 6',section:'A',roll:'015',gender:'Male',dob:'2013-01-25',parent:'Kiran Choudhary',phone:'9876543224',email:'dev@mail.com',status:'Active',admission:'2024-04-01'},
+];
+
+let teachers = [
+  {id:1,name:'Dr. Sunita Rao',subject:'Mathematics',qualification:'Ph.D. Mathematics',phone:'9988776601',email:'sunita@educore.com',status:'Active',joinDate:'2015-06-01'},
+  {id:2,name:'James Mitchell',subject:'English',qualification:'M.A. English Literature',phone:'9988776602',email:'james@educore.com',status:'Active',joinDate:'2017-07-15'},
+  {id:3,name:'Prof. Anil Kulkarni',subject:'Science',qualification:'M.Sc. Physics',phone:'9988776603',email:'anil@educore.com',status:'Active',joinDate:'2016-01-10'},
+  {id:4,name:'Fatima Begum',subject:'History',qualification:'M.A. History',phone:'9988776604',email:'fatima@educore.com',status:'Active',joinDate:'2018-03-20'},
+  {id:5,name:'Rajesh Pillai',subject:'Computer Science',qualification:'M.Tech. CS',phone:'9988776605',email:'rajesh@educore.com',status:'Active',joinDate:'2019-06-01'},
+  {id:6,name:'Sneha Dasgupta',subject:'Geography',qualification:'M.A. Geography',phone:'9988776606',email:'sneha@educore.com',status:'On Leave',joinDate:'2020-01-15'},
+  {id:7,name:'David Thompson',subject:'Physical Education',qualification:'B.P.Ed.',phone:'9988776607',email:'david@educore.com',status:'Active',joinDate:'2017-08-10'},
+  {id:8,name:'Kavita Menon',subject:'Art',qualification:'M.F.A.',phone:'9988776608',email:'kavita@educore.com',status:'Active',joinDate:'2021-04-01'},
+];
+
+let exams = [
+  {id:1,name:'Mid-Term Examination',class:'Class 10',subject:'All Subjects',date:'2025-02-15',status:'Completed',maxMarks:100},
+  {id:2,name:'Unit Test 3',class:'Class 9',subject:'Mathematics',date:'2025-03-10',status:'Completed',maxMarks:50},
+  {id:3,name:'Annual Examination',class:'Class 10',subject:'All Subjects',date:'2025-03-25',status:'Upcoming',maxMarks:100},
+  {id:4,name:'Unit Test 4',class:'Class 8',subject:'Science',date:'2025-04-05',status:'Upcoming',maxMarks:50},
+  {id:5,name:'Practical Exam',class:'Class 12',subject:'Computer Science',date:'2025-03-20',status:'Upcoming',maxMarks:30},
+];
+
+let results = [
+  {examId:1,studentId:1,marks:87},{examId:1,studentId:2,marks:92},{examId:1,studentId:5,marks:78},
+  {examId:2,studentId:3,marks:42},{examId:2,studentId:7,marks:35},{examId:2,studentId:14,marks:46},
+];
+
+let fees = [
+  {id:1,studentId:1,type:'Tuition Fee',amount:15000,paid:15000,due:0,status:'Paid',date:'2025-01-10',month:'January'},
+  {id:2,studentId:2,type:'Tuition Fee',amount:15000,paid:15000,due:0,status:'Paid',date:'2025-01-12',month:'January'},
+  {id:3,studentId:3,type:'Tuition Fee',amount:12000,paid:8000,due:4000,status:'Partial',date:'2025-01-15',month:'January'},
+  {id:4,studentId:4,type:'Tuition Fee',amount:10000,paid:0,due:10000,status:'Pending',date:'2025-02-01',month:'February'},
+  {id:5,studentId:5,type:'Tuition Fee',amount:15000,paid:15000,due:0,status:'Paid',date:'2025-01-08',month:'January'},
+  {id:6,studentId:6,type:'Tuition Fee',amount:10000,paid:5000,due:5000,status:'Partial',date:'2025-01-20',month:'January'},
+  {id:7,studentId:8,type:'Tuition Fee',amount:18000,paid:0,due:18000,status:'Overdue',date:'2024-12-01',month:'December'},
+  {id:8,studentId:9,type:'Tuition Fee',amount:10000,paid:10000,due:0,status:'Paid',date:'2025-01-05',month:'January'},
+  {id:9,studentId:10,type:'Tuition Fee',amount:18000,paid:18000,due:0,status:'Paid',date:'2025-01-03',month:'January'},
+  {id:10,studentId:11,type:'Tuition Fee',amount:10000,paid:0,due:10000,status:'Pending',date:'2025-02-01',month:'February'},
+  {id:11,studentId:1,type:'Bus Fee',amount:3000,paid:3000,due:0,status:'Paid',date:'2025-01-10',month:'January'},
+  {id:12,studentId:2,type:'Lab Fee',amount:2000,paid:2000,due:0,status:'Paid',date:'2025-01-12',month:'January'},
+];
+
+let books = [
+  {id:1,title:'Advanced Mathematics',author:'R.D. Sharma',category:'Mathematics',isbn:'978-0-13-110362-7',copies:25,available:18,status:'Available'},
+  {id:2,title:'English Grammar & Composition',author:'Wren & Martin',category:'English',isbn:'978-0-56-789012-3',copies:30,available:22,status:'Available'},
+  {id:3,title:'Concepts of Physics',author:'H.C. Verma',category:'Science',isbn:'978-0-12-345678-9',copies:20,available:5,status:'Low Stock'},
+  {id:4,title:'World History: A Brief',author:'J.M. Roberts',category:'History',isbn:'978-0-34-567890-1',copies:15,available:15,status:'Available'},
+  {id:5,title:'Computer Science with Python',author:'Sumita Arora',category:'Computer Science',isbn:'978-0-78-901234-5',copies:20,available:0,status:'Out of Stock'},
+  {id:6,title:'Indian Geography',author:'Majid Husain',category:'Geography',isbn:'978-0-90-123456-7',copies:18,available:12,status:'Available'},
+  {id:7,title:'To Kill a Mockingbird',author:'Harper Lee',category:'English',isbn:'978-0-06-112008-4',copies:12,available:8,status:'Available'},
+  {id:8,title:'Organic Chemistry',author:'Morrison & Boyd',category:'Science',isbn:'978-0-23-456789-0',copies:15,available:2,status:'Low Stock'},
+];
+
+let issuedBooks = [
+  {id:1,bookId:1,studentId:1,issueDate:'2025-01-15',dueDate:'2025-02-15',returnDate:null,status:'Issued'},
+  {id:2,bookId:3,studentId:2,issueDate:'2025-01-10',dueDate:'2025-02-10',returnDate:'2025-02-05',status:'Returned'},
+  {id:3,bookId:2,studentId:5,issueDate:'2025-02-01',dueDate:'2025-03-01',returnDate:null,status:'Issued'},
+  {id:4,bookId:5,studentId:3,issueDate:'2025-01-20',dueDate:'2025-02-20',returnDate:null,status:'Overdue'},
+];
+
+let notices = [
+  {id:1,title:'Annual Day Celebration',content:'The annual day celebration will be held on March 15, 2025. All students must participate. Parents are cordially invited.',date:'2025-02-20',author:'Principal',priority:'high',type:'Event'},
+  {id:2,title:'Winter Vacation Schedule',content:'School will remain closed from December 25 to January 5 for winter vacation. Classes resume on January 6.',date:'2025-02-15',author:'Admin',priority:'medium',type:'Holiday'},
+  {id:3,title:'Parent-Teacher Meeting',content:'PTM for Classes 6-10 scheduled on February 28, 2025. Time: 9:00 AM to 1:00 PM.',date:'2025-02-10',author:'Coordinator',priority:'high',type:'Meeting'},
+  {id:4,title:'Science Exhibition',content:'Inter-school science exhibition on March 5. Interested students should register with their science teacher by February 25.',date:'2025-02-05',author:'Science Dept.',priority:'low',type:'Event'},
+  {id:5,title:'Fee Payment Reminder',content:'Parents are requested to clear pending fees for February before the 10th. Late fees will apply after the deadline.',date:'2025-02-01',author:'Accounts',priority:'medium',type:'Fee'},
+];
+
+const timetable = {
+  'Class 10': [
+    ['8:00-8:45','Mathematics','English','Science','History','Computer Science'],
+    ['8:45-9:30','English','Mathematics','Geography','Mathematics','English'],
+    ['9:30-10:15','Science','Hindi','Mathematics','English','Science'],
+    ['10:15-10:30','— Break —','— Break —','— Break —','— Break —','— Break —'],
+    ['10:30-11:15','History','Science','English','Art','Mathematics'],
+    ['11:15-12:00','Geography','Art','Hindi','Science','History'],
+    ['12:00-12:45','— Lunch —','— Lunch —','— Lunch —','— Lunch —','— Lunch —'],
+    ['12:45-1:30','Computer Science','Physical Education','Art','Hindi','Geography'],
+    ['1:30-2:15','Hindi','Geography','Physical Education','Computer Science','Physical Education'],
+  ],
+};
+
+let attendanceData = {};
+students.forEach(s => { attendanceData[s.id] = { date: new Date().toISOString().split('T')[0], status: 'Present' }; });
+
+/* ========== STATE ========== */
+let currentPage = 'dashboard';
+let stuPage = 1, stuPerPage = 8, stuSearch = '', stuFilterClass = '';
+let teaSearch = '', teaPage = 1, teaPerPage = 8;
+let feeFilter = 'all', feeSearch = '';
+let bookSearch = '';
+let attClass = 'Class 10', attDate = new Date().toISOString().split('T')[0];
+let ttClass = 'Class 10';
+let examTab = 'exams';
+let chartInstances = {};
+
+/* ========== NAV ========== */
+const navItems = [
+  {id:'dashboard',icon:'fa-chart-pie',label:'Dashboard'},
+  {id:'students',icon:'fa-graduation-cap',label:'Students'},
+  {id:'teachers',icon:'fa-chalkboard-user',label:'Teachers'},
+  {id:'attendance',icon:'fa-clipboard-check',label:'Attendance'},
+  {id:'exams',icon:'fa-file-lines',label:'Exams & Results'},
+  {id:'timetable',icon:'fa-calendar-days',label:'Timetable'},
+  {id:'fees',icon:'fa-money-bill-wave',label:'Fee Management'},
+  {id:'library',icon:'fa-book-open',label:'Library'},
+  {id:'notices',icon:'fa-bullhorn',label:'Notices'},
+  {id:'settings',icon:'fa-gear',label:'Settings'},
+];
+
+function renderNav() {
+  document.getElementById('sideNav').innerHTML = navItems.map(n =>
+    `<button onclick="navigateTo('${n.id}')" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${currentPage===n.id?'active text-primary-400':'text-slate-400 hover:bg-sidebar-hover hover:text-slate-200'}">
+      <i class="fas ${n.icon} w-5 text-center text-[13px]"></i><span>${n.label}</span>
+    </button>`
+  ).join('');
+}
+
+function navigateTo(page) {
+  currentPage = page;
+  document.getElementById('bcPage').textContent = navItems.find(n=>n.id===page)?.label || 'Dashboard';
+  renderNav();
+  renderPage();
+  closeMob();
+}
+
+/* ========== TOAST ========== */
+function toast(msg, type='success') {
+  const icons = {success:'fa-check-circle text-emerald-500',error:'fa-times-circle text-red-500',warning:'fa-exclamation-circle text-amber-500',info:'fa-info-circle text-cyan-500'};
+  const box = document.getElementById('toastBox');
+  const el = document.createElement('div');
+  el.className = 'toast-in bg-white rounded-xl shadow-lg border border-slate-200 p-4 flex items-start gap-3';
+  el.innerHTML = `<i class="fas ${icons[type]} mt-0.5"></i><div class="flex-1"><p class="text-sm font-medium text-slate-800">${msg}</p></div><button onclick="this.parentElement.remove()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times text-xs"></i></button>`;
+  box.appendChild(el);
+  setTimeout(()=>{el.classList.remove('toast-in');el.classList.add('toast-out');setTimeout(()=>el.remove(),300)},3000);
+}
+
+/* ========== MODAL ========== */
+function openModal(html, wide) {
+  const ov = document.getElementById('modalOv');
+  const pn = document.getElementById('modalPn');
+  pn.className = `bg-white rounded-2xl shadow-2xl w-full ${wide?'max-w-2xl':'max-w-lg'} max-h-[90vh] overflow-y-auto modal-pn`;
+  pn.innerHTML = html;
+  ov.classList.remove('hidden');ov.classList.add('flex');
+}
+function closeModal() { const ov=document.getElementById('modalOv');ov.classList.add('hidden');ov.classList.remove('flex'); }
+
+/* ========== DROPDOWNS ========== */
+function toggleNotif() {
+  const d = document.getElementById('notifDrop');
+  d.classList.toggle('hidden');
+  if(!d.classList.contains('hidden')) {
+    d.innerHTML = `<div class="p-4 border-b border-slate-100 flex items-center justify-between"><h4 class="font-heading font-semibold text-slate-800">Notifications</h4><span class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-medium">3 New</span></div>
+    <div class="max-h-72 overflow-y-auto">
+      <div class="p-4 border-b border-slate-50 hover:bg-slate-50 cursor-pointer"><div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center flex-shrink-0"><i class="fas fa-bullhorn text-xs"></i></div><div><p class="text-sm font-medium text-slate-800">Annual Day Notice</p><p class="text-xs text-slate-500 mt-0.5">New notice posted about Annual Day celebration</p><p class="text-xs text-primary-600 mt-1">2 hours ago</p></div></div></div>
+      <div class="p-4 border-b border-slate-50 hover:bg-slate-50 cursor-pointer"><div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0"><i class="fas fa-money-bill text-xs"></i></div><div><p class="text-sm font-medium text-slate-800">Fee Overdue Alert</p><p class="text-xs text-slate-500 mt-0.5">3 students have overdue fee payments</p><p class="text-xs text-primary-600 mt-1">5 hours ago</p></div></div></div>
+      <div class="p-4 hover:bg-slate-50 cursor-pointer"><div class="flex items-start gap-3"><div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0"><i class="fas fa-calendar text-xs"></i></div><div><p class="text-sm font-medium text-slate-800">Exam Schedule Updated</p><p class="text-xs text-slate-500 mt-0.5">Annual exam schedule has been published</p><p class="text-xs text-primary-600 mt-1">1 day ago</p></div></div></div>
+    </div>
+    <div class="p-3 border-t border-slate-100 text-center"><button class="text-sm text-primary-600 hover:text-primary-700 font-medium">View All Notifications</button></div>`;
+  }
+  document.getElementById('profDrop').classList.add('hidden');
+}
+function toggleProf() { document.getElementById('profDrop').classList.toggle('hidden'); document.getElementById('notifDrop').classList.add('hidden'); }
+function handleGlobalSearch(v) { if(v.length>0 && currentPage!=='students') navigateTo('students'); if(currentPage==='students'){stuSearch=v;stuPage=1;renderPage();} }
+
+document.addEventListener('click', e => {
+  if(!e.target.closest('#notifDrop') && !e.target.closest('[onclick*="toggleNotif"]')) document.getElementById('notifDrop').classList.add('hidden');
+  if(!e.target.closest('#profDrop') && !e.target.closest('[onclick*="toggleProf"]')) document.getElementById('profDrop').classList.add('hidden');
+});
+
+/* ========== MOBILE ========== */
+function toggleMob() { const s=document.getElementById('sidebar'),o=document.getElementById('mobOv');s.classList.toggle('-translate-x-full');o.classList.toggle('hidden'); }
+function closeMob() { if(window.innerWidth<1024){document.getElementById('sidebar').classList.add('-translate-x-full');document.getElementById('mobOv').classList.add('hidden');} }
+
+/* ========== HELPERS ========== */
+function avatar(name, size='w-9 h-9', text='text-xs') {
+  const initials = name.split(' ').map(w=>w[0]).join('').slice(0,2);
+  const colors = ['from-primary-500 to-cyan-500','from-violet-500 to-purple-500','from-amber-500 to-orange-500','from-rose-500 to-pink-500','from-emerald-500 to-teal-500','from-blue-500 to-indigo-500'];
+  const c = colors[name.length % colors.length];
+  return `<div class="${size} rounded-full bg-gradient-to-br ${c} flex items-center justify-center text-white font-semibold ${text} flex-shrink-0">${initials}</div>`;
+}
+function statusBadge(s) {
+  const m = {Active:'bg-emerald-100 text-emerald-700',Inactive:'bg-slate-100 text-slate-600','On Leave':'bg-amber-100 text-amber-700',Paid:'bg-emerald-100 text-emerald-700',Pending:'bg-amber-100 text-amber-700',Partial:'bg-blue-100 text-blue-700',Overdue:'bg-red-100 text-red-700',Completed:'bg-emerald-100 text-emerald-700',Upcoming:'bg-cyan-100 text-cyan-700','Available':'bg-emerald-100 text-emerald-700','Low Stock':'bg-amber-100 text-amber-700','Out of Stock':'bg-red-100 text-red-700',Issued:'bg-blue-100 text-blue-700',Returned:'bg-emerald-100 text-emerald-700',Present:'bg-emerald-100 text-emerald-700',Absent:'bg-red-100 text-red-700',Late:'bg-amber-100 text-amber-700'};
+  return `<span class="px-2.5 py-1 rounded-full text-xs font-medium ${m[s]||'bg-slate-100 text-slate-600'}">${s}</span>`;
+}
+function priorityBadge(p) {
+  const m = {high:'bg-red-100 text-red-700',medium:'bg-amber-100 text-amber-700',low:'bg-slate-100 text-slate-600'};
+  return `<span class="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase ${m[p]||''}">${p}</span>`;
+}
+function paginate(arr, page, per) { const start=(page-1)*per; return arr.slice(start, start+per); }
+function pagControls(total, page, per, fn) {
+  const pages = Math.ceil(total/per);
+  if(pages<=1) return '';
+  let btns = '';
+  for(let i=1;i<=pages;i++) btns += `<button onclick="${fn}(${i})" class="w-8 h-8 rounded-lg text-sm font-medium ${i===page?'bg-primary-600 text-white':'text-slate-600 hover:bg-slate-100'}">${i}</button>`;
+  return `<div class="flex items-center gap-1">${page>1?`<button onclick="${fn}(${page-1})" class="w-8 h-8 rounded-lg text-sm text-slate-500 hover:bg-slate-100"><i class="fas fa-chevron-left text-xs"></i></button>`:''}${btns}${page<pages?`<button onclick="${fn}(${page+1})" class="w-8 h-8 rounded-lg text-sm text-slate-500 hover:bg-slate-100"><i class="fas fa-chevron-right text-xs"></i></button>`:''}</div>`;
+}
+function destroyCharts() { Object.values(chartInstances).forEach(c=>c.destroy()); chartInstances={}; }
+
+/* ========== RENDER PAGE ========== */
+function renderPage() {
+  destroyCharts();
+  const mc = document.getElementById('mainContent');
+  const renderers = {dashboard:renderDashboard,students:renderStudents,teachers:renderTeachers,attendance:renderAttendance,exams:renderExams,timetable:renderTimetable,fees:renderFees,library:renderLibrary,notices:renderNotices,settings:renderSettings};
+  mc.innerHTML = `<div class="page-content">${(renderers[currentPage]||renderDashboard)()}</div>`;
+  if(currentPage==='dashboard') initCharts();
+}
+
+/* ========== DASHBOARD ========== */
+function renderDashboard() {
+  const totalStu = students.length, activeStu = students.filter(s=>s.status==='Active').length;
+  const totalTea = teachers.length, totalFees = fees.reduce((a,f)=>a+f.paid,0);
+  const pendingFees = fees.reduce((a,f)=>a+f.due,0);
+  const todayAtt = students.filter(s=>attendanceData[s.id]?.status==='Present').length;
+  const attPct = Math.round((todayAtt/totalStu)*100);
+
+  return `
+  <div class="mb-6"><h2 class="font-heading text-2xl font-bold text-slate-900">Dashboard</h2><p class="text-slate-500 text-sm mt-1">Welcome back, Admin. Here's what's happening today.</p></div>
+  <!-- Stats -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+    <div class="scard bg-white rounded-xl p-5 border border-slate-200/60">
+      <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center"><i class="fas fa-graduation-cap"></i></div><span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full"><i class="fas fa-arrow-up text-[10px] mr-0.5"></i>12%</span></div>
+      <p class="text-2xl font-heading font-bold text-slate-900">${totalStu}</p><p class="text-sm text-slate-500 mt-0.5">Total Students</p>
+    </div>
+    <div class="scard bg-white rounded-xl p-5 border border-slate-200/60">
+      <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 rounded-lg bg-violet-100 text-violet-600 flex items-center justify-center"><i class="fas fa-chalkboard-user"></i></div><span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full"><i class="fas fa-arrow-up text-[10px] mr-0.5"></i>5%</span></div>
+      <p class="text-2xl font-heading font-bold text-slate-900">${totalTea}</p><p class="text-sm text-slate-500 mt-0.5">Total Teachers</p>
+    </div>
+    <div class="scard bg-white rounded-xl p-5 border border-slate-200/60">
+      <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fas fa-clipboard-check"></i></div><span class="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">${attPct}%</span></div>
+      <p class="text-2xl font-heading font-bold text-slate-900">${todayAtt}</p><p class="text-sm text-slate-500 mt-0.5">Present Today</p>
+    </div>
+    <div class="scard bg-white rounded-xl p-5 border border-slate-200/60">
+      <div class="flex items-center justify-between mb-3"><div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center"><i class="fas fa-indian-rupee-sign"></i></div><span class="text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded-full">${pendingFees>0?'Pending':''}</span></div>
+      <p class="text-2xl font-heading font-bold text-slate-900">${(totalFees/1000).toFixed(0)}K</p><p class="text-sm text-slate-500 mt-0.5">Fees Collected</p>
+    </div>
+  </div>
+  <!-- Charts -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+    <div class="lg:col-span-2 bg-white rounded-xl p-5 border border-slate-200/60">
+      <div class="flex items-center justify-between mb-4"><h3 class="font-heading font-semibold text-slate-800">Enrollment Trend</h3>
+        <select class="text-sm border border-slate-200 rounded-lg px-3 py-1.5 text-slate-600"><option>This Year</option><option>Last Year</option></select>
+      </div>
+      <canvas id="enrollChart" height="120"></canvas>
+    </div>
+    <div class="bg-white rounded-xl p-5 border border-slate-200/60">
+      <h3 class="font-heading font-semibold text-slate-800 mb-4">Attendance Overview</h3>
+      <canvas id="attChart" height="180"></canvas>
+      <div class="flex justify-center gap-4 mt-4 text-xs text-slate-500"><span><span class="inline-block w-2.5 h-2.5 rounded-full bg-primary-500 mr-1"></span>Present (85%)</span><span><span class="inline-block w-2.5 h-2.5 rounded-full bg-red-400 mr-1"></span>Absent (12%)</span><span><span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 mr-1"></span>Late (3%)</span></div>
+    </div>
+  </div>
+  <!-- Bottom Row -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div class="bg-white rounded-xl p-5 border border-slate-200/60">
+      <h3 class="font-heading font-semibold text-slate-800 mb-4">Recent Activities</h3>
+      <div class="space-y-3">
+        ${[
+          {icon:'fa-user-plus',color:'text-primary-600 bg-primary-100',text:'New student Vivaan Kumar enrolled in Class 6-B',time:'30 min ago'},
+          {icon:'fa-money-check',color:'text-emerald-600 bg-emerald-100',text:'Fee payment received from Priya Patel - Rs. 15,000',time:'1 hour ago'},
+          {icon:'fa-clipboard-check',color:'text-blue-600 bg-blue-100',text:'Attendance marked for Class 10-A by Dr. Sunita Rao',time:'2 hours ago'},
+          {icon:'fa-book',color:'text-violet-600 bg-violet-100',text:'"Concepts of Physics" issued to Kabir Verma',time:'3 hours ago'},
+          {icon:'fa-bullhorn',color:'text-amber-600 bg-amber-100',text:'New notice: Annual Day Celebration posted',time:'5 hours ago'},
+        ].map(a=>`<div class="flex items-start gap-3"><div class="w-8 h-8 rounded-lg ${a.color} flex items-center justify-center flex-shrink-0"><i class="fas ${a.icon} text-xs"></i></div><div class="flex-1 min-w-0"><p class="text-sm text-slate-700 leading-snug">${a.text}</p><p class="text-xs text-slate-400 mt-0.5">${a.time}</p></div></div>`).join('')}
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-5 border border-slate-200/60">
+      <h3 class="font-heading font-semibold text-slate-800 mb-4">Upcoming Events</h3>
+      <div class="space-y-3">
+        ${[
+          {date:'Mar 05',title:'Science Exhibition',desc:'Inter-school science exhibition',color:'bg-primary-500'},
+          {date:'Mar 10',title:'Unit Test 3',desc:'Class 9 - Mathematics',color:'bg-violet-500'},
+          {date:'Mar 15',title:'Annual Day',desc:'Annual day celebration and prize distribution',color:'bg-amber-500'},
+          {date:'Mar 20',title:'Practical Exam',desc:'Class 12 - Computer Science',color:'bg-rose-500'},
+          {date:'Mar 25',title:'Annual Exam',desc:'Class 10 - All Subjects',color:'bg-blue-500'},
+          {date:'Mar 28',title:'Parent-Teacher Meeting',desc:'Classes 6-10 PTM',color:'bg-emerald-500'},
+        ].map(e=>`<div class="flex items-center gap-4"><div class="w-12 h-12 rounded-xl ${e.color} flex flex-col items-center justify-center text-white flex-shrink-0"><span class="text-[10px] font-medium uppercase leading-none">Mar</span><span class="text-lg font-bold leading-none">${e.date.split(' ')[1]}</span></div><div class="flex-1 min-w-0"><p class="text-sm font-medium text-slate-800">${e.title}</p><p class="text-xs text-slate-500 mt-0.5">${e.desc}</p></div></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function initCharts() {
+  const ctx1 = document.getElementById('enrollChart');
+  if(ctx1) {
+    chartInstances.enroll = new Chart(ctx1, {
+      type:'bar',
+      data:{labels:['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'],datasets:[
+        {label:'Boys',data:[8,5,3,2,4,6,3,2,1,5,4,2],backgroundColor:'rgba(13,148,136,0.8)',borderRadius:4,barPercentage:0.6},
+        {label:'Girls',data:[6,4,4,3,3,5,4,3,2,4,3,3],backgroundColor:'rgba(6,182,212,0.6)',borderRadius:4,barPercentage:0.6}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:6,font:{size:11,family:'DM Sans'}}}},scales:{x:{grid:{display:false},ticks:{font:{size:11,family:'DM Sans'}}},y:{grid:{color:'#f1f5f9'},ticks:{font:{size:11,family:'DM Sans'}}}}}
+    });
+  }
+  const ctx2 = document.getElementById('attChart');
+  if(ctx2) {
+    chartInstances.att = new Chart(ctx2, {
+      type:'doughnut',
+      data:{labels:['Present','Absent','Late'],datasets:[{data:[85,12,3],backgroundColor:['#0d9488','#f87171','#fbbf24'],borderWidth:0,spacing:2}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false}}}
+    });
+  }
+}
+
+/* ========== STUDENTS ========== */
+function renderStudents() {
+  let filtered = students.filter(s => {
+    const matchSearch = !stuSearch || s.name.toLowerCase().includes(stuSearch.toLowerCase()) || s.roll.includes(stuSearch) || s.email.toLowerCase().includes(stuSearch.toLowerCase());
+    const matchClass = !stuFilterClass || s.class === stuFilterClass;
+    return matchSearch && matchClass;
+  });
+  const total = filtered.length;
+  const paged = paginate(filtered, stuPage, stuPerPage);
+  const activeCount = students.filter(s=>s.status==='Active').length;
+  const inactiveCount = students.filter(s=>s.status==='Inactive').length;
+
+  return `
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div><h2 class="font-heading text-2xl font-bold text-slate-900">Students</h2><p class="text-slate-500 text-sm mt-1">Manage all student records</p></div>
+    <div class="flex items-center gap-2">
+      <button onclick="toast('Data exported successfully','info')" class="bpress px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors"><i class="fas fa-download mr-2 text-xs"></i>Export</button>
+      <button onclick="openStudentModal()" class="bpress px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 transition-colors shadow-sm shadow-primary-600/20"><i class="fas fa-plus mr-2 text-xs"></i>Add Student</button>
+    </div>
+  </div>
+  <!-- Mini stats -->
+  <div class="grid grid-cols-3 gap-3 mb-5">
+    <div class="bg-white rounded-xl p-4 border border-slate-200/60 text-center"><p class="text-xl font-heading font-bold text-slate-900">${students.length}</p><p class="text-xs text-slate-500 mt-0.5">Total</p></div>
+    <div class="bg-white rounded-xl p-4 border border-slate-200/60 text-center"><p class="text-xl font-heading font-bold text-emerald-600">${activeCount}</p><p class="text-xs text-slate-500 mt-0.5">Active</p></div>
+    <div class="bg-white rounded-xl p-4 border border-slate-200/60 text-center"><p class="text-xl font-heading font-bold text-slate-400">${inactiveCount}</p><p class="text-xs text-slate-500 mt-0.5">Inactive</p></div>
+  </div>
+  <!-- Filters -->
+  <div class="bg-white rounded-xl border border-slate-200/60 p-4 mb-4">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <div class="flex-1 flex items-center bg-slate-100 rounded-lg px-3 py-2 gap-2"><i class="fas fa-search text-slate-400 text-sm"></i><input type="text" placeholder="Search by name, roll, email..." value="${stuSearch}" oninput="stuSearch=this.value;stuPage=1;renderPage()" class="bg-transparent text-sm w-full border-none outline-none"></div>
+      <select class="border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 min-w-[150px]" onchange="stuFilterClass=this.value;stuPage=1;renderPage()">
+        <option value="">All Classes</option>${classes.map(c=>`<option value="${c}" ${stuFilterClass===c?'selected':''}>${c}</option>`).join('')}
+      </select>
+    </div>
+  </div>
+  <!-- Table -->
+  <div class="bg-white rounded-xl border border-slate-200/60 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead><tr class="bg-slate-50 border-b border-slate-100">
+          <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Student</th>
+          <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden md:table-cell">Class</th>
+          <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden lg:table-cell">Roll</th>
+          <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden lg:table-cell">Parent</th>
+          <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Status</th>
+          <th class="text-right px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Actions</th>
+        </tr></thead>
+        <tbody class="divide-y divide-slate-100">
+          ${paged.length===0?'<tr><td colspan="6" class="px-5 py-10 text-center text-slate-400">No students found</td></tr>':
+          paged.map(s=>`<tr class="trow">
+            <td class="px-5 py-3.5"><div class="flex items-center gap-3">${avatar(s.name)}<div><p class="font-medium text-slate-800">${s.name}</p><p class="text-xs text-slate-400">${s.email}</p></div></div></td>
+            <td class="px-5 py-3.5 hidden md:table-cell text-slate-600">${s.class} - ${s.section}</td>
+            <td class="px-5 py-3.5 hidden lg:table-cell text-slate-600">${s.roll}</td>
+            <td class="px-5 py-3.5 hidden lg:table-cell text-slate-600">${s.parent}</td>
+            <td class="px-5 py-3.5">${statusBadge(s.status)}</td>
+            <td class="px-5 py-3.5 text-right"><div class="flex items-center justify-end gap-1">
+              <button onclick="viewStudent(${s.id})" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-primary-600 transition-colors" title="View"><i class="fas fa-eye text-xs"></i></button>
+              <button onclick="openStudentModal(${s.id})" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-blue-600 transition-colors" title="Edit"><i class="fas fa-pen text-xs"></i></button>
+              <button onclick="deleteStudent(${s.id})" class="w-8 h-8 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors" title="Delete"><i class="fas fa-trash text-xs"></i></button>
+            </div></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    ${total>stuPerPage?`<div class="px-5 py-3 border-t border-slate-100 flex items-center justify-between"><p class="text-xs text-slate-500">Showing ${(stuPage-1)*stuPerPage+1}-${Math.min(stuPage*stuPerPage,total)} of ${total}</p>${pagControls(total,stuPage,stuPerPage,'goStuPage')}</div>`:''}
+  </div>`;
+}
+function goStuPage(p){stuPage=p;renderPage();}
+
+function openStudentModal(id=null) {
+  const s = id ? students.find(x=>x.id===id) : null;
+  const title = s ? 'Edit Student' : 'Add New Student';
+  openModal(`
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-6"><h3 class="font-heading text-lg font-bold text-slate-900">${title}</h3><button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400"><i class="fas fa-times"></i></button></div>
+      <form onsubmit="saveStudent(event,${id||'null'})" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Full Name *</label><input name="name" value="${s?.name||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Email *</label><input name="email" type="email" value="${s?.email||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Class *</label><select name="class" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm">${classes.map(c=>`<option ${s?.class===c?'selected':''}>${c}</option>`).join('')}</select></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Section *</label><select name="section" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm">${sections.map(sec=>`<option ${s?.section===sec?'selected':''}>${sec}</option>`).join('')}</select></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Roll No *</label><input name="roll" value="${s?.roll||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Gender *</label><select name="gender" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"><option ${s?.gender==='Male'?'selected':''}>Male</option><option ${s?.gender==='Female'?'selected':''}>Female</option></select></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Date of Birth *</label><input name="dob" type="date" value="${s?.dob||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Parent Name *</label><input name="parent" value="${s?.parent||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Phone *</label><input name="phone" value="${s?.phone||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        </div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Status</label><select name="status" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"><option ${s?.status==='Active'?'selected':''}>Active</option><option ${s?.status==='Inactive'?'selected':''}>Inactive</option></select></div>
+        <div class="flex gap-3 pt-2">
+          <button type="button" onclick="closeModal()" class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="bpress flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 shadow-sm shadow-primary-600/20">${s?'Update':'Add'} Student</button>
+        </div>
+      </form>
+    </div>
+  `);
+}
+
+function saveStudent(e, id) {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const data = Object.fromEntries(f);
+  if(id) {
+    const s = students.find(x=>x.id===id);
+    Object.assign(s, data);
+    toast('Student updated successfully');
+  } else {
+    data.id = Math.max(...students.map(s=>s.id))+1;
+    data.admission = new Date().toISOString().split('T')[0];
+    students.push(data);
+    attendanceData[data.id] = {date:attDate, status:'Present'};
+    toast('Student added successfully');
+  }
+  closeModal(); renderPage();
+}
+
+function deleteStudent(id) {
+  const s = students.find(x=>x.id===id);
+  openModal(`
+    <div class="p-6 text-center">
+      <div class="w-16 h-16 rounded-full bg-red-100 text-red-500 flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-2xl"></i></div>
+      <h3 class="font-heading text-lg font-bold text-slate-900 mb-2">Delete Student</h3>
+      <p class="text-sm text-slate-500 mb-6">Are you sure you want to delete <strong>${s.name}</strong>? This action cannot be undone.</p>
+      <div class="flex gap-3"><button onclick="closeModal()" class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">Cancel</button><button onclick="confirmDeleteStudent(${id})" class="bpress flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700">Delete</button></div>
+    </div>
+  `);
+}
+function confirmDeleteStudent(id) { students = students.filter(s=>s.id!==id); delete attendanceData[id]; closeModal(); toast('Student deleted','warning'); renderPage(); }
+
+function viewStudent(id) {
+  const s = students.find(x=>x.id===id);
+  const stuFees = fees.filter(f=>f.studentId===id);
+  const totalPaid = stuFees.reduce((a,f)=>a+f.paid,0);
+  const totalDue = stuFees.reduce((a,f)=>a+f.due,0);
+  openModal(`
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-6"><h3 class="font-heading text-lg font-bold text-slate-900">Student Profile</h3><button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400"><i class="fas fa-times"></i></button></div>
+      <div class="flex items-center gap-4 mb-6 pb-6 border-b border-slate-100">
+        ${avatar(s.name,'w-16 h-16','text-xl')}
+        <div><h4 class="font-heading font-bold text-lg text-slate-900">${s.name}</h4><p class="text-sm text-slate-500">${s.class} - ${s.section} | Roll: ${s.roll}</p>${statusBadge(s.status)}</div>
+      </div>
+      <div class="grid grid-cols-2 gap-4 text-sm mb-6">
+        <div><p class="text-slate-400 text-xs mb-0.5">Gender</p><p class="text-slate-700 font-medium">${s.gender}</p></div>
+        <div><p class="text-slate-400 text-xs mb-0.5">Date of Birth</p><p class="text-slate-700 font-medium">${s.dob}</p></div>
+        <div><p class="text-slate-400 text-xs mb-0.5">Parent/Guardian</p><p class="text-slate-700 font-medium">${s.parent}</p></div>
+        <div><p class="text-slate-400 text-xs mb-0.5">Phone</p><p class="text-slate-700 font-medium">${s.phone}</p></div>
+        <div><p class="text-slate-400 text-xs mb-0.5">Email</p><p class="text-slate-700 font-medium">${s.email}</p></div>
+        <div><p class="text-slate-400 text-xs mb-0.5">Admission Date</p><p class="text-slate-700 font-medium">${s.admission}</p></div>
+      </div>
+      <h4 class="font-heading font-semibold text-slate-800 mb-3">Fee Summary</h4>
+      <div class="grid grid-cols-3 gap-3 mb-4">
+        <div class="bg-emerald-50 rounded-lg p-3 text-center"><p class="text-lg font-bold text-emerald-700">${(totalPaid/1000).toFixed(1)}K</p><p class="text-xs text-emerald-600">Paid</p></div>
+        <div class="bg-amber-50 rounded-lg p-3 text-center"><p class="text-lg font-bold text-amber-700">${(totalDue/1000).toFixed(1)}K</p><p class="text-xs text-amber-600">Due</p></div>
+        <div class="bg-slate-50 rounded-lg p-3 text-center"><p class="text-lg font-bold text-slate-700">${stuFees.length}</p><p class="text-xs text-slate-500">Records</p></div>
+      </div>
+      <button onclick="closeModal()" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">Close</button>
+    </div>
+  `, true);
+}
+
+/* ========== TEACHERS ========== */
+function renderTeachers() {
+  let filtered = teachers.filter(t => !teaSearch || t.name.toLowerCase().includes(teaSearch.toLowerCase()) || t.subject.toLowerCase().includes(teaSearch.toLowerCase()));
+  const total = filtered.length;
+  const paged = paginate(filtered, teaPage, teaPerPage);
+
+  return `
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div><h2 class="font-heading text-2xl font-bold text-slate-900">Teachers</h2><p class="text-slate-500 text-sm mt-1">Manage teaching staff</p></div>
+    <button onclick="openTeacherModal()" class="bpress px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 transition-colors shadow-sm shadow-primary-600/20"><i class="fas fa-plus mr-2 text-xs"></i>Add Teacher</button>
+  </div>
+  <div class="bg-white rounded-xl border border-slate-200/60 p-4 mb-4">
+    <div class="flex items-center bg-slate-100 rounded-lg px-3 py-2 gap-2"><i class="fas fa-search text-slate-400 text-sm"></i><input type="text" placeholder="Search by name or subject..." value="${teaSearch}" oninput="teaSearch=this.value;teaPage=1;renderPage()" class="bg-transparent text-sm w-full border-none outline-none"></div>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    ${paged.map(t=>`
+    <div class="bg-white rounded-xl border border-slate-200/60 p-5 scard">
+      <div class="flex items-start gap-4">
+        ${avatar(t.name,'w-12 h-12','text-sm')}
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between"><div><h4 class="font-heading font-semibold text-slate-800">${t.name}</h4><p class="text-sm text-primary-600 font-medium">${t.subject}</p></div>${statusBadge(t.status)}</div>
+          <p class="text-xs text-slate-500 mt-1">${t.qualification}</p>
+          <div class="flex items-center gap-4 mt-3 text-xs text-slate-500"><span><i class="fas fa-phone mr-1"></i>${t.phone}</span><span><i class="fas fa-envelope mr-1"></i>${t.email}</span></div>
+          <p class="text-xs text-slate-400 mt-1">Joined: ${t.joinDate}</p>
+          <div class="flex gap-2 mt-3">
+            <button onclick="openTeacherModal(${t.id})" class="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-50"><i class="fas fa-pen mr-1"></i>Edit</button>
+            <button onclick="deleteTeacher(${t.id})" class="px-3 py-1.5 border border-red-200 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50"><i class="fas fa-trash mr-1"></i>Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('')}
+  </div>
+  ${total>teaPerPage?`<div class="flex justify-end mt-4">${pagControls(total,teaPage,teaPerPage,'goTeaPage')}</div>`:''}`;
+}
+function goTeaPage(p){teaPage=p;renderPage();}
+
+function openTeacherModal(id=null) {
+  const t = id ? teachers.find(x=>x.id===id) : null;
+  openModal(`
+    <div class="p-6">
+      <div class="flex items-center justify-between mb-6"><h3 class="font-heading text-lg font-bold text-slate-900">${t?'Edit':'Add'} Teacher</h3><button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400"><i class="fas fa-times"></i></button></div>
+      <form onsubmit="saveTeacher(event,${id||'null'})" class="space-y-4">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Full Name *</label><input name="name" value="${t?.name||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Subject *</label><select name="subject" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm">${subjects.map(s=>`<option ${t?.subject===s?'selected':''}>${s}</option>`).join('')}</select></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Status</label><select name="status" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"><option ${t?.status==='Active'?'selected':''}>Active</option><option ${t?.status==='On Leave'?'selected':''}>On Leave</option><option ${t?.status==='Inactive'?'selected':''}>Inactive</option></select></div>
+        </div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Qualification *</label><input name="qualification" value="${t?.qualification||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        <div class="grid grid-cols-2 gap-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Phone *</label><input name="phone" value="${t?.phone||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Email *</label><input name="email" type="email" value="${t?.email||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button type="button" onclick="closeModal()" class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">Cancel</button>
+          <button type="submit" class="bpress flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700">${t?'Update':'Add'} Teacher</button>
+        </div>
+      </form>
+    </div>
+  `);
+}
+function saveTeacher(e, id) {
+  e.preventDefault(); const f = new FormData(e.target); const data = Object.fromEntries(f);
+  if(id) { Object.assign(teachers.find(x=>x.id===id), data); toast('Teacher updated'); }
+  else { data.id = Math.max(...teachers.map(t=>t.id))+1; data.joinDate = new Date().toISOString().split('T')[0]; teachers.push(data); toast('Teacher added'); }
+  closeModal(); renderPage();
+}
+function deleteTeacher(id) {
+  const t = teachers.find(x=>x.id===id);
+  openModal(`<div class="p-6 text-center"><div class="w-16 h-16 rounded-full bg-red-100 text-red-500 flex items-center justify-center mx-auto mb-4"><i class="fas fa-exclamation-triangle text-2xl"></i></div><h3 class="font-heading text-lg font-bold text-slate-900 mb-2">Delete Teacher</h3><p class="text-sm text-slate-500 mb-6">Are you sure you want to delete <strong>${t.name}</strong>?</p><div class="flex gap-3"><button onclick="closeModal()" class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">Cancel</button><button onclick="teachers=teachers.filter(x=>x.id!==${id});closeModal();toast('Teacher deleted','warning');renderPage()" class="bpress flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700">Delete</button></div></div>`);
+}
+
+/* ========== ATTENDANCE ========== */
+function renderAttendance() {
+  const classStudents = students.filter(s => s.class === attClass && s.status === 'Active').sort((a,b)=>a.roll.localeCompare(b.roll));
+  const present = classStudents.filter(s=>attendanceData[s.id]?.status==='Present').length;
+  const absent = classStudents.filter(s=>attendanceData[s.id]?.status==='Absent').length;
+  const late = classStudents.filter(s=>attendanceData[s.id]?.status==='Late').length;
+  const pct = classStudents.length ? Math.round((present/classStudents.length)*100) : 0;
+
+  return `
+  <div class="mb-6"><h2 class="font-heading text-2xl font-bold text-slate-900">Attendance</h2><p class="text-slate-500 text-sm mt-1">Mark and manage daily attendance</p></div>
+  <div class="bg-white rounded-xl border border-slate-200/60 p-4 mb-4">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <select class="border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-600 min-w-[150px]" onchange="attClass=this.value;renderPage()">
+        ${classes.map(c=>`<option ${attClass===c?'selected':''}>${c}</option>`).join('')}
+      </select>
+      <input type="date" value="${attDate}" onchange="attDate=this.value;renderPage()" class="border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-600 min-w-[160px]">
+      <button onclick="markAllPresent()" class="px-4 py-2.5 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 bpress"><i class="fas fa-check-double mr-2 text-xs"></i>Mark All Present</button>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+    <div class="bg-white rounded-xl p-4 border border-slate-200/60 text-center"><p class="text-2xl font-heading font-bold text-emerald-600">${present}</p><p class="text-xs text-slate-500 mt-0.5">Present</p></div>
+    <div class="bg-white rounded-xl p-4 border border-slate-200/60 text-center"><p class="text-2xl font-heading font-bold text-red-500">${absent}</p><p class="text-xs text-slate-500 mt-0.5">Absent</p></div>
+    <div class="bg-white rounded-xl p-4 border border-slate-200/60 text-center"><p class="text-2xl font-heading font-bold text-amber-500">${late}</p><p class="text-xs text-slate-500 mt-0.5">Late</p></div>
+    <div class="bg-white rounded-xl p-4 border border-slate-200/60 text-center"><p class="text-2xl font-heading font-bold text-primary-600">${pct}%</p><p class="text-xs text-slate-500 mt-0.5">Attendance Rate</p></div>
+  </div>
+  <div class="bg-white rounded-xl border border-slate-200/60 overflow-hidden">
+    <table class="w-full text-sm">
+      <thead><tr class="bg-slate-50 border-b border-slate-100">
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Student</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden sm:table-cell">Roll</th>
+        <th class="text-center px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Status</th>
+      </tr></thead>
+      <tbody class="divide-y divide-slate-100">
+        ${classStudents.length===0?'<tr><td colspan="3" class="px-5 py-10 text-center text-slate-400">No students in this class</td></tr>':
+        classStudents.map(s=>{
+          const st = attendanceData[s.id]?.status || 'Present';
+          return `<tr class="trow">
+            <td class="px-5 py-3.5"><div class="flex items-center gap-3">${avatar(s.name,'w-8 h-8','text-[10px]')}<span class="font-medium text-slate-800">${s.name}</span></div></td>
+            <td class="px-5 py-3.5 hidden sm:table-cell text-slate-600">${s.roll}</td>
+            <td class="px-5 py-3.5"><div class="flex items-center justify-center gap-2">
+              ${['Present','Absent','Late'].map(st2=>`<button onclick="attendanceData[${s.id}].status='${st2}';renderPage()" class="px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${st===st2?'text-white shadow-sm':'text-slate-500 hover:bg-slate-100'} ${st===st2?(st2==='Present'?'bg-emerald-600':st2==='Absent'?'bg-red-500':'bg-amber-500'):''}">${st2}</button>`).join('')}
+            </div></td>
+          </tr>`}).join('')}
+      </tbody>
+    </table>
+  </div>
+  ${classStudents.length>0?`<div class="mt-4 flex justify-end"><button onclick="toast('Attendance saved successfully for ${attClass}')" class="bpress px-6 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 shadow-sm shadow-primary-600/20"><i class="fas fa-save mr-2 text-xs"></i>Save Attendance</button></div>`:''}`;
+}
+function markAllPresent() { students.filter(s=>s.class===attClass&&s.status==='Active').forEach(s=>{if(attendanceData[s.id])attendanceData[s.id].status='Present';}); renderPage(); toast('All marked present','info'); }
+
+/* ========== EXAMS ========== */
+function renderExams() {
+  return `
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div><h2 class="font-heading text-2xl font-bold text-slate-900">Exams & Results</h2><p class="text-slate-500 text-sm mt-1">Manage examinations and view results</p></div>
+    <button onclick="openExamModal()" class="bpress px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 shadow-sm shadow-primary-600/20"><i class="fas fa-plus mr-2 text-xs"></i>Add Exam</button>
+  </div>
+  <div class="flex gap-2 mb-5">
+    <button onclick="examTab='exams';renderPage()" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors ${examTab==='exams'?'bg-primary-600 text-white':'text-slate-600 hover:bg-slate-100'}">Exams List</button>
+    <button onclick="examTab='results';renderPage()" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors ${examTab==='results'?'bg-primary-600 text-white':'text-slate-600 hover:bg-slate-100'}">Results</button>
+  </div>
+  ${examTab==='exams'?renderExamList():renderResults()}`;
+}
+
+function renderExamList() {
+  return `<div class="space-y-3">${exams.map(e=>`
+    <div class="bg-white rounded-xl border border-slate-200/60 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 scard">
+      <div class="flex items-center gap-4">
+        <div class="w-12 h-12 rounded-xl ${e.status==='Completed'?'bg-emerald-100 text-emerald-600':e.status==='Upcoming'?'bg-cyan-100 text-cyan-600':'bg-amber-100 text-amber-600'} flex items-center justify-center flex-shrink-0"><i class="fas ${e.status==='Completed'?'fa-check-circle':'fa-clock'}"></i></div>
+        <div><h4 class="font-heading font-semibold text-slate-800">${e.name}</h4><p class="text-sm text-slate-500">${e.class} | ${e.subject} | Max: ${e.maxMarks} marks</p><p class="text-xs text-slate-400 mt-0.5"><i class="fas fa-calendar mr-1"></i>${e.date}</p></div>
+      </div>
+      <div class="flex items-center gap-2">${statusBadge(e.status)}
+        ${e.status==='Completed'?`<button onclick="viewExamResults(${e.id})" class="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-50">View Results</button>`:''}
+        <button onclick="deleteExam(${e.id})" class="w-8 h-8 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600"><i class="fas fa-trash text-xs"></i></button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+function renderResults() {
+  const completedExams = exams.filter(e=>e.status==='Completed');
+  return `<div class="space-y-4">${completedExams.length===0?'<div class="bg-white rounded-xl border border-slate-200/60 p-10 text-center text-slate-400">No completed exams yet</div>':
+  completedExams.map(e=>{
+    const res = results.filter(r=>r.examId===e.id);
+    return `<div class="bg-white rounded-xl border border-slate-200/60 overflow-hidden">
+      <div class="p-4 border-b border-slate-100 bg-slate-50"><h4 class="font-heading font-semibold text-slate-800">${e.name}</h4><p class="text-xs text-slate-500">${e.class} | ${e.subject} | Max: ${e.maxMarks}</p></div>
+      ${res.length===0?'<p class="p-4 text-sm text-slate-400 text-center">No results entered</p>':
+      `<table class="w-full text-sm"><thead><tr class="border-b border-slate-100"><th class="text-left px-5 py-2.5 text-xs font-semibold text-slate-500 uppercase">Student</th><th class="text-center px-5 py-2.5 text-xs font-semibold text-slate-500 uppercase">Marks</th><th class="text-center px-5 py-2.5 text-xs font-semibold text-slate-500 uppercase">Percentage</th><th class="text-center px-5 py-2.5 text-xs font-semibold text-slate-500 uppercase">Grade</th></tr></thead><tbody class="divide-y divide-slate-100">
+      ${res.map(r=>{const s=students.find(st=>st.id===r.studentId);if(!s)return'';const pct=Math.round((r.marks/e.maxMarks)*100);const g=pct>=90?'A+':pct>=80?'A':pct>=70?'B+':pct>=60?'B':pct>=50?'C':'F';return `<tr class="trow"><td class="px-5 py-2.5"><div class="flex items-center gap-2">${avatar(s.name,'w-7 h-7','text-[9px]')}<span class="font-medium text-slate-800">${s.name}</span></div></td><td class="text-center px-5 py-2.5 font-semibold text-slate-700">${r.marks}/${e.maxMarks}</td><td class="text-center px-5 py-2.5"><div class="flex items-center justify-center gap-2"><div class="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full rounded-full ${pct>=60?'bg-emerald-500':pct>=40?'bg-amber-500':'bg-red-500'}" style="width:${pct}%"></div></div><span class="text-xs font-medium text-slate-600">${pct}%</span></div></td><td class="text-center px-5 py-2.5"><span class="font-bold ${g==='F'?'text-red-600':pct>=80?'text-emerald-600':'text-amber-600'}">${g}</span></td></tr>`}).join('')}
+      </tbody></table>`}</div>`;
+  }).join('')}</div>`;
+}
+
+function viewExamResults(examId) { examTab='results'; renderPage(); }
+
+function openExamModal() {
+  openModal(`<div class="p-6">
+    <div class="flex items-center justify-between mb-6"><h3 class="font-heading text-lg font-bold text-slate-900">Add Exam</h3><button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400"><i class="fas fa-times"></i></button></div>
+    <form onsubmit="saveExam(event)" class="space-y-4">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Exam Name *</label><input name="name" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Class *</label><select name="class" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm">${classes.map(c=>`<option>${c}</option>`).join('')}</select></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Subject *</label><select name="subject" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"><option>All Subjects</option>${subjects.map(s=>`<option>${s}</option>`).join('')}</select></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Date *</label><input name="date" type="date" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Max Marks *</label><input name="maxMarks" type="number" value="100" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+      </div>
+      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal()" class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">Cancel</button><button type="submit" class="bpress flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700">Add Exam</button></div>
+    </form></div>`);
+}
+function saveExam(e) { e.preventDefault(); const f=new FormData(e.target); const d=Object.fromEntries(f); d.id=Math.max(0,...exams.map(x=>x.id))+1; d.maxMarks=parseInt(d.maxMarks); d.status='Upcoming'; exams.push(d); closeModal(); toast('Exam added'); renderPage(); }
+function deleteExam(id) { exams=exams.filter(x=>x.id!==id); results=results.filter(r=>r.examId!==id); toast('Exam deleted','warning'); renderPage(); }
+
+/* ========== TIMETABLE ========== */
+function renderTimetable() {
+  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
+  const data = timetable[ttClass] || timetable['Class 10'];
+
+  return `
+  <div class="mb-6"><h2 class="font-heading text-2xl font-bold text-slate-900">Timetable</h2><p class="text-slate-500 text-sm mt-1">Weekly class schedule</p></div>
+  <div class="bg-white rounded-xl border border-slate-200/60 p-4 mb-5">
+    <select class="border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-600 min-w-[150px]" onchange="ttClass=this.value;renderPage()">
+      ${classes.map(c=>`<option ${ttClass===c?'selected':''}>${c}</option>`).join('')}
+    </select>
+  </div>
+  <div class="bg-white rounded-xl border border-slate-200/60 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead><tr class="bg-slate-50 border-b border-slate-100">
+          <th class="text-left px-4 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider w-28">Time</th>
+          ${days.map(d=>`<th class="text-center px-4 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">${d}</th>`).join('')}
+        </tr></thead>
+        <tbody class="divide-y divide-slate-100">
+          ${data.map(row=>{
+            const isBreak = row[1]?.includes('Break') || row[1]?.includes('Lunch');
+            return `<tr class="${isBreak?'bg-slate-50':'trow'}">
+              <td class="px-4 py-3 font-medium text-slate-600 text-xs whitespace-nowrap">${row[0]}</td>
+              ${row.slice(1).map(cell=>{
+                if(isBreak) return `<td class="px-4 py-2.5 text-center text-xs text-slate-400 italic">${cell}</td>`;
+                const color = subColors[cell] || '#64748b';
+                const teacher = teachers.find(t=>t.subject===cell);
+                return `<td class="px-3 py-2.5"><div class="tt-cell rounded-lg p-2.5 text-center border border-slate-100" style="border-left:3px solid ${color}"><p class="font-medium text-slate-800 text-xs">${cell}</p>${teacher?`<p class="text-[10px] text-slate-400 mt-0.5">${teacher.name.split(' ').slice(-1)}</p>`:''}</div></td>`;
+              }).join('')}
+            </tr>`}).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="mt-4 flex flex-wrap gap-3">${Object.entries(subColors).slice(0,6).map(([s,c])=>`<div class="flex items-center gap-2 text-xs text-slate-600"><span class="w-3 h-3 rounded-sm" style="background:${c}"></span>${s}</div>`).join('')}</div>`;
+}
+
+/* ========== FEES ========== */
+function renderFees() {
+  let filtered = fees.filter(f => {
+    const matchFilter = feeFilter==='all' || f.status.toLowerCase()===feeFilter;
+    const matchSearch = !feeSearch || students.find(s=>s.id===f.studentId)?.name.toLowerCase().includes(feeSearch.toLowerCase());
+    return matchFilter && matchSearch;
+  });
+  const totalCollected = fees.reduce((a,f)=>a+f.paid,0);
+  const totalPending = fees.reduce((a,f)=>a+f.due,0);
+  const overdue = fees.filter(f=>f.status==='Overdue').length;
+
+  return `
+  <div class="mb-6"><h2 class="font-heading text-2xl font-bold text-slate-900">Fee Management</h2><p class="text-slate-500 text-sm mt-1">Track and manage fee payments</p></div>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+    <div class="scard bg-white rounded-xl p-5 border border-slate-200/60"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fas fa-indian-rupee-sign"></i></div><div><p class="text-xl font-heading font-bold text-slate-900">${(totalCollected/1000).toFixed(1)}K</p><p class="text-xs text-slate-500">Total Collected</p></div></div></div>
+    <div class="scard bg-white rounded-xl p-5 border border-slate-200/60"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center"><i class="fas fa-clock"></i></div><div><p class="text-xl font-heading font-bold text-slate-900">${(totalPending/1000).toFixed(1)}K</p><p class="text-xs text-slate-500">Pending Amount</p></div></div></div>
+    <div class="scard bg-white rounded-xl p-5 border border-slate-200/60"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-red-100 text-red-600 flex items-center justify-center"><i class="fas fa-exclamation-circle"></i></div><div><p class="text-xl font-heading font-bold text-slate-900">${overdue}</p><p class="text-xs text-slate-500">Overdue Records</p></div></div></div>
+  </div>
+  <div class="bg-white rounded-xl border border-slate-200/60 p-4 mb-4">
+    <div class="flex flex-col sm:flex-row gap-3">
+      <div class="flex-1 flex items-center bg-slate-100 rounded-lg px-3 py-2 gap-2"><i class="fas fa-search text-slate-400 text-sm"></i><input type="text" placeholder="Search by student name..." value="${feeSearch}" oninput="feeSearch=this.value;renderPage()" class="bg-transparent text-sm w-full border-none outline-none"></div>
+      <div class="flex gap-2">${['all','paid','pending','partial','overdue'].map(f=>`<button onclick="feeFilter='${f}';renderPage()" class="px-3 py-2 rounded-lg text-xs font-medium transition-colors ${feeFilter===f?'bg-primary-600 text-white':'text-slate-600 hover:bg-slate-100 capitalize'}">${f}</button>`).join('')}</div>
+    </div>
+  </div>
+  <div class="bg-white rounded-xl border border-slate-200/60 overflow-hidden">
+    <div class="overflow-x-auto"><table class="w-full text-sm">
+      <thead><tr class="bg-slate-50 border-b border-slate-100">
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Student</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden md:table-cell">Type</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden lg:table-cell">Month</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Amount</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden lg:table-cell">Progress</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Status</th>
+        <th class="text-right px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Action</th>
+      </tr></thead>
+      <tbody class="divide-y divide-slate-100">
+        ${filtered.map(f=>{const s=students.find(st=>st.id===f.studentId);if(!s)return'';const pct=Math.round((f.paid/f.amount)*100);return `<tr class="trow">
+          <td class="px-5 py-3.5"><div class="flex items-center gap-3">${avatar(s.name,'w-8 h-8','text-[10px]')}<div><p class="font-medium text-slate-800">${s.name}</p><p class="text-xs text-slate-400">${s.class}</p></div></div></td>
+          <td class="px-5 py-3.5 hidden md:table-cell text-slate-600">${f.type}</td>
+          <td class="px-5 py-3.5 hidden lg:table-cell text-slate-600">${f.month}</td>
+          <td class="px-5 py-3.5 font-medium text-slate-800">${f.amount.toLocaleString()}</td>
+          <td class="px-5 py-3.5 hidden lg:table-cell"><div class="flex items-center gap-2"><div class="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden"><div class="h-full rounded-full pfill ${pct===100?'bg-emerald-500':pct>0?'bg-blue-500':'bg-slate-300'}" style="width:${pct}%"></div></div><span class="text-xs text-slate-500">${pct}%</span></div></td>
+          <td class="px-5 py-3.5">${statusBadge(f.status)}</td>
+          <td class="px-5 py-3.5 text-right">${f.status!=='Paid'?`<button onclick="openPayModal(${f.id})" class="px-3 py-1.5 bg-primary-600 text-white rounded-lg text-xs font-medium hover:bg-primary-700 bpress">Pay</button>`:'<span class="text-xs text-slate-400"><i class="fas fa-check-circle text-emerald-500"></i> Done</span>'}</td>
+        </tr>`}).join('')}
+      </tbody>
+    </table></div>
+  </div>`;
+}
+
+function openPayModal(feeId) {
+  const f = fees.find(x=>x.id===feeId);
+  const s = students.find(st=>st.id===f.studentId);
+  openModal(`<div class="p-6">
+    <div class="flex items-center justify-between mb-6"><h3 class="font-heading text-lg font-bold text-slate-900">Process Payment</h3><button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400"><i class="fas fa-times"></i></button></div>
+    <div class="bg-slate-50 rounded-xl p-4 mb-5">
+      <div class="flex items-center gap-3 mb-3">${avatar(s.name,'w-10 h-10','text-xs')}<div><p class="font-medium text-slate-800">${s.name}</p><p class="text-xs text-slate-500">${s.class} | ${f.type}</p></div></div>
+      <div class="grid grid-cols-3 gap-3 text-center"><div><p class="text-xs text-slate-500">Total</p><p class="font-bold text-slate-800">${f.amount.toLocaleString()}</p></div><div><p class="text-xs text-slate-500">Paid</p><p class="font-bold text-emerald-600">${f.paid.toLocaleString()}</p></div><div><p class="text-xs text-slate-500">Due</p><p class="font-bold text-red-600">${f.due.toLocaleString()}</p></div></div>
+    </div>
+    <form onsubmit="processPayment(event,${feeId})" class="space-y-4">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Payment Amount *</label><input name="amount" type="number" min="1" max="${f.due}" value="${f.due}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Payment Method</label><select name="method" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"><option>Cash</option><option>Online Transfer</option><option>UPI</option><option>Cheque</option><option>Card</option></select></div>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Reference No.</label><input name="ref" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm" placeholder="Optional"></div>
+      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal()" class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">Cancel</button><button type="submit" class="bpress flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700">Process Payment</button></div>
+    </form></div>`);
+}
+
+function processPayment(e, feeId) {
+  e.preventDefault(); const f = new FormData(e.target); const amt = parseInt(f.get('amount'));
+  const fee = fees.find(x=>x.id===feeId);
+  fee.paid += amt; fee.due -= amt;
+  fee.status = fee.due <= 0 ? 'Paid' : 'Partial';
+  closeModal(); toast(`Payment of ${amt.toLocaleString()} processed successfully`); renderPage();
+}
+
+/* ========== LIBRARY ========== */
+function renderLibrary() {
+  let filtered = books.filter(b => !bookSearch || b.title.toLowerCase().includes(bookSearch.toLowerCase()) || b.author.toLowerCase().includes(bookSearch.toLowerCase()) || b.category.toLowerCase().includes(bookSearch.toLowerCase()));
+  const totalBooks = books.reduce((a,b)=>a+b.copies,0);
+  const available = books.reduce((a,b)=>a+b.available,0);
+  const issued = issuedBooks.filter(ib=>ib.status==='Issued').length;
+
+  return `
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div><h2 class="font-heading text-2xl font-bold text-slate-900">Library</h2><p class="text-slate-500 text-sm mt-1">Manage books and issuance</p></div>
+    <button onclick="openBookModal()" class="bpress px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 shadow-sm shadow-primary-600/20"><i class="fas fa-plus mr-2 text-xs"></i>Add Book</button>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">
+    <div class="scard bg-white rounded-xl p-5 border border-slate-200/60"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center"><i class="fas fa-book"></i></div><div><p class="text-xl font-heading font-bold text-slate-900">${totalBooks}</p><p class="text-xs text-slate-500">Total Books</p></div></div></div>
+    <div class="scard bg-white rounded-xl p-5 border border-slate-200/60"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center"><i class="fas fa-check-circle"></i></div><div><p class="text-xl font-heading font-bold text-slate-900">${available}</p><p class="text-xs text-slate-500">Available</p></div></div></div>
+    <div class="scard bg-white rounded-xl p-5 border border-slate-200/60"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fas fa-hand-holding"></i></div><div><p class="text-xl font-heading font-bold text-slate-900">${issued}</p><p class="text-xs text-slate-500">Currently Issued</p></div></div></div>
+  </div>
+  <!-- Tabs -->
+  <div class="flex gap-2 mb-4">
+    <button onclick="document.getElementById('libBooks').classList.remove('hidden');document.getElementById('libIssued').classList.add('hidden');this.classList.add('bg-primary-600','text-white');this.classList.remove('text-slate-600');this.nextElementSibling.classList.remove('bg-primary-600','text-white');this.nextElementSibling.classList.add('text-slate-600')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-primary-600 text-white">Book Catalog</button>
+    <button onclick="document.getElementById('libIssued').classList.remove('hidden');document.getElementById('libBooks').classList.add('hidden');this.classList.add('bg-primary-600','text-white');this.classList.remove('text-slate-600');this.previousElementSibling.classList.remove('bg-primary-600','text-white');this.previousElementSibling.classList.add('text-slate-600')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors text-slate-600 hover:bg-slate-100">Issued Books</button>
+  </div>
+  <div class="bg-white rounded-xl border border-slate-200/60 p-4 mb-4">
+    <div class="flex items-center bg-slate-100 rounded-lg px-3 py-2 gap-2"><i class="fas fa-search text-slate-400 text-sm"></i><input type="text" placeholder="Search by title, author, or category..." value="${bookSearch}" oninput="bookSearch=this.value;renderPage()" class="bg-transparent text-sm w-full border-none outline-none"></div>
+  </div>
+  <!-- Books -->
+  <div id="libBooks" class="bg-white rounded-xl border border-slate-200/60 overflow-hidden">
+    <div class="overflow-x-auto"><table class="w-full text-sm">
+      <thead><tr class="bg-slate-50 border-b border-slate-100">
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Book</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden md:table-cell">Category</th>
+        <th class="text-center px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Copies</th>
+        <th class="text-center px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden sm:table-cell">Available</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Status</th>
+        <th class="text-right px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Action</th>
+      </tr></thead>
+      <tbody class="divide-y divide-slate-100">
+        ${filtered.map(b=>`<tr class="trow">
+          <td class="px-5 py-3.5"><div><p class="font-medium text-slate-800">${b.title}</p><p class="text-xs text-slate-400">${b.author}</p></div></td>
+          <td class="px-5 py-3.5 hidden md:table-cell text-slate-600">${b.category}</td>
+          <td class="px-5 py-3.5 text-center text-slate-700">${b.copies}</td>
+          <td class="px-5 py-3.5 text-center hidden sm:table-cell font-medium ${b.available===0?'text-red-500':b.available<=5?'text-amber-600':'text-emerald-600'}">${b.available}</td>
+          <td class="px-5 py-3.5">${statusBadge(b.status)}</td>
+          <td class="px-5 py-3.5 text-right">${b.available>0?`<button onclick="openIssueModal(${b.id})" class="px-3 py-1.5 bg-primary-600 text-white rounded-lg text-xs font-medium hover:bg-primary-700 bpress">Issue</button>`:'<span class="text-xs text-slate-400">N/A</span>'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>
+  </div>
+  <!-- Issued -->
+  <div id="libIssued" class="hidden bg-white rounded-xl border border-slate-200/60 overflow-hidden">
+    <div class="overflow-x-auto"><table class="w-full text-sm">
+      <thead><tr class="bg-slate-50 border-b border-slate-100">
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Student</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden md:table-cell">Book</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider hidden sm:table-cell">Issue Date</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Due Date</th>
+        <th class="text-left px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Status</th>
+        <th class="text-right px-5 py-3 font-semibold text-slate-600 text-xs uppercase tracking-wider">Action</th>
+      </tr></thead>
+      <tbody class="divide-y divide-slate-100">
+        ${issuedBooks.map(ib=>{const s=students.find(st=>st.id===ib.studentId);const b=books.find(bk=>bk.id===ib.bookId);if(!s||!b)return'';return `<tr class="trow">
+          <td class="px-5 py-3.5"><div class="flex items-center gap-2">${avatar(s.name,'w-7 h-7','text-[9px]')}<span class="font-medium text-slate-800">${s.name}</span></div></td>
+          <td class="px-5 py-3.5 hidden md:table-cell text-slate-600">${b.title}</td>
+          <td class="px-5 py-3.5 hidden sm:table-cell text-slate-600">${ib.issueDate}</td>
+          <td class="px-5 py-3.5 text-slate-600">${ib.dueDate}</td>
+          <td class="px-5 py-3.5">${statusBadge(ib.status)}</td>
+          <td class="px-5 py-3.5 text-right">${ib.status==='Issued'?`<button onclick="returnBook(${ib.id})" class="px-3 py-1.5 bg-emerald-600 text-white rounded-lg text-xs font-medium hover:bg-emerald-700 bpress">Return</button>`:'—'}</td>
+        </tr>`}).join('')}
+      </tbody>
+    </table></div>
+  </div>`;
+}
+
+function openBookModal() {
+  openModal(`<div class="p-6">
+    <div class="flex items-center justify-between mb-6"><h3 class="font-heading text-lg font-bold text-slate-900">Add Book</h3><button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400"><i class="fas fa-times"></i></button></div>
+    <form onsubmit="saveBook(event)" class="space-y-4">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Title *</label><input name="title" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Author *</label><input name="author" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Category *</label><select name="category" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm">${subjects.map(s=>`<option>${s}</option>`).join('')}</select></div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">ISBN</label><input name="isbn" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Copies *</label><input name="copies" type="number" min="1" value="10" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+      </div>
+      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal()" class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">Cancel</button><button type="submit" class="bpress flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700">Add Book</button></div>
+    </form></div>`);
+}
+function saveBook(e) { e.preventDefault(); const f=new FormData(e.target); const d=Object.fromEntries(f); d.id=Math.max(0,...books.map(x=>x.id))+1; d.copies=parseInt(d.copies); d.available=d.copies; d.status='Available'; books.push(d); closeModal(); toast('Book added'); renderPage(); }
+
+function openIssueModal(bookId) {
+  const b = books.find(x=>x.id===bookId);
+  const classStudents = students.filter(s=>s.status==='Active');
+  openModal(`<div class="p-6">
+    <div class="flex items-center justify-between mb-6"><h3 class="font-heading text-lg font-bold text-slate-900">Issue Book</h3><button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400"><i class="fas fa-times"></i></button></div>
+    <div class="bg-slate-50 rounded-xl p-4 mb-5"><p class="font-medium text-slate-800">${b.title}</p><p class="text-xs text-slate-500">${b.author} | Available: ${b.available}</p></div>
+    <form onsubmit="issueBook(event,${bookId})" class="space-y-4">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Student *</label><select name="studentId" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm">${classStudents.map(s=>`<option value="${s.id}">${s.name} (${s.class}-${s.section})</option>`).join('')}</select></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Issue Date *</label><input name="issueDate" type="date" value="${new Date().toISOString().split('T')[0]}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Due Date *</label><input name="dueDate" type="date" value="${new Date(Date.now()+30*86400000).toISOString().split('T')[0]}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+      </div>
+      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal()" class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">Cancel</button><button type="submit" class="bpress flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700">Issue Book</button></div>
+    </form></div>`);
+}
+function issueBook(e, bookId) {
+  e.preventDefault(); const f=new FormData(e.target); const d=Object.fromEntries(f);
+  d.id=Math.max(0,...issuedBooks.map(x=>x.id))+1; d.bookId=bookId; d.studentId=parseInt(d.studentId); d.returnDate=null; d.status='Issued';
+  issuedBooks.push(d);
+  const book=books.find(b=>b.id===bookId); book.available--; book.status=book.available===0?'Out of Stock':book.available<=5?'Low Stock':'Available';
+  closeModal(); toast('Book issued successfully'); renderPage();
+}
+function returnBook(ibId) {
+  const ib=issuedBooks.find(x=>x.id===ibId); ib.returnDate=new Date().toISOString().split('T')[0]; ib.status='Returned';
+  const book=books.find(b=>b.id===ib.bookId); book.available++; book.status=book.available<=5?'Low Stock':'Available';
+  toast('Book returned successfully'); renderPage();
+}
+
+/* ========== NOTICES ========== */
+function renderNotices() {
+  const typeIcons = {Event:'fa-calendar-star text-primary-600 bg-primary-100',Holiday:'fa-umbrella-beach text-amber-600 bg-amber-100',Meeting:'fa-users text-blue-600 bg-blue-100',Fee:'fa-money-bill text-emerald-600 bg-emerald-100',General:'fa-info-circle text-slate-600 bg-slate-100'};
+
+  return `
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div><h2 class="font-heading text-2xl font-bold text-slate-900">Notices</h2><p class="text-slate-500 text-sm mt-1">School announcements and communications</p></div>
+    <button onclick="openNoticeModal()" class="bpress px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 shadow-sm shadow-primary-600/20"><i class="fas fa-plus mr-2 text-xs"></i>Create Notice</button>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    ${notices.map(n=>{
+      const ic = typeIcons[n.type] || typeIcons.General;
+      return `<div class="bg-white rounded-xl border border-slate-200/60 p-5 scard">
+        <div class="flex items-start justify-between mb-3">
+          <div class="flex items-center gap-3"><div class="w-10 h-10 rounded-lg ${ic.split(' ').slice(1).join(' ')} flex items-center justify-center"><i class="fas ${ic.split(' ')[0]}"></i></div><div><span class="text-[10px] font-semibold uppercase tracking-wider text-slate-400">${n.type}</span>${priorityBadge(n.priority)}</div></div>
+          <div class="flex gap-1"><button onclick="openNoticeModal(${n.id})" class="w-7 h-7 rounded hover:bg-slate-100 text-slate-400 hover:text-blue-600 flex items-center justify-center"><i class="fas fa-pen text-[10px]"></i></button><button onclick="deleteNotice(${n.id})" class="w-7 h-7 rounded hover:bg-red-50 text-slate-400 hover:text-red-600 flex items-center justify-center"><i class="fas fa-trash text-[10px]"></i></button></div>
+        </div>
+        <h4 class="font-heading font-semibold text-slate-800 mb-2">${n.title}</h4>
+        <p class="text-sm text-slate-500 leading-relaxed mb-3 line-clamp-3">${n.content}</p>
+        <div class="flex items-center justify-between text-xs text-slate-400"><span><i class="fas fa-user mr-1"></i>${n.author}</span><span><i class="fas fa-calendar mr-1"></i>${n.date}</span></div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function openNoticeModal(id=null) {
+  const n = id ? notices.find(x=>x.id===id) : null;
+  openModal(`<div class="p-6">
+    <div class="flex items-center justify-between mb-6"><h3 class="font-heading text-lg font-bold text-slate-900">${n?'Edit':'Create'} Notice</h3><button onclick="closeModal()" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-400"><i class="fas fa-times"></i></button></div>
+    <form onsubmit="saveNotice(event,${id||'null'})" class="space-y-4">
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Title *</label><input name="title" value="${n?.title||''}" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Type</label><select name="type" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm">${['Event','Holiday','Meeting','Fee','General'].map(t=>`<option ${n?.type===t?'selected':''}>${t}</option>`).join('')}</select></div>
+        <div><label class="block text-sm font-medium text-slate-700 mb-1">Priority</label><select name="priority" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm">${['high','medium','low'].map(p=>`<option ${n?.priority===p?'selected':''}>${p}</option>`).join('')}</select></div>
+      </div>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Content *</label><textarea name="content" rows="4" required class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm resize-none">${n?.content||''}</textarea></div>
+      <div><label class="block text-sm font-medium text-slate-700 mb-1">Author</label><input name="author" value="${n?.author||'Admin'}" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+      <div class="flex gap-3 pt-2"><button type="button" onclick="closeModal()" class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl text-sm font-medium text-slate-600 hover:bg-slate-50">Cancel</button><button type="submit" class="bpress flex-1 px-4 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700">${n?'Update':'Publish'}</button></div>
+    </form></div>`);
+}
+function saveNotice(e, id) {
+  e.preventDefault(); const f=new FormData(e.target); const d=Object.fromEntries(f);
+  if(id) { Object.assign(notices.find(x=>x.id===id), d); toast('Notice updated'); }
+  else { d.id=Math.max(0,...notices.map(x=>x.id))+1; d.date=new Date().toISOString().split('T')[0]; notices.unshift(d); toast('Notice published'); }
+  closeModal(); renderPage();
+}
+function deleteNotice(id) { notices=notices.filter(x=>x.id!==id); toast('Notice deleted','warning'); renderPage(); }
+
+/* ========== SETTINGS ========== */
+function renderSettings() {
+  return `
+  <div class="mb-6"><h2 class="font-heading text-2xl font-bold text-slate-900">Settings</h2><p class="text-slate-500 text-sm mt-1">Configure school management system</p></div>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Sidebar tabs -->
+    <div class="lg:col-span-1">
+      <div class="bg-white rounded-xl border border-slate-200/60 overflow-hidden">
+        <button onclick="showSettingsTab('school')" class="sett-tab w-full flex items-center gap-3 px-5 py-3.5 text-sm text-left hover:bg-slate-50 transition-colors border-l-3 border-primary-600 bg-primary-50 text-primary-700 font-medium" data-tab="school"><i class="fas fa-school w-5 text-center"></i>School Information</button>
+        <button onclick="showSettingsTab('academic')" class="sett-tab w-full flex items-center gap-3 px-5 py-3.5 text-sm text-left hover:bg-slate-50 transition-colors border-l-3 border-transparent text-slate-600" data-tab="academic"><i class="fas fa-calendar-alt w-5 text-center"></i>Academic Year</button>
+        <button onclick="showSettingsTab('profile')" class="sett-tab w-full flex items-center gap-3 px-5 py-3.5 text-sm text-left hover:bg-slate-50 transition-colors border-l-3 border-transparent text-slate-600" data-tab="profile"><i class="fas fa-user-circle w-5 text-center"></i>Admin Profile</button>
+        <button onclick="showSettingsTab('appearance')" class="sett-tab w-full flex items-center gap-3 px-5 py-3.5 text-sm text-left hover:bg-slate-50 transition-colors border-l-3 border-transparent text-slate-600" data-tab="appearance"><i class="fas fa-palette w-5 text-center"></i>Appearance</button>
+      </div>
+    </div>
+    <!-- Content -->
+    <div class="lg:col-span-2">
+      <div id="settSchool" class="sett-content bg-white rounded-xl border border-slate-200/60 p-6">
+        <h3 class="font-heading font-semibold text-slate-800 mb-5">School Information</h3>
+        <form onsubmit="event.preventDefault();toast('School information saved')" class="space-y-4">
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">School Name</label><input value="EduCore International School" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Phone</label><input value="+91 11 2345 6789" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Email</label><input value="info@educore.edu" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Address</label><textarea rows="2" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm resize-none">123 Education Lane, Sector 15, New Delhi - 110001</textarea></div>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Board</label><select class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"><option>CBSE</option><option>ICSE</option><option>State Board</option><option>IB</option></select></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Affiliation No.</label><input value="CBSE/AFF/2730XXX/2020" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+          </div>
+          <button type="submit" class="bpress px-6 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700 shadow-sm shadow-primary-600/20">Save Changes</button>
+        </form>
+      </div>
+      <div id="settAcademic" class="sett-content hidden bg-white rounded-xl border border-slate-200/60 p-6">
+        <h3 class="font-heading font-semibold text-slate-800 mb-5">Academic Year Settings</h3>
+        <form onsubmit="event.preventDefault();toast('Academic settings saved')" class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Current Session</label><select class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"><option>2024-2025</option><option>2025-2026</option></select></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Term</label><select class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"><option>Term 2</option><option>Term 1</option></select></div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Session Start</label><input type="date" value="2024-04-01" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Session End</label><input type="date" value="2025-03-31" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+          </div>
+          <div class="bg-slate-50 rounded-xl p-4"><h4 class="text-sm font-medium text-slate-700 mb-3">Working Days</h4>
+            <div class="flex flex-wrap gap-2">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((d,i)=>`<label class="flex items-center gap-2 px-3 py-2 rounded-lg border ${i<5?'border-primary-200 bg-primary-50':'border-slate-200 bg-white'} cursor-pointer text-sm"><input type="checkbox" ${i<5?'checked':''} class="w-4 h-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500"><span class="${i<5?'text-primary-700':'text-slate-500'}">${d}</span></label>`).join('')}</div>
+          </div>
+          <button type="submit" class="bpress px-6 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700">Save Changes</button>
+        </form>
+      </div>
+      <div id="settProfile" class="sett-content hidden bg-white rounded-xl border border-slate-200/60 p-6">
+        <h3 class="font-heading font-semibold text-slate-800 mb-5">Admin Profile</h3>
+        <form onsubmit="event.preventDefault();toast('Profile updated')" class="space-y-4">
+          <div class="flex items-center gap-4 mb-4">${avatar('Admin User','w-16 h-16','text-xl')}<div><button class="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-50">Change Photo</button><p class="text-xs text-slate-400 mt-1">JPG, PNG. Max 2MB</p></div></div>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Full Name</label><input value="Admin User" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Email</label><input value="admin@educore.com" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Phone</label><input value="+91 98765 43210" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Role</label><input value="Super Admin" disabled class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm bg-slate-50 text-slate-500"></div>
+          </div>
+          <hr class="border-slate-100">
+          <h4 class="text-sm font-medium text-slate-700">Change Password</h4>
+          <div><label class="block text-sm font-medium text-slate-700 mb-1">Current Password</label><input type="password" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+          <div class="grid grid-cols-2 gap-4">
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">New Password</label><input type="password" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+            <div><label class="block text-sm font-medium text-slate-700 mb-1">Confirm Password</label><input type="password" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-sm"></div>
+          </div>
+          <button type="submit" class="bpress px-6 py-2.5 bg-primary-600 text-white rounded-xl text-sm font-medium hover:bg-primary-700">Update Profile</button>
+        </form>
+      </div>
+      <div id="settAppearance" class="sett-content hidden bg-white rounded-xl border border-slate-200/60 p-6">
+        <h3 class="font-heading font-semibold text-slate-800 mb-5">Appearance</h3>
+        <div class="space-y-5">
+          <div><label class="block text-sm font-medium text-slate-700 mb-3">Theme</label>
+            <div class="grid grid-cols-3 gap-3">
+              <button class="p-4 rounded-xl border-2 border-primary-500 bg-white text-center"><div class="w-full h-8 bg-slate-100 rounded-lg mb-2"></div><span class="text-xs font-medium text-slate-700">Light</span></button>
+              <button onclick="toast('Dark mode coming soon','info')" class="p-4 rounded-xl border-2 border-slate-200 bg-white text-center hover:border-slate-300"><div class="w-full h-8 bg-slate-800 rounded-lg mb-2"></div><span class="text-xs font-medium text-slate-700">Dark</span></button>
+              <button onclick="toast('Auto mode coming soon','info')" class="p-4 rounded-xl border-2 border-slate-200 bg-white text-center hover:border-slate-300"><div class="w-full h-8 bg-gradient-to-r from-slate-100 to-slate-800 rounded-lg  mb-2"></div><span class="text-xs font-medium text-slate-700">Auto</span></button>
+            </div>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-3">Accent Color</label>
+            <div class="flex gap-3">
+              ${['#0d9488','#7c3aed','#2563eb','#dc2626','#d97706','#059669','#db2777','#0891b2'].map(c=>`<button onclick="document.documentElement.style.setProperty('--accent','${c}');toast('Accent color updated','info')" class="w-10 h-10 rounded-xl border-2 ${c==='#0d9488'?'border-slate-800':'border-transparent hover:border-slate-300'} transition-colors" style="background:${c}"></button>`).join('')}
+            </div>
+          </div>
+          <div><label class="block text-sm font-medium text-slate-700 mb-3">Sidebar Style</label>
+            <div class="grid grid-cols-2 gap-3">
+              <button class="p-3 rounded-xl border-2 border-primary-500 bg-white text-center text-sm font-medium text-slate-700">Dark</button>
+              <button onclick="toast('Light sidebar coming soon','info')" class="p-3 rounded-xl border-2 border-slate-200 bg-white text-center text-sm font-medium text-slate-700 hover:border-slate-300">Light</button>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+            <div><p class="text-sm font-medium text-slate-700">Compact Mode</p><p class="text-xs text-slate-500">Reduce spacing and font sizes</p></div>
+            <button onclick="this.classList.toggle('bg-primary-600');this.classList.toggle('bg-slate-300');this.querySelector('span').classList.toggle('translate-x-5');toast('Compact mode toggled','info')" class="w-11 h-6 bg-slate-300 rounded-full relative transition-colors"><span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform"></span></button>
+          </div>
+          <div class="flex items-center justify-between p-4 bg-slate-50 rounded-xl">
+            <div><p class="text-sm font-medium text-slate-700">Animations</p><p class="text-xs text-slate-500">Enable page transition animations</p></div>
+            <button onclick="this.classList.toggle('bg-primary-600');this.classList.toggle('bg-slate-300');this.querySelector('span').classList.toggle('translate-x-5')" class="w-11 h-6 bg-primary-600 rounded-full relative transition-colors"><span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform translate-x-5"></span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function showSettingsTab(tab) {
+  document.querySelectorAll('.sett-content').forEach(el => el.classList.add('hidden'));
+  document.querySelectorAll('.sett-tab').forEach(el => {
+    el.classList.remove('border-primary-600','bg-primary-50','text-primary-700','font-medium');
+    el.classList.add('border-transparent','text-slate-600');
+  });
+  const tabMap = {school:'settSchool',academic:'settAcademic',profile:'settProfile',appearance:'settAppearance'};
+  const target = document.getElementById(tabMap[tab]);
+  if(target) target.classList.remove('hidden');
+  const btn = document.querySelector(`.sett-tab[data-tab="${tab}"]`);
+  if(btn) {
+    btn.classList.add('border-primary-600','bg-primary-50','text-primary-700','font-medium');
+    btn.classList.remove('border-transparent','text-slate-600');
+  }
+}
+
+/* ========== INIT ========== */
+function init() {
+  renderNav();
+  renderPage();
+  // Keyboard shortcut: Ctrl+K for search
+  document.addEventListener('keydown', e => {
+    if((e.ctrlKey||e.metaKey) && e.key==='k') {
+      e.preventDefault();
+      const gs = document.getElementById('globalSearch');
+      if(gs) gs.focus();
+    }
+    if(e.key==='Escape') {
+      closeModal();
+      document.getElementById('notifDrop').classList.add('hidden');
+      document.getElementById('profDrop').classList.add('hidden');
+    }
+  });
+}
+
+init();
+</script>
+</body>
+</html>

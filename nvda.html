@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AXIOM — Motion Design & Creative Technology</title>
+<meta name="description" content="Enterprise-grade Motion Design Portfolio. Crafting digital experiences through code, motion, and strategy.">
+
+<!-- ==========================================
+     TAILWIND DESIGN SYSTEM (JIT CDN)
+     ========================================== -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        // 1. DESIGN TOKENS
+        colors: {
+          brand: {
+            50: '#fef7ee', 100: '#fdedd6', 200: '#fad6ac', 300: '#f7b874',
+            400: '#f39139', 500: '#ef710d', 600: '#dc580c', 700: '#b8410e',
+            800: '#943413', 900: '#772d12', 950: '#411305',
+          },
+          surface: {
+            light: '#ffffff', 'light-muted': '#fafafa',
+            dark: '#0a0a0b', 'dark-muted': '#131314',
+            card: 'rgba(255,255,255,0.03)', 'card-hover': 'rgba(255,255,255,0.06)',
+          },
+          text: {
+            primary: { light: '#0a0a0a', dark: '#fafafa' },
+            secondary: { light: '#525252', dark: '#a3a3a3' },
+            muted: { light: '#a3a3a3', dark: '#525252' },
+          },
+          border: { light: '#e5e5e5', dark: '#27272a' },
+        },
+        fontFamily: {
+          display: ['"Syne"', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+          sans: ['"Inter"', 'system-ui', 'sans-serif'],
+        },
+        fontSize: {
+          'display-xl': ['clamp(3.5rem, 8vw + 1rem, 8rem)', { lineHeight: '0.95', letterSpacing: '-0.03em', fontWeight: '800' }],
+          'display-lg': ['clamp(2.5rem, 5vw + 1rem, 5rem)', { lineHeight: '1.0', letterSpacing: '-0.02em', fontWeight: '700' }],
+          'display-md': ['clamp(1.75rem, 3vw + 1rem, 3rem)', { lineHeight: '1.1', letterSpacing: '-0.01em', fontWeight: '600' }],
+          'lead': ['clamp(1.125rem, 1.5vw + 0.5rem, 1.5rem)', { lineHeight: '1.6', fontWeight: '400' }],
+          'body': ['1rem', { lineHeight: '1.7', fontWeight: '400' }],
+          'caption': ['0.8125rem', { lineHeight: '1.5', fontWeight: '500', letterSpacing: '0.05em', textTransform: 'uppercase' }],
+        },
+        spacing: { '18': '4.5rem', '22': '5.5rem', '26': '6.5rem', '30': '7.5rem' },
+        borderRadius: { 'xl': '1rem', '2xl': '1.5rem', '3xl': '2rem' },
+        transitionDuration: { '400': '400ms', '600': '600ms', '800': '800ms', '1000': '1000ms' },
+        transitionTimingFunction: { 'expo': 'cubic-bezier(0.16, 1, 0.3, 1)', 'expo-in': 'cubic-bezier(0.7, 0, 0.84, 0)', 'expo-out': 'cubic-bezier(0.16, 1, 0.3, 1)' },
+        boxShadow: {
+          'glow': '0 0 60px -10px rgb(239 113 13 / 0.4)',
+          'glow-lg': '0 0 100px -20px rgb(239 113 13 / 0.5)',
+          'inner-glow': 'inset 0 1px 0 0 rgba(255,255,255,0.1)',
+          'card': '0 4px 24px -4px rgb(0 0 0 / 0.1), 0 0 0 1px rgb(0 0 0 / 0.03)',
+          'card-dark': '0 4px 24px -4px rgb(0 0 0 / 0.4), 0 0 0 1px rgb(255 255 255 / 0.03)',
+        },
+        backgroundImage: {
+          'grid-pattern': "linear-gradient(to right, rgb(0 0 0 / 0.03) 1px, transparent 1px), linear-gradient(to bottom, rgb(0 0 0 / 0.03) 1px, transparent 1px)",
+          'grid-pattern-dark': "linear-gradient(to right, rgb(255 255 255 / 0.02) 1px, transparent 1px), linear-gradient(to bottom, rgb(255 255 255 / 0.02) 1px, transparent 1px)",
+          'radial-gradient': 'radial-gradient(ellipse 80% 50% at 50% -20%, rgb(239 113 13 / 0.15), transparent)',
+        },
+        backgroundSize: { 'grid': '60px 60px' },
+      },
+    },
+  }
+</script>
+
+<!-- ==========================================
+     EXTERNAL DEPENDENCIES (GSAP, Fonts)
+     ========================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollSmoother.min.js"></script>
+
+<!-- ==========================================
+     CUSTOM CSS (Critical Styles & Utilities)
+     ========================================== -->
+<style>
+  /* CSS Variables for Theme Switching (Performance) */
+  :root { --bg: #ffffff; --fg: #0a0a0a; --muted: #a3a3a3; --border: #e5e5e5; --card-bg: rgba(0,0,0,0.02); --card-border: rgba(0,0,0,0.05); }
+  .dark { --bg: #0a0a0b; --fg: #fafafa; --muted: #525252; --border: #27272a; --card-bg: rgba(255,255,255,0.03); --card-border: rgba(255,255,255,0.05); }
+
+  /* Base */
+  *, *::before, *::after { box-sizing: border-box; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+    .gsap-parallax { transform: none !important; }
+  }
+
+  html { scroll-behavior: smooth; }
+  @supports (view-transition-name: none) { html { scroll-behavior: auto; } }
+
+  body { background-color: var(--bg); color: var(--fg); font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden; }
+
+  /* Smooth Scroll Wrapper (GSAP ScrollSmoother) */
+  #smooth-wrapper { overflow: hidden; width: 100%; }
+  #smooth-content { overflow: hidden; width: 100%; }
+
+  /* Selection */
+  ::selection { background: rgb(239 113 13 / 0.3); color: var(--fg); }
+  .dark ::selection { background: rgb(239 113 13 / 0.5); }
+
+  /* Focus Visible (Accessibility) */
+  :focus-visible { outline: 2px solid rgb(239 113 13); outline-offset: 3px; border-radius: 4px; }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* Utility: Text Gradient */
+  .text-gradient { background: linear-gradient(135deg, var(--fg) 0%, var(--muted) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .text-gradient-brand { background: linear-gradient(135deg, #ef710d 0%, #f39139 50%, #fad6ac 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+  /* Utility: Clip Text Reveal */
+  .clip-text { overflow: hidden; display: inline-block; vertical-align: bottom; }
+  .clip-text span { display: inline-block; transform: translateY(100%); will-change: transform; }
+
+  /* Magnetic Button Base */
+  .magnetic-btn { position: relative; overflow: hidden; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease; will-change: transform; }
+  .magnetic-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgb(239 113 13 / 0.1), transparent); opacity: 0; transition: opacity 0.4s ease; pointer-events: none; z-index: -1; }
+  .magnetic-btn:hover::before { opacity: 1; }
+
+  /* Cursor Follower (High-End Feel) */
+  .cursor-follower { position: fixed; top: 0; left: 0; width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--border); pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease, opacity 0.2s ease; mix-blend-mode: difference; opacity: 0; }
+  .cursor-follower.active { opacity: 1; }
+  .cursor-follower.hover { width: 80px; height: 80px; border-color: transparent; background: rgb(239 113 13 / 0.15); mix-blend-mode: normal; }
+  .cursor-follower.text-mode { width: auto; height: auto; padding: 8px 16px; border-radius: 100px; border: none; background: var(--fg); color: var(--bg); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap; mix-blend-mode: normal; }
+
+  /* Grid Background */
+  .bg-grid { background-image: var(--grid-img, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3e%3cpath d='M0 60H0V0H60V60' fill='none' stroke='%23e5e5e5' stroke-width='0.5'/%3e%3c/svg%3e")); background-size: 60px 60px; }
+  .dark .bg-grid { background-image: var(--grid-img, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3e%3cpath d='M0 60H0V0H60V60' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.02'/%3e%3c/svg%3e")); }
+
+  /* Noise Texture Overlay */
+  .noise-overlay::before { content: ''; position: absolute; inset: 0; opacity: 0.03; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); z-index: 10; }
+
+  /* Reveal Lines (Case Studies) */
+  .reveal-line { overflow: hidden; position: relative; }
+  .reveal-line::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: currentColor; opacity: 0.2; transform: scaleX(0); transform-origin: left; transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+  .group:hover .reveal-line::after { transform: scaleX(1); }
+
+  /* Image Parallax Container */
+  .parallax-wrap { overflow: hidden; position: relative; border-radius: inherit; }
+  .parallax-img { width: 100%; height: 100%; object-fit: cover; will-change: transform; transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease; }
+  .group:hover .parallax-img { transform: scale(1.08); filter: saturate(1.2); }
+
+  /* View Transition Names */
+  .hero-title { view-transition-name: hero-title; }
+  .hero-sub { view-transition-name: hero-sub; }
+  .nav-logo { view-transition-name: nav-logo; }
+  .case-img { view-transition-name: case-img; }
+  .case-title { view-transition-name: case-title; }
+</style>
+</head>
+
+<body class="h-full antialiased">
+<!-- Cursor Follower -->
+<div class="cursor-follower" id="cursor" aria-hidden="true"></div>
+
+<!-- GSAP ScrollSmoother Wrapper -->
+<div id="smooth-wrapper">
+  <div id="smooth-content">
+
+    <!-- ==========================================
+         NAVIGATION
+         ========================================== -->
+    <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-4 md:px-10 lg:px-20 transition-colors duration-600" style="background: linear-gradient(to bottom, var(--bg), transparent);" aria-label="Main Navigation">
+      <div class="flex items-center justify-between max-w-[1600px] mx-auto">
+        <!-- Logo -->
+        <a href="#" class="nav-logo flex items-center gap-2 text-[var(--fg)] font-display font-bold text-xl tracking-tight magnetic-btn px-3 py-1 rounded-lg" aria-label="Axiom Home">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true" class="text-brand-500">
+            <path d="M14 2L4 10v8l10 8 10-8V10L14 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M14 10V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <span class="hidden sm:block">AXIOM</span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#work" class="text-sm font-medium text-[var(--muted)] hover:text-[var(--fg)] transition-colors duration-300 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 after:transition-all hover:after:w-full magnetic-btn px-2 py-1">Work</a>
+          <a href="#process" class="text-sm font-medium text-[var(--muted)] hover:text-[var(--fg)] transition-colors duration-300 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 after:transition-all hover:after:w-full magnetic-btn px-2 py-1">Process</a>
+          <a href="#about" class="text-sm font-medium text-[var(--muted)] hover:text-[var(--fg)] transition-colors duration-300 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-brand-500 after:transition-all hover:after:w-full magnetic-btn px-2 py-1">About</a>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-4">
+          <!-- Theme Toggle -->
+          <button id="theme-toggle" class="magnetic-btn p-2 rounded-xl bg-[var(--card-bg)] border border-[var(--card-border)] flex items-center justify-center" aria-label="Toggle theme" aria-pressed="false">
+            <svg class="sun-icon w-5 h-5 text-[var(--fg)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" stroke-width="1.5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            <svg class="moon-icon w-5 h-5 text-[var(--fg)] hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+          </button>
+
+          <!-- CTA Button -->
+          <a href="#contact" class="hidden sm:block magnetic-btn bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl font-medium text-sm tracking-wide shadow-glow transition-all duration-400 flex items-center gap-2">
+            Start Project
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+
+          <!-- Mobile Menu Btn -->
+          <button id="mobile-menu-btn" class="md:hidden magnetic-btn p-2 rounded-xl bg-[var(--card-bg)] border border-[var(--card-border)]" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+            <svg class="w-6 h-6 text-[var(--fg)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-[var(--bg)] translate-y-full md:hidden transition-transform duration-600 ease-expo flex flex-col items-center justify-center gap-10 px-6" role="dialog" aria-modal="true" aria-label="Mobile Menu">
+      <a href="#work" class="text-display-md font-display font-bold text-[var(--fg)] magnetic-btn px-4 py-2">Work</a>
+      <a href="#process" class="text-display-md font-display font-bold text-[var(--fg)] magnetic-btn px-4 py-2">Process</a>
+      <a href="#about" class="text-display-md font-display font-bold text-[var(--fg)] magnetic-btn px-4 py-2">About</a>
+      <a href="#contact" class="magnetic-btn bg-brand-500 hover:bg-brand-600 text-white px-10 py-4 rounded-xl font-medium text-sm tracking-wide shadow-glow mt-4">Start Project</a>
+    </div>
+
+    <!-- ==========================================
+         HERO SECTION
+         ========================================== -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center pt-20 pb-20 overflow-hidden noise-overlay" aria-labelledby="hero-title">
+      <!-- Background Grid -->
+      <div class="absolute inset-0 bg-grid dark:bg-grid [mask-image:linear-gradient(to_bottom,black_60%,transparent)]" aria-hidden="true"></div>
+      <!-- Radial Glow -->
+      <div class="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] max-w-[1000px] bg-gradient-to-b from-brand-500/10 via-transparent to-transparent rounded-full blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+      <div class="relative z-10 px-6 md:px-10 lg:px-20 max-w-[1600px] mx-auto w-full">
+        <!-- Eyebrow -->
+        <div class="mb-8">
+          <p class="caption text-brand-500 tracking-widest clip-text" data-split="chars"><span>Motion Design & Creative Technology</span></p>
+        </div>
+
+        <!-- Main Headline -->
+        <h1 id="hero-title" class="font-display text-display-xl text-[var(--fg)] leading-none mb-10 max-w-4xl clip-text" data-split="lines" style="will-change: transform, opacity;">
+          <span>We craft digital</span>
+          <span class="text-gradient-brand">experiences</span>
+          <span>that move</span>
+          <span class="relative">brands</span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p id="hero-sub" class="lead text-[var(--muted)] max-w-2xl mb-16 clip-text" data-split="lines" style="will-change: transform, opacity;">
+          <span>Strategic motion systems for ambitious teams. </span>
+          <span>From concept to code — we build the impossible.</span>
+        </p>
+
+        <!-- Hero Actions -->
+        <div class="flex flex-wrap items-center gap-4 mb-20 clip-text" data-split="lines" style="will-change: transform, opacity;">
+          <span>
+            <a href="#work" class="magnetic-btn group inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-[var(--card-bg)] border border-[var(--card-border)] hover:bg-[var(--card-hover)] transition-all duration-400">
+              <span class="font-medium text-[var(--fg)]">View Work</span>
+              <svg class="w-5 h-5 text-[var(--muted)] group-hover:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4-4 4M3 12h18"/></svg>
+            </a>
+          </span>
+          <span>
+            <button class="magnetic-btn inline-flex items-center gap-3 px-6 py-4 rounded-xl bg-transparent border border-[var(--border)] hover:border-brand-500/50 text-[var(--muted)] hover:text-[var(--fg)] font-medium transition-all duration-400">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span>Showreel</span>
+            </button>
+          </span>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10 border-t border-[var(--border)] pt-10 clip-text" data-split="lines" style="will-change: transform, opacity;">
+          <div class="reveal-line group" data-count="47"><div class="font-display text-display-lg text-[var(--fg)]" data-target="47">0</div><div class="caption text-[var(--muted)] mt-1">Projects Delivered</div></div>
+          <div class="reveal-line group" data-count="12"><div class="font-display text-display-lg text-[var(--fg)]" data-target="12">0</div><div class="caption text-[var(--muted)] mt-1">Years Experience</div></div>
+          <div class="reveal-line group" data-count="8"><div class="font-display text-display-lg text-[var(--fg)]" data-target="8">0</div><div class="caption text-[var(--muted)] mt-1">Team Members</div></div>
+          <div class="reveal-line group" data-count="98"><div class="font-display text-display-lg text-[var(--fg)]" data-target="98">0</div><div class="caption text-[var(--muted)] mt-1">Client Retention %</div></div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[var(--muted)] opacity-60 hidden md:flex" aria-hidden="true">
+          <p class="caption tracking-widest">Scroll</p>
+          <svg class="animate-bounce-slow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         WORK / CASE STUDIES
+         ========================================== -->
+    <section id="work" class="relative py-22 md:py-30 px-6 md:px-10 lg:px-20 bg-[var(--bg)]" aria-labelledby="work-title">
+      <div class="max-w-[1600px] mx-auto">
+        <!-- Section Header -->
+        <div class="mb-16 md:mb-24 clip-text" data-split="lines" style="will-change: transform, opacity;">
+          <p id="work-title" class="caption text-brand-500 mb-4">Selected Work</p>
+          <h2 class="font-display text-display-lg text-[var(--fg)] max-w-2xl">Case studies in motion & strategy</h2>
+        </div>
+
+        <!-- Case Study Grid -->
+        <div class="grid md:grid-cols-2 gap-6 md:gap-8" id="cases-grid">
+          <!-- Case 1 -->
+          <article class="group relative aspect-[4/3] md:aspect-[16/10] rounded-2xl overflow-hidden bg-[var(--card-bg)] border border-[var(--card-border)] magnetic-btn transition-all duration-600 hover:shadow-card-dark dark:hover:shadow-card hover:border-brand-500/20" style="view-transition-name: case-1;" data-case="neural">
+            <div class="parallax-wrap absolute inset-0">
+              <img src="https://picsum.photos/seed/neural-motion/1200/800.jpg" alt="" class="parallax-img" loading="lazy" width="1200" height="800">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg)]/90 via-transparent to-transparent z-10"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20">
+              <p class="caption text-brand-500 mb-2">Brand System / Motion</p>
+              <h3 class="font-display text-display-md text-[var(--fg)] mb-2 case-title">Neural Nexus</h3>
+              <p class="text-[var(--muted)] text-body max-w-xs">Real-time generative identity system for AI research lab.</p>
+            </div>
+            <div class="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-400 translate-y-2 group-hover:translate-y-0">
+               <button class="magnetic-btn w-12 h-12 rounded-xl bg-[var(--bg)]/80 backdrop-blur border border-[var(--border)] flex items-center justify-center" aria-label="View Neural Nexus case study">
+                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+               </button>
+            </div>
+          </article>
+
+          <!-- Case 2 -->
+          <article class="group relative aspect-[4/3] md:aspect-[16/10] rounded-2xl overflow-hidden bg-[var(--card-bg)] border border-[var(--card-border)] magnetic-btn transition-all duration-600 hover:shadow-card-dark dark:hover:shadow-card hover:border-brand-500/20" style="view-transition-name: case-2;" data-case="quantum">
+            <div class="parallax-wrap absolute inset-0">
+              <img src="https://picsum.photos/seed/quantum-flow/1200/800.jpg" alt="" class="parallax-img" loading="lazy" width="1200" height="800">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg)]/90 via-transparent to-transparent z-10"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20">
+              <p class="caption text-brand-500 mb-2">Web Experience / 3D</p>
+              <h3 class="font-display text-display-md text-[var(--fg)] mb-2 case-title">Quantum Flow</h3>
+              <p class="text-[var(--muted)] text-body max-w-xs">Immersive Three.js journey for quantum computing startup.</p>
+            </div>
+             <div class="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-400 translate-y-2 group-hover:translate-y-0">
+               <button class="magnetic-btn w-12 h-12 rounded-xl bg-[var(--bg)]/80 backdrop-blur border border-[var(--border)] flex items-center justify-center" aria-label="View Quantum Flow case study">
+                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+               </button>
+            </div>
+          </article>
+
+          <!-- Case 3 -->
+          <article class="group relative aspect-[4/3] md:aspect-[16/10] rounded-2xl overflow-hidden bg-[var(--card-bg)] border border-[var(--card-border)] magnetic-btn transition-all duration-600 hover:shadow-card-dark dark:hover:shadow-card hover:border-brand-500/20 md:col-span-2" style="view-transition-name: case-3;" data-case="meridian">
+            <div class="parallax-wrap absolute inset-0">
+              <img src="https://picsum.photos/seed/meridian-systems/1600/800.jpg" alt="" class="parallax-img" loading="lazy" width="1600" height="800">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg)]/90 via-transparent to-transparent z-10"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20 flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <p class="caption text-brand-500 mb-2">Platform / Design System</p>
+                <h3 class="font-display text-display-lg text-[var(--fg)] mb-2 case-title">Meridian OS</h3>
+                <p class="text-[var(--muted)] text-body max-w-md">Enterprise design system unifying 12 products across 4 platforms.</p>
+              </div>
+              <button class="magnetic-btn w-14 h-14 md:w-16 md:h-16 rounded-xl bg-[var(--bg)]/80 backdrop-blur border border-[var(--border)] flex items-center justify-center self-end opacity-0 group-hover:opacity-100 transition-all duration-400 translate-y-2 group-hover:translate-y-0" aria-label="View Meridian OS case study">
+                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </button>
+            </div>
+          </article>
+
+          <!-- Case 4 -->
+          <article class="group relative aspect-[4/3] md:aspect-[16/10] rounded-2xl overflow-hidden bg-[var(--card-bg)] border border-[var(--card-border)] magnetic-btn transition-all duration-600 hover:shadow-card-dark dark:hover:shadow-card hover:border-brand-500/20" style="view-transition-name: case-4;" data-case="lumen">
+            <div class="parallax-wrap absolute inset-0">
+              <img src="https://picsum.photos/seed/lumen-light/1200/800.jpg" alt="" class="parallax-img" loading="lazy" width="1200" height="800">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg)]/90 via-transparent to-transparent z-10"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20">
+              <p class="caption text-brand-500 mb-2">Installation / Creative Code</p>
+              <h3 class="font-display text-display-md text-[var(--fg)] mb-2 case-title">Lumen</h3>
+              <p class="text-[var(--muted)] text-body max-w-xs">Interactive light sculpture driven by sound & proximity.</p>
+            </div>
+             <div class="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-400 translate-y-2 group-hover:translate-y-0">
+               <button class="magnetic-btn w-12 h-12 rounded-xl bg-[var(--bg)]/80 backdrop-blur border border-[var(--border)] flex items-center justify-center" aria-label="View Lumen case study">
+                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+               </button>
+            </div>
+          </article>
+
+          <!-- Case 5 -->
+          <article class="group relative aspect-[4/3] md:aspect-[16/10] rounded-2xl overflow-hidden bg-[var(--card-bg)] border border-[var(--card-border)] magnetic-btn transition-all duration-600 hover:shadow-card-dark dark:hover:shadow-card hover:border-brand-500/20" style="view-transition-name: case-5;" data-case="orbital">
+            <div class="parallax-wrap absolute inset-0">
+              <img src="https://picsum.photos/seed/orbital-mechanics/1200/800.jpg" alt="" class="parallax-img" loading="lazy" width="1200" height="800">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--bg)]/90 via-transparent to-transparent z-10"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 z-20">
+              <p class="caption text-brand-500 mb-2">Data Viz / WebGL</p>
+              <h3 class="font-display text-display-md text-[var(--fg)] mb-2 case-title">Orbital</h3>
+              <p class="text-[var(--muted)] text-body max-w-xs">Real-time satellite tracking visualization for aerospace client.</p>
+            </div>
+             <div class="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-400 translate-y-2 group-hover:translate-y-0">
+               <button class="magnetic-btn w-12 h-12 rounded-xl bg-[var(--bg)]/80 backdrop-blur border border-[var(--border)] flex items-center justify-center" aria-label="View Orbital case study">
+                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+               </button>
+            </div>
+          </article>
+        </div>
+
+        <!-- View All CTA -->
+        <div class="text-center mt-16 clip-text" data-split="lines" style="will-change: transform, opacity;">
+          <a href="#" class="magnetic-btn inline-flex items-center gap-3 px-10 py-4 rounded-xl border border-[var(--border)] hover:border-brand-500/50 text-[var(--fg)] font-medium transition-all duration-400">
+            View All Projects
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         PROCESS
+         ========================================== -->
+    <section id="process" class="relative py-22 md:py-30 px-6 md:px-10 lg:px-20 bg-[var(--card-bg)] border-y border-[var(--border)]" aria-labelledby="process-title">
+      <div class="max-w-[1600px] mx-auto">
+        <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
+          <!-- Sticky Left: Text -->
+          <div class="sticky top-24 md:top-32 space-y-12 pr-6 md:pr-12">
+            <div class="clip-text" data-split="lines" style="will-change: transform, opacity;">
+              <p class="caption text-brand-500">Our Process</p>
+              <h2 id="process-title" class="font-display text-display-lg text-[var(--fg)]">Precision in every frame</h2>
+            </div>
+            <p class="lead text-[var(--muted)] clip-text" data-split="lines" style="will-change: transform, opacity;">We don't just animate pixels. We engineer motion systems that scale, perform, and convert. Our methodology blends creative direction with technical architecture.</p>
+            
+            <!-- Process Steps -->
+            <dl class="space-y-8" id="process-steps">
+              <div class="process-step group relative pl-12" data-step="01">
+                <dt class="caption text-brand-500 mb-2">01 — Discovery & Strategy</dt>
+                <dd class="text-[var(--fg)] font-medium text-lg">Audit existing assets, define motion principles, establish technical constraints & KPIs.</dd>
+              </div>
+              <div class="process-step group relative pl-12" data-step="02">
+                <dt class="caption text-brand-500 mb-2">02 — Motion Design Systems</dt>
+                <dd class="text-[var(--fg)] font-medium text-lg">Design token-driven animation specs: easing curves, duration scales, choreography rules.</dd>
+              </div>
+              <div class="process-step group relative pl-12" data-step="03">
+                <dt class="caption text-brand-500 mb-2">03 — Prototyping & Dev Handoff</dt>
+                <dd class="text-[var(--fg)] font-medium text-lg">Interactive Framer/Code prototypes. Lottie/Rive/GSAP production builds. Zero guesswork.</dd>
+              </div>
+              <div class="process-step group relative pl-12" data-step="04">
+                <dt class="caption text-brand-500 mb-2">04 — Implementation & QA</dt>
+                <dd class="text-[var(--fg)] font-medium text-lg">Developer embedding, performance profiling (INP/CLS), cross-browser testing, documentation.</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Right: Visual / Tech Stack -->
+          <div class="space-y-8">
+            <!-- Tech Stack Marquee -->
+            <div class="relative overflow-hidden" aria-label="Technology Stack">
+              <div class="flex gap-8 animate-marquee" aria-hidden="true" style="animation: marquee 20s linear infinite;">
+                <div class="flex gap-8 min-w-max px-8">
+                  <div class="flex items-center gap-3 px-4 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl shrink-0"><span class="text-xs font-mono font-medium text-[var(--muted)]">GSAP</span></div>
+                  <div class="flex items-center gap-3 px-4 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl shrink-0"><span class="text-xs font-mono font-medium text-[var(--muted)]">Three.js</span></div>
+                  <div class="flex items-center gap-3 px-4 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl shrink-0"><span class="text-xs font-mono font-medium text-[var(--muted)]">Rive</span></div>
+                  <div class="flex items-center gap-3 px-4 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl shrink-0"><span class="text-xs font-mono font-medium text-[var(--muted)]">Lottie</span></div>
+                  <div class="flex items-center gap-3 px-4 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl shrink-0"><span class="text-xs font-mono font-medium text-[var(--muted)]">Framer</span></div>
+                  <div class="flex items-center gap-3 px-4 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl shrink-0"><span class="text-xs font-mono font-medium text-[var(--muted)]">WebGL</span></div>
+                  <div class="flex items-center gap-3 px-4 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl shrink-0"><span class="text-xs font-mono font-medium text-[var(--muted)]">Canvas API</span></div>
+                  <div class="flex items-center gap-3 px-4 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl shrink-0"><span class="text-xs font-mono font-medium text-[var(--muted)]">Web Workers</span></div>
+                  <div class="flex items-center gap-3 px-4 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl shrink-0"><span class="text-xs font-mono font-medium text-[var(--muted)]">IntersectionObserver</span></div>
+                  <div class="flex items-center gap-3 px-4 py-2 bg-[var(--bg)] border border-[var(--border)] rounded-xl shrink-0"><span class="text-xs font-mono font-medium text-[var(--muted)]">View Transitions</span></div>
+                </div>
+              </div>
+              <!-- Mask Edges -->
+              <div class="absolute inset-0 bg-gradient-to-r from-[var(--bg)] via-transparent to-[var(--bg)] pointer-events-none" aria-hidden="true"></div>
+            </div>
+
+            <!-- Feature Cards -->
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="p-6 bg-[var(--bg)] border border-[var(--border)] rounded-2xl magnetic-btn transition-all hover:border-brand-500/30">
+                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center"><svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div><h4 class="font-display text-xl text-[var(--fg)]">Performance First</h4></div>
+                <p class="text-sm text-[var(--muted)]">Sub-100ms INP. GPU-accelerated transforms. Zero layout shift. Tree-shakable bundles.</p>
+              </div>
+              <div class="p-6 bg-[var(--bg)] border border-[var(--border)] rounded-2xl magnetic-btn transition-all hover:border-brand-500/30">
+                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center"><svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><h4 class="font-display text-xl text-[var(--fg)]">Accessibility Native</h4></div>
+                <p class="text-sm text-[var(--muted)]">Prefers-reduced-motion, semantic HTML, focus management, screen reader optimized.</p>
+              </div>
+              <div class="p-6 bg-[var(--bg)] border border-[var(--border)] rounded-2xl magnetic-btn transition-all hover:border-brand-500/30">
+                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center"><svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19v-5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6"/></svg></div><h4 class="font-display text-xl text-[var(--fg)]">Scalable Architecture</h4></div>
+                <p class="text-sm text-[var(--muted)]">Design tokens, component libraries, version-controlled motion specs. Design ops ready.</p>
+              </div>
+              <div class="p-6 bg-[var(--bg)] border border-[var(--border)] rounded-2xl magnetic-btn transition-all hover:border-brand-500/30">
+                <div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-xl bg-brand-500/10 flex items-center justify-center"><svg class="w-5 h-5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg></div><h4 class="font-display text-xl text-[var(--fg)]">Collaborative Workflow</h4></div>
+                <p class="text-sm text-[var(--muted)]">Figma → Code sync. Shared prototyping. Real-time feedback loops with stakeholders.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         ABOUT / TESTIMONIALS
+         ========================================== -->
+    <section id="about" class="relative py-22 md:py-30 px-6 md:px-10 lg:px-20 bg-[var(--bg)]" aria-labelledby="about-title">
+      <div class="max-w-[1600px] mx-auto">
+        <div class="grid lg:grid-cols-3 gap-12 lg:gap-16">
+          <!-- Left: Bio -->
+          <div class="lg:col-span-2 space-y-10">
+            <div class="clip-text" data-split="lines" style="will-change: transform, opacity;">
+              <p class="caption text-brand-500 mb-4">About Axiom</p>
+              <h2 id="about-title" class="font-display text-display-lg text-[var(--fg)] max-w-xl">A small team. <br class="hidden sm:block">Massive impact.</h2>
+            </div>
+            <div class="prose prose-invert max-w-none text-[var(--muted)] leading-relaxed space-y-6">
+              <p>Founded in 2018, Axiom operates at the intersection of design, engineering, and strategy. We partner with funded startups and enterprise brands to build motion design systems that ship.</p>
+              <p>Our core belief: <strong class="text-[var(--fg)]">Motion is not decoration. It is communication.</strong> Every micro-interaction, page transition, and data visualization serves a cognitive purpose — reducing load, guiding attention, and reinforcing brand personality.</p>
+              <p>We write our own tools. We contribute to open source. We speak at conferences. We treat every project as R&D for the next one.</p>
+            </div>
+
+            <!-- Team Grid -->
+            <div class="grid sm:grid-cols-2 gap-6 pt-6 border-t border-[var(--border)]">
+              <div class="flex items-start gap-4">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 flex-shrink-0 flex items-center justify-center text-white font-display font-bold text-2xl">JD</div>
+                <div>
+                  <h4 class="font-display text-lg text-[var(--fg)]">Jordan Drake</h4>
+                  <p class="text-sm text-[var(--muted)]">Founder / Creative Director</p>
+                  <p class="text-xs text-[var(--muted)] mt-1 font-mono">Ex-Google, Framer, Rive</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-500 flex-shrink-0 flex items-center justify-center text-white font-display font-bold text-2xl">MC</div>
+                <div>
+                  <h4 class="font-display text-lg text-[var(--fg)]">Maya Chen</h4>
+                  <p class="text-sm text-[var(--muted)]">Technical Director</p>
+                  <p class="text-xs text-[var(--muted)] mt-1 font-mono">Ex-Shopify, Three.js Core</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-600 to-brand-700 flex-shrink-0 flex items-center justify-center text-white font-display font-bold text-2xl">AR</div>
+                <div>
+                  <h4 class="font-display text-lg text-[var(--fg)]">Alex Rivera</h4>
+                  <p class="text-sm text-[var(--muted)]">Lead Motion Engineer</p>
+                  <p class="text-xs text-[var(--muted)] mt-1 font-mono">Ex-Airbnb, Lottie</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-4">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-300 to-brand-400 flex-shrink-0 flex items-center justify-center text-white font-display font-bold text-2xl">SK</div>
+                <div>
+                  <h4 class="font-display text-lg text-[var(--fg)]">Sam Kim</h4>
+                  <p class="text-sm text-[var(--muted)]">Design Systems Lead</p>
+                  <p class="text-xs text-[var(--muted)] mt-1 font-mono">Ex-Figma, Design Tokens W3C</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Testimonials (Sticky) -->
+          <div class="lg:col-span-1">
+            <div class="sticky top-24 md:top-32 space-y-6">
+              <p class="caption text-brand-500">Trusted By Leaders</p>
+              
+              <!-- Testimonial Cards -->
+              <div class="space-y-4" id="testimonials">
+                <blockquote class="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl magnetic-btn transition-all hover:border-brand-500/20">
+                  <p class="text-[var(--fg)] text-body mb-4">"Axiom didn't just animate our dashboard — they redefined how our users understand complex data. INP dropped 40%."</p>
+                  <footer class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-400 to-brand-600"></div>
+                    <div>
+                      <cite class="font-medium text-[var(--fg)] block">Sarah Mitchell</cite>
+                      <span class="text-sm text-[var(--muted)]">VP Product, Vertex AI</span>
+                    </div>
+                  </footer>
+                </blockquote>
+                <blockquote class="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl magnetic-btn transition-all hover:border-brand-500/20">
+                  <p class="text-[var(--fg)] text-body mb-4">"The motion spec they delivered is now our single source of truth. Designers and engineers finally speak the same language."</p>
+                  <footer class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-500 to-brand-700"></div>
+                    <div>
+                      <cite class="font-medium text-[var(--fg)] block">David Park</cite>
+                      <span class="text-sm text-[var(--muted)]">Design Systems Lead, Stripe</span>
+                    </div>
+                  </footer>
+                </blockquote>
+                <blockquote class="p-6 bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl magnetic-btn transition-all hover:border-brand-500/20">
+                  <p class="text-[var(--fg)] text-body mb-4">"Rare blend of artistic vision and engineering rigor. They ship production code, not just prototypes."</p>
+                  <footer class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-600 to-brand-800"></div>
+                    <div>
+                      <cite class="font-medium text-[var(--fg)] block">Elena Volkov</cite>
+                      <span class="text-sm text-[var(--muted)]">CTO, Neural Labs</span>
+                    </div>
+                  </footer>
+                </blockquote>
+              </div>
+
+              <!-- Logos Marquee -->
+              <div class="pt-6 border-t border-[var(--border)] overflow-hidden" aria-label="Client Logos">
+                <div class="flex gap-12 animate-marquee-slow" style="animation: marquee 30s linear infinite;" aria-hidden="true">
+                  <div class="flex gap-12 min-w-max opacity-40 hover:opacity-100 transition-opacity">
+                    <svg class="h-8 w-auto" viewBox="0 0 100 30" fill="currentColor"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold">VERTEX</text></svg>
+                    <svg class="h-8 w-auto" viewBox="0 0 100 30" fill="currentColor"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold">STRIPE</text></svg>
+                    <svg class="h-8 w-auto" viewBox="0 0 100 30" fill="currentColor"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold">NOTION</text></svg>
+                    <svg class="h-8 w-auto" viewBox="0 0 100 30" fill="currentColor"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold">LINEAR</text></svg>
+                    <svg class="h-8 w-auto" viewBox="0 0 100 30" fill="currentColor"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold">VERCEL</text></svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         CONTACT / CTA
+         ========================================== -->
+    <section id="contact" class="relative py-22 md:py-30 px-6 md:px-10 lg:px-20 bg-[var(--card-bg)] border-y border-[var(--border)] overflow-hidden" aria-labelledby="contact-title">
+      <div class="max-w-[1600px] mx-auto relative z-10">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-grid dark:bg-grid opacity-50" aria-hidden="true"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-brand-500/10 to-transparent rounded-full blur-3xl" aria-hidden="true"></div>
+
+        <div class="relative text-center max-w-3xl mx-auto space-y-8 clip-text" data-split="lines" style="will-change: transform, opacity;">
+          <p class="caption text-brand-500">Let's Build Something</p>
+          <h2 id="contact-title" class="font-display text-display-lg text-[var(--fg)]">Ready to move your brand?</p>
+          <p class="lead text-[var(--muted)]">We take on 4 new partnerships per quarter. Let's discuss if we're the right fit for your next initiative.</p>
+          
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <a href="mailto:hello@axiom.studio" class="magnetic-btn w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-4 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-medium shadow-glow transition-all duration-400">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Start a Conversation
+            </a>
+            <a href="#work" class="magnetic-btn w-full sm:w-auto inline-flex items-center justify-center gap-3 px-10 py-4 rounded-xl border border-[var(--border)] hover:border-brand-500/50 text-[var(--fg)] font-medium transition-all duration-400">
+              View Recent Work
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:translate-x-1 transition-transform" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+
+          <p class="caption text-[var(--muted)]">Or email directly: <a href="mailto:hello@axiom.studio" class="text-brand-500 hover:underline font-mono">hello@axiom.studio</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="relative py-12 md:py-16 px-6 md:px-10 lg:px-20 bg-[var(--bg)] border-t border-[var(--border)]" aria-labelledby="footer-title">
+      <div class="max-w-[1600px] mx-auto">
+        <div class="flex flex-col md:flex-row items-center md:items-start justify-between gap-8">
+          <!-- Brand -->
+          <div class="flex flex-col items-center md:items-start text-center md:text-left space-y-4">
+            <a href="#" class="nav-logo flex items-center gap-2 text-[var(--fg)] font-display font-bold text-xl tracking-tight" aria-label="Axiom Home">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true" class="text-brand-500"><path d="M14 2L4 10v8l10 8 10-8V10L14 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 10V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span>AXIOM</span>
+            </a>
+            <p class="text-sm text-[var(--muted)] max-w-xs">Crafting digital experiences through motion, code, and strategy. © 2024 Axiom Studio.</p>
+            <div class="flex items-center gap-4">
+              <a href="#" class="text-[var(--muted)] hover:text-brand-500 transition-colors" aria-label="Twitter"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <a href="#" class="text-[var(--muted)] hover:text-brand-500 transition-colors" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+              <a href="#" class="text-[var(--muted)] hover:text-brand-500 transition-colors" aria-label="GitHub"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg></a>
+              <a href="#" class="text-[var(--muted)] hover:text-brand-500 transition-colors" aria-label="Dribbble"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm9.039 11.58c-.78 3.134-3.121 5.529-6.039 6.096 2.34-.063 4.606-.975 5.978-2.574.851-1.074.841-2.337-.022-3.234zm-8.172 1.902c1.002-1.773 2.924-3.262 5.133-3.534C9.057 8.953 7.6 10.96 7.54 13.272c-.022.775.358 1.484.953 1.974zm1.807-7.722c-2.207.272-4.054 1.841-4.58 3.792 1.873-.519 3.638-1.934 4.16-3.561-.43-.548-1.074-.967-1.848-1.103zm9.595 4.761c-.672 2.52-2.81 4.692-5.473 5.112 2.125.525 4.14 1.249 5.473-1.153 1.259-2.262-.328-4.833-3.42-5.412 2.107-.428 3.866-1.603 5.04-3.267zm-8.172 7.152c1.593 1.678 3.96 2.74 6.532 2.804-2.195-2.238-4.08-4.848-5.04-7.874-2.853.22-5.186 2.194-5.955 4.73zm-1.06-3.534C2.902 10.233 0 13.74 0 12c0-6.627 5.373-12 12-12s12 5.373 12 12c0 2.473-.87 4.738-2.304 6.468-1.593 1.912-3.96 3.147-6.72 3.384-3.003.26-5.526-1.754-6.72-3.384z"/></svg></a>
+            </div>
+          </div>
+
+          <!-- Nav Links -->
+          <nav class="grid grid-cols-2 gap-6 md:gap-10 text-center md:text-left" aria-label="Footer Navigation">
+            <div>
+              <h3 class="caption text-[var(--fg)] mb-4">Company</h3>
+              <ul class="space-y-3">
+                <li><a href="#about" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">About</a></li>
+                <li><a href="#process" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Process</a></li>
+                <li><a href="#work" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Work</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Careers</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Journal</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="caption text-[var(--fg)] mb-4">Capabilities</h3>
+              <ul class="space-y-3">
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Motion Design Systems</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Creative Development</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">3D & WebGL</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Data Visualization</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Installations</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="caption text-[var(--fg)] mb-4">Legal</h3>
+              <ul class="space-y-3">
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Privacy Policy</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Terms of Service</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Cookie Policy</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Accessibility</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="caption text-[var(--fg)] mb-4">Connect</h3>
+              <ul class="space-y-3">
+                <li><a href="mailto:hello@axiom.studio" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors font-mono">hello@axiom.studio</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">New Project</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">Newsletter</a></li>
+                <li><a href="#" class="text-sm text-[var(--muted)] hover:text-brand-500 transition-colors">RFP Inquiries</a></li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </footer>
+
+  </div> <!-- /smooth-content -->
+</div> <!-- /smooth-wrapper -->
+
+<!-- ==========================================
+     MAIN JAVASCRIPT (GSAP, Interactions, Logic)
+     ========================================== -->
+<script>
+  // ==========================================
+  // 0. GLOBAL CONFIG & UTILS
+  // ==========================================
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
+  // Register GSAP Plugins
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+
+  // ==========================================
+  // 1. SMOOTH SCROLL (GSAP ScrollSmoother)
+  // ==========================================
+  let smoother;
+  if (!prefersReducedMotion && !isTouch) {
+    smoother = ScrollSmoother.create({
+      wrapper: '#smooth-wrapper',
+      content: '#smooth-content',
+      smooth: 1.5,      // Smoothness (0-2)
+      effects: true,    // Enable data-speed/data-lag
+      normalizeScroll: true, // Prevent address bar hide issues
+      ignoreMobileResize: true,
+    });
+  } else {
+    // Fallback: Native scroll
+    document.documentElement.style.scrollBehavior = 'smooth';
+  }
+
+  // ==========================================
+  // 2. THEME TOGGLE (Instant, No Flash)
+  // ==========================================
+  (function() {
+    const toggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    const sunIcon = toggle.querySelector('.sun-icon');
+    const moonIcon = toggle.querySelector('.moon-icon');
+    
+    // Initialize from localStorage or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = savedTheme ? savedTheme === 'dark' : systemDark;
+    
+    if (isDark) html.classList.add('dark');
+    sunIcon.classList.toggle('hidden', isDark);
+    moonIcon.classList.toggle('hidden', !isDark);
+    toggle.setAttribute('aria-pressed', isDark);
+
+    toggle.addEventListener('click', () => {
+      const newDark = !html.classList.contains('dark');
+      html.classList.toggle('dark', newDark);
+      localStorage.setItem('theme', newDark ? 'dark' : 'light');
+      sunIcon.classList.toggle('hidden', newDark);
+      moonIcon.classList.toggle('hidden', !newDark);
+      toggle.setAttribute('aria-pressed', newDark);
+      
+      // Refresh ScrollTrigger positions after theme change (borders/colors change)
+      ScrollTrigger.refresh();
+    });
+  })();
+
+  // ==========================================
+  // 3. CURSOR FOLLOWER (Desktop Only)
+  // ==========================================
+  if (!isTouch && !prefersReducedMotion) {
+    const cursor = document.getElementById('cursor');
+    const magneticElements = document.querySelectorAll('.magnetic-btn, a, button, .group');
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+    let isVisible = false;
+    let rafId;
+
+    // Show cursor on mouse move
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      if (!isVisible) {
+        cursor.classList.add('active');
+        isVisible = true;
+      }
+    });
+
+    // Animation Loop
+    function animateCursor() {
+      const ease = 0.15;
+      cursorX += (mouseX - cursorX) * ease;
+      cursorY += (mouseY - cursorY) * ease;
+      cursor.style.transform = `translate(${cursorX - 20}px, ${cursorY - 20}px)`;
+      rafId = requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // Magnetic Hover Detection
+    magneticElements.forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.classList.add('hover');
+        cursor.classList.remove('text-mode');
+        cursor.textContent = '';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.classList.remove('hover', 'text-mode');
+        cursor.textContent = '';
+      });
+    });
+
+    // Specific "Text Mode" for CTAs
+    document.querySelectorAll('[data-cursor-text]').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.classList.add('text-mode', 'hover');
+        cursor.classList.remove('hover'); // reset hover style
+        cursor.textContent = el.dataset.cursorText;
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.classList.remove('text-mode', 'hover');
+        cursor.textContent = '';
+      });
+    });
+  } else {
+    // Hide cursor element on touch/reduced motion
+    document.getElementById('cursor').style.display = 'none';
+  }
+
+  // ==========================================
+  // 4. MAGNETIC BUTTON EFFECT (GSAP)
+  // ==========================================
+  if (!prefersReducedMotion) {
+    document.querySelectorAll('.magnetic-btn').forEach(btn => {
+      let bounds, centerX, centerY;
+      
+      const updateBounds = () => {
+        bounds = btn.getBoundingClientRect();
+        centerX = bounds.left + bounds.width / 2;
+        centerY = bounds.top + bounds.height / 2;
+      };
+
+      btn.addEventListener('mousemove', (e) => {
+        if (!bounds) updateBounds();
+        const dx = e.clientX - centerX;
+        const dy = e.clientY - centerY;
+        // Strength factor
+        const strength = 0.3; 
+        gsap.to(btn, { 
+          x: dx * strength, 
+          y: dy * strength, 
+          duration: 0.4, 
+          ease: 'expo.out',
+          overwrite: 'auto'
+        });
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        gsap.to(btn, { 
+          x: 0, 
+          y: 0, 
+          duration: 0.6, 
+          ease: 'elastic.out(1, 0.5)' 
+        });
+      });
+
+      btn.addEventListener('mouseenter', updateBounds);
+      // Update bounds on scroll/resize
+      ScrollTrigger.addEventListener('refresh', updateBounds);
+    });
+  }
+
+  // ==========================================
+  // 5. MOBILE MENU
+  // ==========================================
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  let menuOpen = false;
+
+  menuBtn.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    menuBtn.setAttribute('aria-expanded', menuOpen);
+    menuBtn.setAttribute('aria-label', menuOpen ? 'Close menu' : 'Open menu');
+    
+    if (menuOpen) {
+      menu.classList.remove('translate-y-full');
+      // Animate items in
+      gsap.fromTo(menu.children, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'expo.out' });
+      document.body.style.overflow = 'hidden';
+    } else {
+      gsap.to(menu.children, { y: -20, opacity: 0, duration: 0.3, stagger: 0.03, ease: 'expo.in', onComplete: () => {
+        menu.classList.add('translate-y-full');
+        document.body.style.overflow = '';
+      }});
+    }
+  });
+
+  // Close menu on link click
+  menu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (menuOpen) menuBtn.click();
+    });
+  });
+
+  // ==========================================
+  // 6. SPLIT TEXT ANIMATION (Hero, Sections)
+  // ==========================================
+  function initSplitText() {
+    if (prefersReducedMotion) {
+      document.querySelectorAll('[data-split] [data-split-el]').forEach(el => el.style.transform = 'none');
+      return;
+    }
+
+    document.querySelectorAll('[data-split]').forEach(container => {
+      const type = container.dataset.split; // 'chars', 'words', 'lines'
+      const text = container.textContent.trim();
+      container.textContent = '';
+      container.style.opacity = 1; // Ensure visible for JS split
+
+      const nodes = [];
+      if (type === 'lines') {
+        // Manual line split for headlines (preserves <br>)
+        const lines = container.innerHTML.split('<br>'); // Only works if we set innerHTML first
+        // Better approach: Use GSAP SplitText plugin logic manually or simple span wrap
+        // Since we don't have SplitText plugin, we do a simple character/word wrap for demo
+        // For Enterprise, you'd import GSAP SplitText plugin. Here is a lightweight vanilla version:
+      }
+      
+      // Vanilla "Lines" Split (for Hero/Section Headers)
+      if (type === 'lines') {
+        // We assume the HTML structure has <span> children already for lines (as written in HTML)
+        const spans = container.querySelectorAll('span');
+        spans.forEach((span, i) => {
+          span.style.display = 'inline-block'; // Required for transform
+          gsap.fromTo(span, 
+            { yPercent: 100, opacity: 0 }, 
+            { yPercent: 0, opacity: 1, duration: 1.2, delay: i * 0.1, ease: 'expo.out', scrollTrigger: { trigger: container, start: 'top 85%', once: true } }
+          );
+        });
+      }
+    });
+  }
+
+  // ==========================================
+  // 7. SCROLL REVEALS (IntersectionObserver + GSAP)
+  // ==========================================
+  function initScrollReveals() {
+    if (prefersReducedMotion) return;
+
+    // General "Up Fade" Reveal
+    const revealEls = document.querySelectorAll('[data-reveal], .clip-text:not([data-split]), .reveal-line, .process-step, blockquote, .p-6.bg-\\[var\\(--bg\\)\\]');
+    
+    revealEls.forEach((el, i) => {
+      // Skip if already handled by split text
+      if (el.closest('[data-split]') && el.tagName === 'SPAN') return;
+      
+      gsap.fromTo(el, 
+        { y: 60, opacity: 0 }, 
+        { 
+          y: 0, opacity: 1, duration: 1, ease: 'expo.out', 
+          scrollTrigger: { 
+            trigger: el, 
+            start: 'top 85%', 
+            once: true,
+            // toggleActions: 'play none none reverse' // Uncomment for retrigger
+          } 
+        }
+      );
+    });
+
+    // Counter Animation (Hero Stats)
+    document.querySelectorAll('[data-count]').forEach(el => {
+      const target = +el.dataset.count;
+      const numEl = el.querySelector('[data-target]');
+      if (!numEl) return;
+      
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top 80%',
+        once: true,
+        onEnter: () => {
+          gsap.to({ val: 0 }, {
+            val: target,
+            duration: 2,
+            ease: 'expo.out',
+            onUpdate: function() { numEl.textContent = Math.round(this.targets()[0].val); }
+          });
+        }
+      });
+    });
+
+    // Parallax Images (Cases)
+    document.querySelectorAll('.parallax-img').forEach(img => {
+      gsap.to(img, {
+        yPercent: 20, // Move 20% of height
+        ease: 'none',
+        scrollTrigger: {
+          trigger: img.closest('article'),
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        }
+      });
+    });
+  }
+
+  // ==========================================
+  // 8. PROCESS STEPS SCROLL HIGHLIGHT
+  // ==========================================
+  function initProcessSteps() {
+    const steps = document.querySelectorAll('.process-step');
+    const indicators = document.querySelectorAll('[data-step-indicator]'); // If we had dots
+    
+    steps.forEach((step, i) => {
+      ScrollTrigger.create({
+        trigger: step,
+        start: 'top center',
+        end: 'bottom center',
+        toggleClass: { targets: step, className: 'active' },
+        onToggle: (self) => {
+          if (self.isActive) {
+            // Could update a visual progress bar here
+            step.style.borderLeftColor = 'rgb(239 113 13)';
+          } else {
+            step.style.borderLeftColor = 'transparent';
+          }
+        }
+      });
+    });
+  }
+
+  // ==========================================
+  // 9. MARQUEE ANIMATION (CSS Fallback + GSAP Sync)
+  // ==========================================
+  // CSS Handles the infinite loop. GSAP can pause on hover.
+  document.querySelectorAll('.animate-marquee, .animate-marquee-slow').forEach(marquee => {
+    const content = marquee.querySelector('.flex');
+    if (!content) return;
+    
+    marquee.addEventListener('mouseenter', () => content.style.animationPlayState = 'paused');
+    marquee.addEventListener('mouseleave', () => content.style.animationPlayState = 'running');
+  });
+
+  // ==========================================
+  // 10. VIEW TRANSITIONS (Navigation)
+  // ==========================================
+  if ('startViewTransition' in document) {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href === '#') return;
+        const target = document.querySelector(href);
+        if (!target) return;
+
+        e.preventDefault();
+        
+        document.startViewTransition(() => {
+          target.scrollIntoView({ behavior: 'smooth' }); // Smoother handles this
+          // Update URL without scroll jump
+          history.pushState(null, '', href);
+        });
+      });
+    });
+  }
+
+  // ==========================================
+  // 11. INITIALIZATION SEQUENCE
+  // ==========================================
+  function init() {
+    // 1. Split Text (Hero)
+    initSplitText();
+    
+    // 2. Scroll Reveals
+    initScrollReveals();
+    
+    // 3. Process Steps
+    initProcessSteps();
+
+    // 4. Hero Entrance Timeline (Master Timeline)
+    if (!prefersReducedMotion) {
+      const heroTl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+      
+      // Select elements safely
+      const eyebrow = document.querySelector('#hero .caption');
+      const titleLines = document.querySelectorAll('#hero-title span');
+      const subLines = document.querySelectorAll('#hero-sub span');
+      const ctaLines = document.querySelectorAll('#hero .flex-wrap span');
+      const stats = document.querySelectorAll('#hero .grid > div');
+      const scrollInd = document.querySelector('#hero .absolute.bottom-10');
+
+      heroTl
+        .fromTo(eyebrow, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, 0)
+        .fromTo(titleLines, { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1.2, stagger: 0.08 }, 0.1)
+        .fromTo(subLines, { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1, stagger: 0.08 }, 0.4)
+        .fromTo(ctaLines, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.1 }, 0.7)
+        .fromTo(stats, { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.08 }, 0.9)
+        .fromTo(scrollInd, { opacity: 0 }, { opacity: 0.6, duration: 1 }, 1.5);
+    }
+
+    // 5. Refresh ScrollTrigger after all DOM mutations
+    ScrollTrigger.refresh();
+    
+    // 6. Handle Resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+        // Recalc magnetic bounds
+        document.querySelectorAll('.magnetic-btn').forEach(btn => btn.dispatchEvent(new Event('mouseenter')));
+      }, 250);
+    });
+  }
+
+  // Run Init when DOM Ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // ==========================================
+  // 12. PERFORMANCE: Passive Listeners & Cleanup
+  // ==========================================
+  // GSAP ScrollSmoother handles passive listeners internally.
+  // On unload (SPA context), kill smoother:
+  // window.addEventListener('beforeunload', () => smoother?.kill());
+</script>
+
+<!-- Keyframes for Marquee (Injected via JS would be better, but style tag is fine) -->
+<style>
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .animate-marquee { animation: marquee 20s linear infinite; }
+  .animate-marquee-slow { animation: marquee 30s linear infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee, .animate-marquee-slow { animation: none; }
+  }
+</style>
+</body>
+</html>

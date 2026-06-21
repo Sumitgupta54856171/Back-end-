@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veridian — School Management System</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Inter','ui-sans-serif','system-ui'],
+          serif: ['Lora','serif'],
+        },
+        colors: {
+          ink: '#10131a',
+          paper: '#f7f6f3',
+          brand: {
+            50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',
+            500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81'
+          },
+          moss: { 50:'#f0fdf4',100:'#dcfce7',500:'#16a34a',600:'#15803d',700:'#166534' },
+          amber:{ 50:'#fffbeb',100:'#fef3c7',500:'#d97706',600:'#b45309'},
+          rose:{ 50:'#fff1f2',100:'#ffe4e6',500:'#e11d48',600:'#be123c'}
+        },
+        boxShadow: {
+          card: '0 1px 2px 0 rgb(16 19 26 / 0.04), 0 1px 6px -1px rgb(16 19 26 / 0.06)',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body{ -webkit-font-smoothing:antialiased; }
+  ::-webkit-scrollbar{ width:8px; height:8px; }
+  ::-webkit-scrollbar-thumb{ background:#d8d6cf; border-radius:8px; }
+  .nav-item.active{ background:#312e81; color:#fff; }
+  .nav-item.active .lucide{ color:#a5b4fc; }
+  .view{ display:none; }
+  .view.active{ display:block; animation:fade .25s ease; }
+  @keyframes fade{ from{opacity:0; transform:translateY(4px)} to{opacity:1; transform:translateY(0)} }
+  .modal-backdrop{ display:none; }
+  .modal-backdrop.active{ display:flex; }
+  table tr td, table tr th{ white-space:nowrap; }
+  .scrollbar-thin::-webkit-scrollbar{ width:6px; }
+  input[type=checkbox].switch{ appearance:none; width:36px; height:20px; border-radius:999px; background:#e5e3db; position:relative; cursor:pointer; transition:.15s; flex-shrink:0; }
+  input[type=checkbox].switch:checked{ background:#4f46e5; }
+  input[type=checkbox].switch::after{ content:''; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:999px; background:#fff; transition:.15s; box-shadow:0 1px 2px rgba(0,0,0,.3); }
+  input[type=checkbox].switch:checked::after{ transform:translateX(16px); }
+  .toast{ animation: slidein .25s ease; }
+  @keyframes slidein{ from{ opacity:0; transform:translateX(20px);} to{opacity:1; transform:translateX(0);} }
+</style>
+</head>
+<body class="bg-paper text-ink font-sans antialiased">
+
+<!-- ============ LOGIN VIEW ============ -->
+<div id="login-screen" class="min-h-screen w-full flex">
+  <div class="hidden lg:flex w-1/2 bg-ink relative overflow-hidden flex-col justify-between p-12">
+    <div class="absolute inset-0 opacity-[0.07]" style="background-image:radial-gradient(circle at 1px 1px, #fff 1px, transparent 0); background-size:28px 28px;"></div>
+    <div class="relative flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-brand-500 flex items-center justify-center font-serif text-lg italic text-white">V</div>
+      <span class="text-white font-semibold tracking-tight text-lg">Veridian</span>
+    </div>
+    <div class="relative max-w-md">
+      <p class="font-serif italic text-3xl text-white leading-snug">"The administrative weight of a school should never outweigh the teaching inside it."</p>
+      <div class="mt-6 flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-brand-500/30 border border-white/20"></div>
+        <div>
+          <p class="text-white text-sm font-medium">Dr. Amara Whitfield</p>
+          <p class="text-white/50 text-xs">Head of School, Lindenwood Academy</p>
+        </div>
+      </div>
+    </div>
+    <div class="relative flex items-center gap-8 text-white/40 text-xs uppercase tracking-widest">
+      <span>Est. record-keeping, reimagined</span>
+    </div>
+  </div>
+
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
+    <div class="w-full max-w-sm">
+      <div class="lg:hidden flex items-center gap-3 mb-10">
+        <div class="w-9 h-9 rounded-lg bg-brand-600 flex items-center justify-center font-serif text-lg italic text-white">V</div>
+        <span class="font-semibold tracking-tight text-lg">Veridian</span>
+      </div>
+      <h1 class="text-2xl font-semibold tracking-tight">Welcome back</h1>
+      <p class="text-sm text-ink/50 mt-1.5 mb-8">Sign in to the Lindenwood Academy workspace.</p>
+
+      <form id="login-form" class="space-y-4">
+        <div>
+          <label class="text-xs font-medium text-ink/60">Email address</label>
+          <input type="email" value="amara.whitfield@lindenwood.edu" class="mt-1.5 w-full rounded-lg border border-ink/10 bg-white px-3.5 py-2.5 text-sm shadow-card focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500">
+        </div>
+        <div>
+          <label class="text-xs font-medium text-ink/60">Password</label>
+          <input type="password" value="••••••••••" class="mt-1.5 w-full rounded-lg border border-ink/10 bg-white px-3.5 py-2.5 text-sm shadow-card focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500">
+        </div>
+        <div class="flex items-center justify-between text-xs">
+          <label class="flex items-center gap-2 text-ink/60"><input type="checkbox" checked class="rounded border-ink/20"> Remember this device</label>
+          <a href="#" class="text-brand-600 font-medium">Forgot password?</a>
+        </div>
+        <button type="submit" class="w-full bg-ink text-white rounded-lg py-2.5 text-sm font-medium hover:bg-ink/85 transition flex items-center justify-center gap-2">
+          Sign in <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </form>
+      <p class="text-xs text-center text-ink/40 mt-8">Prototype build — any credentials will sign you in.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP SHELL ============ -->
+<div id="app-shell" class="hidden min-h-screen w-full">
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 shrink-0 bg-ink text-white/80 flex flex-col">
+      <div class="h-16 flex items-center gap-3 px-5 border-b border-white/10">
+        <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center font-serif italic text-white">V</div>
+        <div>
+          <p class="text-white text-sm font-semibold leading-none">Veridian</p>
+          <p class="text-[11px] text-white/40 mt-0.5">Lindenwood Academy</p>
+        </div>
+      </div>
+
+      <nav class="flex-1 overflow-y-auto px-3 py-4 space-y-6 scrollbar-thin">
+        <div>
+          <p class="px-3 text-[10px] font-semibold uppercase tracking-widest text-white/30 mb-2">Overview</p>
+          <button data-view="dashboard" class="nav-item active w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5"><i data-lucide="layout-dashboard" class="w-4 h-4"></i>Dashboard</button>
+        </div>
+        <div>
+          <p class="px-3 text-[10px] font-semibold uppercase tracking-widest text-white/30 mb-2">People</p>
+          <button data-view="students" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5"><i data-lucide="graduation-cap" class="w-4 h-4"></i>Students</button>
+          <button data-view="teachers" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5"><i data-lucide="users" class="w-4 h-4"></i>Faculty</button>
+        </div>
+        <div>
+          <p class="px-3 text-[10px] font-semibold uppercase tracking-widest text-white/30 mb-2">Academics</p>
+          <button data-view="attendance" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5"><i data-lucide="check-square" class="w-4 h-4"></i>Attendance</button>
+          <button data-view="timetable" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5"><i data-lucide="calendar-clock" class="w-4 h-4"></i>Timetable</button>
+          <button data-view="gradebook" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5"><i data-lucide="book-marked" class="w-4 h-4"></i>Gradebook</button>
+        </div>
+        <div>
+          <p class="px-3 text-[10px] font-semibold uppercase tracking-widest text-white/30 mb-2">Operations</p>
+          <button data-view="fees" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5"><i data-lucide="banknote" class="w-4 h-4"></i>Fees & Billing</button>
+          <button data-view="notices" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5"><i data-lucide="megaphone" class="w-4 h-4"></i>Notices</button>
+          <button data-view="settings" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium hover:bg-white/5"><i data-lucide="settings" class="w-4 h-4"></i>Settings</button>
+        </div>
+      </nav>
+
+      <div class="p-3 border-t border-white/10">
+        <div class="flex items-center gap-3 px-2 py-2 rounded-lg hover:bg-white/5 cursor-pointer">
+          <div class="w-8 h-8 rounded-full bg-brand-500 flex items-center justify-center text-xs font-semibold text-white">AW</div>
+          <div class="flex-1 min-w-0">
+            <p class="text-xs font-medium text-white truncate">Dr. Amara Whitfield</p>
+            <p class="text-[11px] text-white/40 truncate">Head of School</p>
+          </div>
+          <button id="logout-btn" title="Sign out"><i data-lucide="log-out" class="w-4 h-4 text-white/40 hover:text-white"></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="flex-1 flex flex-col min-w-0">
+      <!-- TOPBAR -->
+      <header class="h-16 shrink-0 border-b border-ink/10 bg-white/80 backdrop-blur flex items-center justify-between px-6 gap-4">
+        <div class="relative w-full max-w-md">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink/30"></i>
+          <input id="global-search" placeholder="Search students, faculty, invoices…" class="w-full bg-ink/[0.04] rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:bg-white border border-transparent focus:border-brand-200">
+        </div>
+        <div class="flex items-center gap-4 shrink-0">
+          <span id="today-date" class="text-xs text-ink/40 hidden md:block"></span>
+          <button class="relative"><i data-lucide="bell" class="w-5 h-5 text-ink/50"></i><span class="absolute -top-1 -right-1 w-2 h-2 bg-rose-500 rounded-full"></span></button>
+          <button id="new-record-btn" class="bg-ink text-white text-sm font-medium px-3.5 py-2 rounded-lg flex items-center gap-1.5 hover:bg-ink/85"><i data-lucide="plus" class="w-4 h-4"></i><span class="hidden sm:inline">New</span></button>
+        </div>
+      </header>
+
+      <main class="flex-1 overflow-y-auto p-6 lg:p-8">
+
+        <!-- DASHBOARD -->
+        <section id="view-dashboard" class="view active space-y-6">
+          <div class="flex items-end justify-between flex-wrap gap-3">
+            <div>
+              <h1 class="text-2xl font-semibold tracking-tight">Good morning, Amara.</h1>
+              <p class="text-sm text-ink/50 mt-1">Here's what's happening across Lindenwood Academy today.</p>
+            </div>
+            <select class="text-sm border border-ink/10 rounded-lg px-3 py-2 bg-white shadow-card">
+              <option>Term 2 · 2025–2026</option>
+              <option>Term 1 · 2025–2026</option>
+            </select>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4" id="kpi-cards"></div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-white rounded-xl border border-ink/10 shadow-card p-5">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-sm">Attendance — last 7 days</h3>
+                <span class="text-xs text-ink/40">All campuses</span>
+              </div>
+              <svg viewBox="0 0 560 200" class="w-full h-48">
+                <line x1="0" y1="160" x2="560" y2="160" stroke="#10131a" stroke-opacity="0.08"/>
+                <line x1="0" y1="110" x2="560" y2="110" stroke="#10131a" stroke-opacity="0.08"/>
+                <line x1="0" y1="60" x2="560" y2="60" stroke="#10131a" stroke-opacity="0.08"/>
+                <polyline fill="none" stroke="#4f46e5" stroke-width="2.5" points="10,70 95,55 180,80 265,40 350,60 435,35 520,50"/>
+                <polyline fill="#4f46e5" fill-opacity="0.08" stroke="none" points="10,70 95,55 180,80 265,40 350,60 435,35 520,50 520,160 10,160"/>
+                <g fill="#4f46e5">
+                  <circle cx="10" cy="70" r="3.5"/><circle cx="95" cy="55" r="3.5"/><circle cx="180" cy="80" r="3.5"/>
+                  <circle cx="265" cy="40" r="3.5"/><circle cx="350" cy="60" r="3.5"/><circle cx="435" cy="35" r="3.5"/><circle cx="520" cy="50" r="3.5"/>
+                </g>
+                <g font-size="10" fill="#10131a" fill-opacity="0.4" font-family="Inter">
+                  <text x="2" y="178">Mon</text><text x="87" y="178">Tue</text><text x="172" y="178">Wed</text>
+                  <text x="257" y="178">Thu</text><text x="342" y="178">Fri</text><text x="427" y="178">Sat</text><text x="510" y="178">Sun</text>
+                </g>
+              </svg>
+            </div>
+
+            <div class="bg-white rounded-xl border border-ink/10 shadow-card p-5">
+              <h3 class="font-semibold text-sm mb-4">Fee collection</h3>
+              <div class="flex items-center justify-center py-2">
+                <svg viewBox="0 0 120 120" class="w-32 h-32 -rotate-90">
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="#eef2ff" stroke-width="14"/>
+                  <circle id="fee-ring" cx="60" cy="60" r="50" fill="none" stroke="#4f46e5" stroke-width="14" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="80"/>
+                </svg>
+              </div>
+              <p class="text-center text-2xl font-semibold -mt-20 pointer-events-none" id="fee-pct">74%</p>
+              <p class="text-center text-xs text-ink/40 mt-16">of Term 2 fees collected</p>
+              <div class="mt-4 space-y-2 text-xs">
+                <div class="flex justify-between"><span class="text-ink/50">Collected</span><span class="font-medium">$842,300</span></div>
+                <div class="flex justify-between"><span class="text-ink/50">Outstanding</span><span class="font-medium text-rose-600">$296,500</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-white rounded-xl border border-ink/10 shadow-card">
+              <div class="flex items-center justify-between p-5 pb-0">
+                <h3 class="font-semibold text-sm">Recent admissions</h3>
+                <button data-goto="students" class="text-xs text-brand-600 font-medium">View all →</button>
+              </div>
+              <div class="overflow-x-auto p-5">
+                <table class="w-full text-sm" id="recent-admissions-table"></table>
+              </div>
+            </div>
+            <div class="bg-white rounded-xl border border-ink/10 shadow-card p-5">
+              <h3 class="font-semibold text-sm mb-4">Upcoming on the calendar</h3>
+              <ul class="space-y-4" id="calendar-list"></ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- STUDENTS -->
+        <section id="view-students" class="view space-y-5">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h1 class="text-xl font-semibold tracking-tight">Students</h1>
+              <p class="text-sm text-ink/50 mt-1"><span id="students-count">0</span> enrolled across all grades</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="text-sm border border-ink/10 bg-white rounded-lg px-3 py-2 flex items-center gap-1.5 shadow-card"><i data-lucide="download" class="w-4 h-4"></i>Export</button>
+              <button onclick="openStudentModal()" class="text-sm bg-ink text-white rounded-lg px-3 py-2 flex items-center gap-1.5"><i data-lucide="plus" class="w-4 h-4"></i>Add student</button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl border border-ink/10 shadow-card overflow-hidden">
+            <div class="flex flex-wrap items-center gap-2 p-4 border-b border-ink/10">
+              <div class="relative flex-1 min-w-[200px]">
+                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-ink/30"></i>
+                <input id="student-search" placeholder="Search by name or ID…" class="w-full bg-ink/[0.04] rounded-lg pl-9 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/30">
+              </div>
+              <select id="student-grade-filter" class="text-sm border border-ink/10 rounded-lg px-3 py-2"><option value="">All grades</option></select>
+              <select id="student-status-filter" class="text-sm border border-ink/10 rounded-lg px-3 py-2">
+                <option value="">All statuses</option><option>Active</option><option>Probation</option><option>Withdrawn</option>
+              </select>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-ink/[0.03] text-ink/50 text-xs uppercase tracking-wide">
+                  <tr>
+                    <th class="text-left font-medium px-5 py-3">Student</th>
+                    <th class="text-left font-medium px-5 py-3">ID</th>
+                    <th class="text-left font-medium px-5 py-3">Grade</th>
+                    <th class="text-left font-medium px-5 py-3">Guardian</th>
+                    <th class="text-left font-medium px-5 py-3">GPA</th>
+                    <th class="text-left font-medium px-5 py-3">Status</th>
+                    <th class="text-right font-medium px-5 py-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="students-tbody" class="divide-y divide-ink/5"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TEACHERS -->
+        <section id="view-teachers" class="view space-y-5">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h1 class="text-xl font-semibold tracking-tight">Faculty</h1>
+              <p class="text-sm text-ink/50 mt-1"><span id="teachers-count">0</span> staff members</p>
+            </div>
+            <button onclick="openTeacherModal()" class="text-sm bg-ink text-white rounded-lg px-3 py-2 flex items-center gap-1.5"><i data-lucide="plus" class="w-4 h-4"></i>Add faculty</button>
+          </div>
+          <div id="teachers-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+        </section>
+
+        <!-- ATTENDANCE -->
+        <section id="view-attendance" class="view space-y-5">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h1 class="text-xl font-semibold tracking-tight">Attendance</h1>
+              <p class="text-sm text-ink/50 mt-1">Mark today's roll call for a class.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <select id="attendance-class-select" class="text-sm border border-ink/10 rounded-lg px-3 py-2 bg-white"></select>
+              <input type="date" id="attendance-date" class="text-sm border border-ink/10 rounded-lg px-3 py-2 bg-white">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="attendance-summary"></div>
+
+          <div class="bg-white rounded-xl border border-ink/10 shadow-card overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-ink/[0.03] text-ink/50 text-xs uppercase tracking-wide">
+                <tr><th class="text-left font-medium px-5 py-3">Student</th><th class="text-left font-medium px-5 py-3">ID</th><th class="text-left font-medium px-5 py-3">Mark attendance</th></tr>
+              </thead>
+              <tbody id="attendance-tbody" class="divide-y divide-ink/5"></tbody>
+            </table>
+          </div>
+          <div class="flex justify-end">
+            <button onclick="saveAttendance()" class="text-sm bg-ink text-white rounded-lg px-4 py-2.5 flex items-center gap-1.5"><i data-lucide="save" class="w-4 h-4"></i>Save attendance</button>
+          </div>
+        </section>
+
+        <!-- TIMETABLE -->
+        <section id="view-timetable" class="view space-y-5">
+          <div>
+            <h1 class="text-xl font-semibold tracking-tight">Timetable</h1>
+            <p class="text-sm text-ink/50 mt-1">Weekly schedule — Grade 10, Section A.</p>
+          </div>
+          <div class="bg-white rounded-xl border border-ink/10 shadow-card overflow-x-auto">
+            <table class="w-full text-sm border-collapse" id="timetable-table"></table>
+          </div>
+        </section>
+
+        <!-- GRADEBOOK -->
+        <section id="view-gradebook" class="view space-y-5">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h1 class="text-xl font-semibold tracking-tight">Gradebook</h1>
+              <p class="text-sm text-ink/50 mt-1">Term 2 assessment scores by subject.</p>
+            </div>
+            <select id="gradebook-subject" class="text-sm border border-ink/10 rounded-lg px-3 py-2 bg-white"></select>
+          </div>
+          <div class="bg-white rounded-xl border border-ink/10 shadow-card overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-ink/[0.03] text-ink/50 text-xs uppercase tracking-wide">
+                <tr>
+                  <th class="text-left font-medium px-5 py-3">Student</th>
+                  <th class="text-left font-medium px-5 py-3">Midterm</th>
+                  <th class="text-left font-medium px-5 py-3">Project</th>
+                  <th class="text-left font-medium px-5 py-3">Final</th>
+                  <th class="text-left font-medium px-5 py-3">Average</th>
+                  <th class="text-left font-medium px-5 py-3">Grade</th>
+                </tr>
+              </thead>
+              <tbody id="gradebook-tbody" class="divide-y divide-ink/5"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- FEES -->
+        <section id="view-fees" class="view space-y-5">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h1 class="text-xl font-semibold tracking-tight">Fees & Billing</h1>
+              <p class="text-sm text-ink/50 mt-1">Invoices for Term 2 · 2025–2026.</p>
+            </div>
+            <button onclick="openInvoiceModal()" class="text-sm bg-ink text-white rounded-lg px-3 py-2 flex items-center gap-1.5"><i data-lucide="plus" class="w-4 h-4"></i>New invoice</button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="fees-kpis"></div>
+          <div class="bg-white rounded-xl border border-ink/10 shadow-card overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-ink/[0.03] text-ink/50 text-xs uppercase tracking-wide">
+                <tr>
+                  <th class="text-left font-medium px-5 py-3">Invoice</th>
+                  <th class="text-left font-medium px-5 py-3">Student</th>
+                  <th class="text-left font-medium px-5 py-3">Amount</th>
+                  <th class="text-left font-medium px-5 py-3">Due date</th>
+                  <th class="text-left font-medium px-5 py-3">Status</th>
+                  <th class="text-right font-medium px-5 py-3">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fees-tbody" class="divide-y divide-ink/5"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- NOTICES -->
+        <section id="view-notices" class="view space-y-5">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h1 class="text-xl font-semibold tracking-tight">Notices</h1>
+              <p class="text-sm text-ink/50 mt-1">Announcements published to staff, students and guardians.</p>
+            </div>
+            <button onclick="openNoticeModal()" class="text-sm bg-ink text-white rounded-lg px-3 py-2 flex items-center gap-1.5"><i data-lucide="plus" class="w-4 h-4"></i>New notice</button>
+          </div>
+          <div class="space-y-3" id="notices-list"></div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="view-settings" class="view space-y-6 max-w-2xl">
+          <div>
+            <h1 class="text-xl font-semibold tracking-tight">Settings</h1>
+            <p class="text-sm text-ink/50 mt-1">Workspace preferences for this prototype.</p>
+          </div>
+          <div class="bg-white rounded-xl border border-ink/10 shadow-card divide-y divide-ink/10">
+            <div class="p-5 flex items-center justify-between">
+              <div><p class="text-sm font-medium">Email notifications</p><p class="text-xs text-ink/40 mt-0.5">Receive a daily digest of attendance and fee alerts.</p></div>
+              <input type="checkbox" class="switch" checked>
+            </div>
+            <div class="p-5 flex items-center justify-between">
+              <div><p class="text-sm font-medium">Guardian portal access</p><p class="text-xs text-ink/40 mt-0.5">Allow guardians to view grades and invoices online.</p></div>
+              <input type="checkbox" class="switch" checked>
+            </div>
+            <div class="p-5 flex items-center justify-between">
+              <div><p class="text-sm font-medium">Two-factor authentication</p><p class="text-xs text-ink/40 mt-0.5">Require a verification code for staff sign-in.</p></div>
+              <input type="checkbox" class="switch">
+            </div>
+            <div class="p-5 flex items-center justify-between">
+              <div><p class="text-sm font-medium">Automatic grade rounding</p><p class="text-xs text-ink/40 mt-0.5">Round final averages to the nearest whole number.</p></div>
+              <input type="checkbox" class="switch" checked>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-ink/10 shadow-card p-5 space-y-4">
+            <p class="text-sm font-medium">Institution profile</p>
+            <div class="grid grid-cols-2 gap-4">
+              <div><label class="text-xs text-ink/50">School name</label><input value="Lindenwood Academy" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+              <div><label class="text-xs text-ink/50">Academic year</label><input value="2025–2026" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+            </div>
+            <button onclick="toast('Settings saved')" class="text-sm bg-ink text-white rounded-lg px-4 py-2.5">Save changes</button>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MODALS ============ -->
+<div id="modal-backdrop" class="modal-backdrop fixed inset-0 bg-ink/40 backdrop-blur-sm z-50 items-center justify-center p-4">
+  <div id="modal-box" class="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[88vh] overflow-y-auto"></div>
+</div>
+
+<div id="toast-container" class="fixed bottom-5 right-5 z-[60] space-y-2"></div>
+
+<script>
+lucide.createIcons();
+document.getElementById('today-date').textContent = new Date().toLocaleDateString(undefined,{weekday:'long', month:'long', day:'numeric'});
+
+/* ---------------- DATA STORE (in-memory) ---------------- */
+const FIRST = ["Liam","Olivia","Noah","Emma","Ava","Mason","Sophia","Ethan","Isabella","Lucas","Mia","Elijah","Amelia","James","Harper","Benjamin","Evelyn","Henry","Camila","Daniel","Layla","Owen","Zoe","Leo","Aria","Caleb","Nora","Wyatt","Hazel","Julian"];
+const LAST  = ["Mercer","Holloway","Reyes","Voss","Lindqvist","Castellano","Whitfield","Okafor","Bergström","Marchetti","Donovan","Esposito","Hargrove","Nakamura","Foster","Delgado","Bristow","Hawthorne","Vance","Calloway"];
+const GRADES = ["Grade 6","Grade 7","Grade 8","Grade 9","Grade 10","Grade 11","Grade 12"];
+const SUBJECTS = ["Mathematics","English Literature","Biology","Chemistry","World History","Physics","Computer Science","Art & Design"];
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function pad(n){ return n.toString().padStart(3,'0'); }
+function uid(prefix){ return prefix + '-' + Math.random().toString(36).slice(2,7).toUpperCase(); }
+
+let students = Array.from({length:42}).map((_,i)=>{
+  const fn=rand(FIRST), ln=rand(LAST);
+  return {
+    id: 'STU-'+pad(1000+i),
+    name: fn+' '+ln,
+    grade: rand(GRADES),
+    guardian: rand(LAST)+' Family',
+    gpa: (2.4 + Math.random()*1.6).toFixed(2),
+    status: rand(['Active','Active','Active','Active','Probation','Withdrawn']),
+    email: (fn+'.'+ln+'@students.lindenwood.edu').toLowerCase(),
+    phone: '+1 (555) '+Math.floor(100+Math.random()*900)+'-'+Math.floor(1000+Math.random()*9000),
+    joined: 2021+Math.floor(Math.random()*4)
+  };
+});
+
+let teachers = Array.from({length:9}).map((_,i)=>{
+  const fn=rand(FIRST), ln=rand(LAST);
+  return { id:'FAC-'+pad(200+i), name:fn+' '+ln, subject: SUBJECTS[i%SUBJECTS.length], email:(fn+'.'+ln+'@lindenwood.edu').toLowerCase(), classes: 2+Math.floor(Math.random()*3), rating:(3.6+Math.random()*1.3).toFixed(1) };
+});
+
+let invoices = students.slice(0,16).map((s,i)=>{
+  const statuses=['Paid','Paid','Pending','Overdue'];
+  return { id:'INV-'+pad(4000+i), student:s.name, studentId:s.id, amount: (450+Math.floor(Math.random()*900)), due: `2026-0${1+(i%6)}-${10+(i%15)}`, status: rand(statuses) };
+});
+
+let notices = [
+  {title:'Term 2 Parent–Teacher Conferences', body:'Conferences will run from 9am–4pm in the main hall. Guardians may book 15-minute slots through the portal.', audience:'All guardians', date:'2026-06-18'},
+  {title:'Mid-term Exam Schedule Released', body:'The Term 2 mid-term timetable is now posted on each grade\'s noticeboard and the student portal.', audience:'Students & Faculty', date:'2026-06-15'},
+  {title:'Annual Science Fair — Call for Entries', body:'Students in Grades 8–12 may register a project with their homeroom teacher before July 3rd.', audience:'Students', date:'2026-06-10'},
+];
+
+let attendanceRecords = {}; // key: classId+date -> {studentId: status}
+
+/* ---------------- NAVIGATION ---------------- */
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active', b.dataset.view===name));
+  lucide.createIcons();
+}
+document.querySelectorAll('.nav-item').forEach(b=> b.addEventListener('click', ()=>showView(b.dataset.view)) );
+document.querySelectorAll('[data-goto]').forEach(b=> b.addEventListener('click', ()=>{ showView(b.dataset.goto); document.querySelector(`.nav-item[data-view="${b.dataset.goto}"]`).classList.add('active'); }));
+
+document.getElementById('new-record-btn').addEventListener('click', ()=>{
+  const active = document.querySelector('.view.active').id.replace('view-','');
+  if(active==='students') openStudentModal();
+  else if(active==='teachers') openTeacherModal();
+  else if(active==='fees') openInvoiceModal();
+  else if(active==='notices') openNoticeModal();
+  else openStudentModal();
+});
+
+/* ---------------- LOGIN ---------------- */
+document.getElementById('login-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app-shell').classList.remove('hidden');
+  toast('Welcome back, Amara.');
+  renderAll();
+});
+document.getElementById('logout-btn').addEventListener('click', ()=>{
+  document.getElementById('app-shell').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+});
+
+/* ---------------- TOASTS ---------------- */
+function toast(msg, type='ok'){
+  const el = document.createElement('div');
+  el.className = 'toast bg-ink text-white text-sm px-4 py-3 rounded-lg shadow-xl flex items-center gap-2';
+  el.innerHTML = `<i data-lucide="${type==='ok'?'check-circle-2':'alert-circle'}" class="w-4 h-4 ${type==='ok'?'text-moss-500':'text-rose-500'}"></i>${msg}`;
+  document.getElementById('toast-container').appendChild(el);
+  lucide.createIcons();
+  setTimeout(()=>{ el.style.opacity='0'; el.style.transition='.3s'; setTimeout(()=>el.remove(),300); }, 2600);
+}
+
+/* ---------------- MODAL HELPERS ---------------- */
+function openModal(html){
+  document.getElementById('modal-box').innerHTML = html;
+  document.getElementById('modal-backdrop').classList.add('active');
+  lucide.createIcons();
+}
+function closeModal(){ document.getElementById('modal-backdrop').classList.remove('active'); }
+document.getElementById('modal-backdrop').addEventListener('click', e=>{ if(e.target.id==='modal-backdrop') closeModal(); });
+
+/* ---------------- DASHBOARD ---------------- */
+function renderDashboard(){
+  const kpis = [
+    {label:'Total students', value: students.length, delta:'+4.2%', icon:'graduation-cap', tone:'brand'},
+    {label:'Faculty members', value: teachers.length, delta:'+1', icon:'users', tone:'moss'},
+    {label:'Attendance today', value:'94.3%', delta:'+1.1%', icon:'check-square', tone:'amber'},
+    {label:'Fees outstanding', value:'$296.5K', delta:'-8.4%', icon:'banknote', tone:'rose'},
+  ];
+  document.getElementById('kpi-cards').innerHTML = kpis.map(k=>`
+    <div class="bg-white rounded-xl border border-ink/10 shadow-card p-5">
+      <div class="flex items-center justify-between">
+        <div class="w-9 h-9 rounded-lg bg-${k.tone}-50 flex items-center justify-center"><i data-lucide="${k.icon}" class="w-4.5 h-4.5 text-${k.tone}-600"></i></div>
+        <span class="text-xs font-medium ${k.delta.startsWith('-')?'text-rose-600':'text-moss-600'}">${k.delta}</span>
+      </div>
+      <p class="text-2xl font-semibold mt-4 tracking-tight">${k.value}</p>
+      <p class="text-xs text-ink/45 mt-1">${k.label}</p>
+    </div>`).join('');
+
+  const recent = students.slice(-5).reverse();
+  document.getElementById('recent-admissions-table').innerHTML = `
+    <thead class="text-ink/40 text-xs uppercase"><tr><th class="text-left font-medium pb-2">Name</th><th class="text-left font-medium pb-2">Grade</th><th class="text-left font-medium pb-2">Status</th></tr></thead>
+    <tbody class="divide-y divide-ink/5">${recent.map(s=>`
+      <tr>
+        <td class="py-2.5 flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-brand-100 text-brand-700 text-[11px] font-semibold flex items-center justify-center">${initials(s.name)}</div>${s.name}</td>
+        <td class="py-2.5 text-ink/60">${s.grade}</td>
+        <td class="py-2.5">${statusBadge(s.status)}</td>
+      </tr>`).join('')}</tbody>`;
+
+  document.getElementById('calendar-list').innerHTML = [
+    {d:'24', m:'Jun', t:'Parent–Teacher Conferences', sub:'9:00 AM · Main Hall'},
+    {d:'27', m:'Jun', t:'Grade 11 Field Trip', sub:'Natural History Museum'},
+    {d:'02', m:'Jul', t:'Mid-term Exams Begin', sub:'All grades'},
+  ].map(e=>`
+    <li class="flex gap-3">
+      <div class="w-11 h-11 rounded-lg bg-ink/[0.04] flex flex-col items-center justify-center shrink-0">
+        <span class="text-xs font-bold leading-none">${e.d}</span><span class="text-[9px] text-ink/40 uppercase">${e.m}</span>
+      </div>
+      <div><p class="text-sm font-medium leading-tight">${e.t}</p><p class="text-xs text-ink/40 mt-0.5">${e.sub}</p></div>
+    </li>`).join('');
+}
+
+function initials(name){ return name.split(' ').map(n=>n[0]).join('').slice(0,2).toUpperCase(); }
+function statusBadge(status){
+  const map = {Active:'bg-moss-50 text-moss-700', Probation:'bg-amber-50 text-amber-600', Withdrawn:'bg-rose-50 text-rose-600',
+    Paid:'bg-moss-50 text-moss-700', Pending:'bg-amber-50 text-amber-600', Overdue:'bg-rose-50 text-rose-600'};
+  return `<span class="text-xs font-medium px-2 py-1 rounded-full ${map[status]||'bg-ink/5 text-ink/60'}">${status}</span>`;
+}
+
+/* ---------------- STUDENTS ---------------- */
+function renderStudents(){
+  const grSel = document.getElementById('student-grade-filter');
+  if(grSel.options.length<=1) GRADES.forEach(g=>grSel.insertAdjacentHTML('beforeend', `<option>${g}</option>`));
+
+  const q = document.getElementById('student-search').value.toLowerCase();
+  const gf = grSel.value, sf = document.getElementById('student-status-filter').value;
+  const filtered = students.filter(s =>
+    (s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q)) &&
+    (!gf || s.grade===gf) && (!sf || s.status===sf)
+  );
+  document.getElementById('students-count').textContent = students.length;
+  document.getElementById('students-tbody').innerHTML = filtered.map(s=>`
+    <tr class="hover:bg-ink/[0.015]">
+      <td class="px-5 py-3 flex items-center gap-2.5"><div class="w-8 h-8 rounded-full bg-brand-100 text-brand-700 text-xs font-semibold flex items-center justify-center">${initials(s.name)}</div>
+        <div><p class="font-medium leading-tight">${s.name}</p><p class="text-xs text-ink/40">${s.email}</p></div></td>
+      <td class="px-5 py-3 text-ink/60 font-mono text-xs">${s.id}</td>
+      <td class="px-5 py-3 text-ink/70">${s.grade}</td>
+      <td class="px-5 py-3 text-ink/60">${s.guardian}</td>
+      <td class="px-5 py-3 font-medium">${s.gpa}</td>
+      <td class="px-5 py-3">${statusBadge(s.status)}</td>
+      <td class="px-5 py-3 text-right space-x-2">
+        <button onclick="openStudentModal('${s.id}')" class="text-ink/40 hover:text-brand-600"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+        <button onclick="deleteStudent('${s.id}')" class="text-ink/40 hover:text-rose-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      </td>
+    </tr>`).join('') || `<tr><td colspan="7" class="text-center py-10 text-ink/40 text-sm">No students match these filters.</td></tr>`;
+  lucide.createIcons();
+}
+['student-search','student-grade-filter','student-status-filter'].forEach(id=> document.getElementById(id).addEventListener('input', renderStudents));
+
+function openStudentModal(id){
+  const s = students.find(x=>x.id===id);
+  openModal(`
+    <form id="student-form" class="p-6 space-y-4">
+      <div class="flex items-center justify-between"><h3 class="font-semibold">${s?'Edit student':'Add student'}</h3><button type="button" onclick="closeModal()"><i data-lucide="x" class="w-4 h-4 text-ink/40"></i></button></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="col-span-2"><label class="text-xs text-ink/50">Full name</label><input required name="name" value="${s?.name||''}" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-ink/50">Grade</label><select name="grade" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm">${GRADES.map(g=>`<option ${s?.grade===g?'selected':''}>${g}</option>`).join('')}</select></div>
+        <div><label class="text-xs text-ink/50">Status</label><select name="status" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm">${['Active','Probation','Withdrawn'].map(st=>`<option ${s?.status===st?'selected':''}>${st}</option>`).join('')}</select></div>
+        <div class="col-span-2"><label class="text-xs text-ink/50">Guardian</label><input name="guardian" value="${s?.guardian||''}" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-ink/50">Email</label><input name="email" value="${s?.email||''}" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-ink/50">Phone</label><input name="phone" value="${s?.phone||''}" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        ${s?`<button type="button" onclick="deleteStudent('${s.id}')" class="text-sm text-rose-600 font-medium mr-auto">Delete</button>`:''}
+        <button type="button" onclick="closeModal()" class="text-sm px-4 py-2 rounded-lg border border-ink/10">Cancel</button>
+        <button type="submit" class="text-sm px-4 py-2 rounded-lg bg-ink text-white">${s?'Save changes':'Add student'}</button>
+      </div>
+    </form>`);
+  document.getElementById('student-form').addEventListener('submit', e=>{
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const data = Object.fromEntries(fd.entries());
+    if(s){ Object.assign(s, data); toast('Student updated'); }
+    else{ students.unshift({ id: uid('STU'), gpa:(2.4+Math.random()*1.6).toFixed(2), joined:2026, ...data }); toast('Student added'); }
+    closeModal(); renderStudents(); renderDashboard();
+  });
+}
+function deleteStudent(id){ students = students.filter(s=>s.id!==id); toast('Student removed','warn'); closeModal(); renderStudents(); renderDashboard(); }
+
+/* ---------------- TEACHERS ---------------- */
+function renderTeachers(){
+  document.getElementById('teachers-count').textContent = teachers.length;
+  document.getElementById('teachers-grid').innerHTML = teachers.map(t=>`
+    <div class="bg-white rounded-xl border border-ink/10 shadow-card p-5">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-full bg-brand-100 text-brand-700 font-semibold flex items-center justify-center">${initials(t.name)}</div>
+          <div><p class="font-medium text-sm">${t.name}</p><p class="text-xs text-ink/40">${t.subject}</p></div>
+        </div>
+        <button onclick="openTeacherModal('${t.id}')" class="text-ink/30 hover:text-brand-600"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+      </div>
+      <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
+        <div class="bg-ink/[0.03] rounded-lg p-2.5"><p class="text-ink/40">Classes</p><p class="font-semibold text-sm mt-0.5">${t.classes}</p></div>
+        <div class="bg-ink/[0.03] rounded-lg p-2.5"><p class="text-ink/40">Rating</p><p class="font-semibold text-sm mt-0.5">${t.rating} / 5</p></div>
+      </div>
+      <p class="text-xs text-ink/40 mt-3 truncate">${t.email}</p>
+    </div>`).join('');
+}
+function openTeacherModal(id){
+  const t = teachers.find(x=>x.id===id);
+  openModal(`
+    <form id="teacher-form" class="p-6 space-y-4">
+      <div class="flex items-center justify-between"><h3 class="font-semibold">${t?'Edit faculty':'Add faculty'}</h3><button type="button" onclick="closeModal()"><i data-lucide="x" class="w-4 h-4 text-ink/40"></i></button></div>
+      <div><label class="text-xs text-ink/50">Full name</label><input required name="name" value="${t?.name||''}" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+      <div><label class="text-xs text-ink/50">Subject</label><select name="subject" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm">${SUBJECTS.map(s=>`<option ${t?.subject===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div><label class="text-xs text-ink/50">Email</label><input name="email" value="${t?.email||''}" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+      <div class="flex justify-end gap-2 pt-2">
+        ${t?`<button type="button" onclick="deleteTeacher('${t.id}')" class="text-sm text-rose-600 font-medium mr-auto">Remove</button>`:''}
+        <button type="button" onclick="closeModal()" class="text-sm px-4 py-2 rounded-lg border border-ink/10">Cancel</button>
+        <button type="submit" class="text-sm px-4 py-2 rounded-lg bg-ink text-white">${t?'Save changes':'Add faculty'}</button>
+      </div>
+    </form>`);
+  document.getElementById('teacher-form').addEventListener('submit', e=>{
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target).entries());
+    if(t){ Object.assign(t,data); toast('Faculty updated'); }
+    else{ teachers.unshift({id:uid('FAC'), classes:3, rating:'4.5', ...data}); toast('Faculty added'); }
+    closeModal(); renderTeachers();
+  });
+}
+function deleteTeacher(id){ teachers = teachers.filter(t=>t.id!==id); closeModal(); renderTeachers(); toast('Faculty removed','warn'); }
+
+/* ---------------- ATTENDANCE ---------------- */
+function classKey(){ return document.getElementById('attendance-class-select').value+'|'+document.getElementById('attendance-date').value; }
+function renderAttendanceControls(){
+  const sel = document.getElementById('attendance-class-select');
+  if(sel.options.length===0) GRADES.forEach(g=> sel.insertAdjacentHTML('beforeend', `<option>${g}</option>`));
+  const dateEl = document.getElementById('attendance-date');
+  if(!dateEl.value) dateEl.value = new Date().toISOString().slice(0,10);
+}
+function renderAttendance(){
+  renderAttendanceControls();
+  const grade = document.getElementById('attendance-class-select').value;
+  const roster = students.filter(s=>s.grade===grade);
+  const key = classKey();
+  if(!attendanceRecords[key]){
+    attendanceRecords[key] = {};
+    roster.forEach(s=> attendanceRecords[key][s.id] = rand(['present','present','present','absent','late']));
+  }
+  const rec = attendanceRecords[key];
+  document.getElementById('attendance-tbody').innerHTML = roster.map(s=>`
+    <tr>
+      <td class="px-5 py-3 flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-brand-100 text-brand-700 text-[11px] font-semibold flex items-center justify-center">${initials(s.name)}</div>${s.name}</td>
+      <td class="px-5 py-3 text-ink/50 font-mono text-xs">${s.id}</td>
+      <td class="px-5 py-3">
+        <div class="flex gap-1.5">
+          ${['present','late','absent'].map(st=>`
+            <button type="button" onclick="setAttendance('${s.id}','${st}')" data-att="${s.id}" data-st="${st}"
+              class="att-btn text-xs px-2.5 py-1.5 rounded-md border ${rec[s.id]===st? attClasses(st) : 'border-ink/10 text-ink/40 hover:bg-ink/5'}">
+              ${st[0].toUpperCase()+st.slice(1)}
+            </button>`).join('')}
+        </div>
+      </td>
+    </tr>`).join('');
+  renderAttendanceSummary(rec);
+  lucide.createIcons();
+}
+function attClasses(st){ return st==='present' ? 'bg-moss-50 border-moss-200 text-moss-700' : st==='late' ? 'bg-amber-50 border-amber-200 text-amber-600' : 'bg-rose-50 border-rose-200 text-rose-600'; }
+function setAttendance(id, status){ attendanceRecords[classKey()][id] = status; renderAttendance(); }
+function renderAttendanceSummary(rec){
+  const vals = Object.values(rec);
+  const c = s=> vals.filter(v=>v===s).length;
+  const cards = [
+    {l:'Present', v:c('present'), tone:'moss', icon:'check'},
+    {l:'Late', v:c('late'), tone:'amber', icon:'clock'},
+    {l:'Absent', v:c('absent'), tone:'rose', icon:'x'},
+    {l:'Total roster', v:vals.length, tone:'brand', icon:'users'},
+  ];
+  document.getElementById('attendance-summary').innerHTML = cards.map(k=>`
+    <div class="bg-white rounded-xl border border-ink/10 shadow-card p-4 flex items-center gap-3">
+      <div class="w-9 h-9 rounded-lg bg-${k.tone}-50 flex items-center justify-center"><i data-lucide="${k.icon}" class="w-4 h-4 text-${k.tone}-600"></i></div>
+      <div><p class="text-lg font-semibold leading-none">${k.v}</p><p class="text-xs text-ink/40 mt-1">${k.l}</p></div>
+    </div>`).join('');
+}
+function saveAttendance(){ toast('Attendance saved for '+document.getElementById('attendance-class-select').value); }
+document.addEventListener('change', e=>{
+  if(e.target.id==='attendance-class-select' || e.target.id==='attendance-date') renderAttendance();
+});
+
+/* ---------------- TIMETABLE ---------------- */
+function renderTimetable(){
+  const days = ['Period','Monday','Tuesday','Wednesday','Thursday','Friday'];
+  const periods = ['8:00 – 8:50','9:00 – 9:50','10:10 – 11:00','11:10 – 12:00','1:00 – 1:50','2:00 – 2:50'];
+  const grid = periods.map(()=> days.slice(1).map(()=> Math.random()>0.12 ? rand(SUBJECTS) : null ));
+  let html = `<thead><tr>${days.map(d=>`<th class="text-left text-xs font-medium uppercase tracking-wide text-ink/40 px-4 py-3 bg-ink/[0.03] border-b border-ink/10">${d}</th>`).join('')}</tr></thead><tbody>`;
+  periods.forEach((p,i)=>{
+    html += `<tr class="border-b border-ink/5"><td class="px-4 py-3 text-xs text-ink/50 font-medium whitespace-nowrap">${p}</td>`;
+    grid[i].forEach(subj=>{
+      html += `<td class="px-4 py-3">${subj? `<span class="inline-block text-xs font-medium px-2.5 py-1.5 rounded-lg bg-brand-50 text-brand-700">${subj}</span>` : `<span class="text-xs text-ink/20">—</span>`}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody>`;
+  document.getElementById('timetable-table').innerHTML = html;
+}
+
+/* ---------------- GRADEBOOK ---------------- */
+function renderGradebookControls(){
+  const sel = document.getElementById('gradebook-subject');
+  if(sel.options.length===0) SUBJECTS.forEach(s=> sel.insertAdjacentHTML('beforeend', `<option>${s}</option>`));
+}
+function letterGrade(avg){ return avg>=90?'A':avg>=80?'B':avg>=70?'C':avg>=60?'D':'F'; }
+function gradeTone(g){ return {A:'moss',B:'brand',C:'amber',D:'amber',F:'rose'}[g]; }
+function renderGradebook(){
+  renderGradebookControls();
+  const roster = students.slice(0,14);
+  document.getElementById('gradebook-tbody').innerHTML = roster.map(s=>{
+    const mid = 60+Math.floor(Math.random()*40), proj = 60+Math.floor(Math.random()*40), fin = 60+Math.floor(Math.random()*40);
+    const avg = Math.round((mid+proj+fin)/3);
+    const g = letterGrade(avg);
+    return `<tr>
+      <td class="px-5 py-3 flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-brand-100 text-brand-700 text-[11px] font-semibold flex items-center justify-center">${initials(s.name)}</div>${s.name}</td>
+      <td class="px-5 py-3 text-ink/60">${mid}</td>
+      <td class="px-5 py-3 text-ink/60">${proj}</td>
+      <td class="px-5 py-3 text-ink/60">${fin}</td>
+      <td class="px-5 py-3 font-medium">${avg}</td>
+      <td class="px-5 py-3"><span class="text-xs font-semibold px-2 py-1 rounded-full bg-${gradeTone(g)}-50 text-${gradeTone(g)}-700">${g}</span></td>
+    </tr>`;
+  }).join('');
+}
+document.getElementById('gradebook-subject').addEventListener('change', renderGradebook);
+
+/* ---------------- FEES ---------------- */
+function renderFees(){
+  const total = invoices.reduce((a,i)=>a+i.amount,0);
+  const paid = invoices.filter(i=>i.status==='Paid').reduce((a,i)=>a+i.amount,0);
+  const overdue = invoices.filter(i=>i.status==='Overdue').length;
+  document.getElementById('fees-kpis').innerHTML = [
+    {l:'Total billed', v:'$'+total.toLocaleString(), icon:'receipt', tone:'brand'},
+    {l:'Collected', v:'$'+paid.toLocaleString(), icon:'wallet', tone:'moss'},
+    {l:'Overdue invoices', v:overdue, icon:'alert-triangle', tone:'rose'},
+  ].map(k=>`
+    <div class="bg-white rounded-xl border border-ink/10 shadow-card p-5 flex items-center gap-3">
+      <div class="w-10 h-10 rounded-lg bg-${k.tone}-50 flex items-center justify-center"><i data-lucide="${k.icon}" class="w-4.5 h-4.5 text-${k.tone}-600"></i></div>
+      <div><p class="text-xl font-semibold leading-none">${k.v}</p><p class="text-xs text-ink/40 mt-1">${k.l}</p></div>
+    </div>`).join('');
+
+  document.getElementById('fees-tbody').innerHTML = invoices.map(inv=>`
+    <tr>
+      <td class="px-5 py-3 font-mono text-xs text-ink/60">${inv.id}</td>
+      <td class="px-5 py-3 font-medium">${inv.student}</td>
+      <td class="px-5 py-3">$${inv.amount.toLocaleString()}</td>
+      <td class="px-5 py-3 text-ink/60">${inv.due}</td>
+      <td class="px-5 py-3">${statusBadge(inv.status)}</td>
+      <td class="px-5 py-3 text-right space-x-2">
+        ${inv.status!=='Paid' ? `<button onclick="markPaid('${inv.id}')" class="text-xs font-medium text-brand-600">Mark paid</button>` : `<span class="text-xs text-ink/30">—</span>`}
+      </td>
+    </tr>`).join('');
+  lucide.createIcons();
+}
+function markPaid(id){ const inv = invoices.find(i=>i.id===id); inv.status='Paid'; toast('Invoice '+id+' marked as paid'); renderFees(); }
+function openInvoiceModal(){
+  openModal(`
+    <form id="invoice-form" class="p-6 space-y-4">
+      <div class="flex items-center justify-between"><h3 class="font-semibold">New invoice</h3><button type="button" onclick="closeModal()"><i data-lucide="x" class="w-4 h-4 text-ink/40"></i></button></div>
+      <div><label class="text-xs text-ink/50">Student</label><select name="studentId" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm">${students.map(s=>`<option value="${s.id}">${s.name}</option>`).join('')}</select></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div><label class="text-xs text-ink/50">Amount ($)</label><input required type="number" name="amount" value="650" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+        <div><label class="text-xs text-ink/50">Due date</label><input required type="date" name="due" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeModal()" class="text-sm px-4 py-2 rounded-lg border border-ink/10">Cancel</button>
+        <button type="submit" class="text-sm px-4 py-2 rounded-lg bg-ink text-white">Create invoice</button>
+      </div>
+    </form>`);
+  document.getElementById('invoice-form').addEventListener('submit', e=>{
+    e.preventDefault();
+    const fd = Object.fromEntries(new FormData(e.target).entries());
+    const s = students.find(x=>x.id===fd.studentId);
+    invoices.unshift({id:uid('INV'), student:s.name, studentId:s.id, amount:Number(fd.amount), due:fd.due, status:'Pending'});
+    closeModal(); renderFees(); toast('Invoice created');
+  });
+}
+
+/* ---------------- NOTICES ---------------- */
+function renderNotices(){
+  document.getElementById('notices-list').innerHTML = notices.map((n,idx)=>`
+    <div class="bg-white rounded-xl border border-ink/10 shadow-card p-5">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <p class="font-medium text-sm">${n.title}</p>
+          <p class="text-sm text-ink/55 mt-1.5 leading-relaxed">${n.body}</p>
+        </div>
+        <button onclick="removeNotice(${idx})" class="text-ink/30 hover:text-rose-600 shrink-0"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+      </div>
+      <div class="flex items-center gap-3 mt-4 text-xs text-ink/40">
+        <span class="px-2 py-1 rounded-full bg-ink/[0.04]">${n.audience}</span><span>${n.date}</span>
+      </div>
+    </div>`).join('');
+  lucide.createIcons();
+}
+function removeNotice(idx){ notices.splice(idx,1); renderNotices(); toast('Notice deleted','warn'); }
+function openNoticeModal(){
+  openModal(`
+    <form id="notice-form" class="p-6 space-y-4">
+      <div class="flex items-center justify-between"><h3 class="font-semibold">New notice</h3><button type="button" onclick="closeModal()"><i data-lucide="x" class="w-4 h-4 text-ink/40"></i></button></div>
+      <div><label class="text-xs text-ink/50">Title</label><input required name="title" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></div>
+      <div><label class="text-xs text-ink/50">Message</label><textarea required name="body" rows="3" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"></textarea></div>
+      <div><label class="text-xs text-ink/50">Audience</label><select name="audience" class="mt-1 w-full border border-ink/10 rounded-lg px-3 py-2 text-sm"><option>All guardians</option><option>Students & Faculty</option><option>Students</option><option>Faculty only</option></select></div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" onclick="closeModal()" class="text-sm px-4 py-2 rounded-lg border border-ink/10">Cancel</button>
+        <button type="submit" class="text-sm px-4 py-2 rounded-lg bg-ink text-white">Publish</button>
+      </div>
+    </form>`);
+  document.getElementById('notice-form').addEventListener('submit', e=>{
+    e.preventDefault();
+    const fd = Object.fromEntries(new FormData(e.target).entries());
+    notices.unshift({...fd, date: new Date().toISOString().slice(0,10)});
+    closeModal(); renderNotices(); toast('Notice published');
+  });
+}
+
+/* ---------------- GLOBAL SEARCH ---------------- */
+document.getElementById('global-search').addEventListener('input', e=>{
+  const q = e.target.value.toLowerCase();
+  if(q.length<2) return;
+  const hit = students.find(s=>s.name.toLowerCase().includes(q));
+  if(hit){ showView('students'); document.querySelector('.nav-item[data-view="students"]').classList.add('active'); document.getElementById('student-search').value = q; renderStudents(); }
+});
+
+/* ---------------- INIT ---------------- */
+function renderAll(){
+  renderDashboard();
+  renderStudents();
+  renderTeachers();
+  renderAttendance();
+  renderTimetable();
+  renderGradebook();
+  renderFees();
+  renderNotices();
+  lucide.createIcons();
+}
+</script>
+</body>
+</html>

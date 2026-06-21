@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animation Portfolio – Your Name</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Optional: Tailwind config (for custom colors / fonts) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#4F46E5',   // Indigo‑600
+            secondary: '#6366F1', // Indigo‑500
+          },
+          fontFamily: {
+            sans: ['Poppins', 'system-ui', 'sans-serif'],
+          },
+          keyframes: {
+            bounce100: {
+              '0%, 100%': { transform: 'translateY(-5%)' },
+              '50%': { transform: 'translateY(0)' },
+            },
+          },
+          animation: {
+            bounce100: 'bounce100 1s infinite',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Font (optional) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+    rel="stylesheet"
+  />
+</head>
+
+<body class="font-sans bg-gray-50 text-gray-900">
+
+  <!-- ===================== Header / Hero ===================== -->
+  <header class="relative bg-gradient-to-r from-primary via-indigo-600 to-secondary text-white">
+    <div class="max-w-7xl mx-auto px-6 py-20 flex flex-col items-center text-center">
+      <h1 class="text-5xl md:text-6xl font-extrabold mb-4 animate-pulse">
+        Your Name
+      </h1>
+      <p class="text-xl md:text-2xl mb-8">
+        3D Animator • Motion Designer • Visual Storyteller
+      </p>
+
+      <!-- Social Icons -->
+      <div class="flex space-x-5 text-2xl">
+        <a href="#" aria-label="Twitter" class="hover:text-gray-200 transition">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M23.954 4.569c-.885.389-1.83.654-2.825.775 1.014-.608 1.794-1.574 2.163-2.724-.951.555-2.005.959-3.127 1.184-.897-.957-2.178-1.555-3.594-1.555-2.723 0-4.928 2.205-4.928 4.928 0 .386.045.762.128 1.124-4.094-.205-7.725-2.168-10.157-5.153-.424.725-.666 1.562-.666 2.457 0 1.695.862 3.188 2.174 4.062-.8-.025-1.555-.245-2.213-.613v.062c0 2.376 1.689 4.356 3.933 4.803-.412.112-.846.172-1.294.172-.316 0-.624-.031-.927-.088.626 1.956 2.444 3.379 4.6 3.42-1.68 1.317-3.802 2.104-6.102 2.104-.398 0-.79-.023-1.176-.069 2.177 1.397 4.768 2.215 7.557 2.215 9.054 0 14-7.496 14-13.986 0-.212-.005-.424-.014-.635.962-.694 1.797-1.562 2.457-2.55z"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn" class="hover:text-gray-200 transition">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.762 2.239 5 5 5h14c2.762 0 5-2.238 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.568c-.966 0-1.75-.78-1.75-1.744s.784-1.744 1.75-1.744 1.75.78 1.75 1.744-.784 1.744-1.75 1.744zm13.5 11.568h-3v-5.604c0-1.336-.025-3.054-1.862-3.054-1.862 0-2.148 1.453-2.148 2.956v5.702h-3v-10h2.884v1.366h.041c.402-.761 1.384-1.562 2.849-1.562 3.045 0 3.606 2.005 3.606 4.614v5.582z"/></svg>
+        </a>
+        <a href="#" aria-label="Behance" class="hover:text-gray-200 transition">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M4 0a4 4 0 00-4 4v16a4 4 0 004 4h16a4 4 0 004-4v-16a4 4 0 00-4-4h-16zm7.25 5c2.843 0 4.75 1.083 4.75 3.276 0 1.254-.806 2.332-2.041 2.735v.045c1.548.271 2.654 1.641 2.654 3.349 0 2.497-2.073 3.58-5.163 3.58h-6.386v-13.985h6.186zm-1.994 3.039h-2.04v2.59h2.04c1.188 0 1.84-.548 1.84-1.279s-.652-1.311-1.84-1.311zm.043 6.174h-2.083v2.691h2.083c1.287 0 2.022-.598 2.022-1.354 0-.736-.735-1.337-2.022-1.337z"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== Main Content ===================== -->
+  <main class="max-w-7xl mx-auto px-6 py-16">
+
+    <!-- About Me -->
+    <section id="about" class="flex flex-col md:flex-row items-center mb-24">
+      <div class="w-48 h-48 mb-8 md:mb-0 md:mr-12 flex-shrink-0">
+        <!-- Replace src with your portrait -->
+        <img src="https://picsum.photos/400/400?grayscale" alt="Your portrait"
+          class="w-full h-full object-cover rounded-full border-4 border-primary shadow-lg transform transition duration-300 hover:scale-105">
+      </div>
+      <div class="flex-1">
+        <h2 class="text-3xl font-bold mb-4">About Me</h2>
+        <p class="text-lg leading-relaxed text-gray-700">
+          I craft immersive motion graphics and 3D animations that bring stories to life.
+          Whether it’s a short film, a product demo, or an interactive experience, I blend
+          creative storytelling with technical expertise to deliver high‑impact visuals.
+        </p>
+      </div>
+    </section>
+
+    <!-- Projects / Portfolio -->
+    <section id="projects" class="mb-24">
+      <h2 class="text-4xl font-extrabold text-center mb-12">Featured Projects</h2>
+
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+
+        <!-- --- Project Card (repeat) --- -->
+        <div class="group bg-white rounded-xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2">
+          <!-- Video thumbnail (replace src with your own video) -->
+          <div class="relative aspect-w-16 aspect-h-9 bg-gray-200">
+            <video class="object-cover w-full h-full transition-opacity duration-300 group-hover:opacity-0"
+              src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4" muted loop></video>
+            <img class="absolute inset-0 object-cover w-full h-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              src="https://picsum.photos/600/337?blur=5" alt="Project thumbnail" />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2">Project Title 1</h3>
+            <p class="text-gray-600 text-sm">
+              Short description of what the project is about, tools used, and the result.
+            </p>
+          </div>
+        </div>
+
+        <!-- Repeat the card with different content -->
+        <div class="group bg-white rounded-xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2">
+          <div class="relative aspect-w-16 aspect-h-9 bg-gray-200">
+            <video class="object-cover w-full h-full transition-opacity duration-300 group-hover:opacity-0"
+              src="https://media.w3.org/2010/05/bunny/movie.mp4" muted loop></video>
+            <img class="absolute inset-0 object-cover w-full h-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              src="https://picsum.photos/600/337?blur=5" alt="Project thumbnail" />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2">Project Title 2</h3>
+            <p class="text-gray-600 text-sm">
+              Brief info about this animation, the challenge, and the technique.
+            </p>
+          </div>
+        </div>
+
+        <div class="group bg-white rounded-xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2">
+          <div class="relative aspect-w-16 aspect-h-9 bg-gray-200">
+            <video class="object-cover w-full h-full transition-opacity duration-300 group-hover:opacity-0"
+              src="https://media.w3.org/2010/05/video/movie_300.mp4" muted loop></video>
+            <img class="absolute inset-0 object-cover w-full h-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              src="https://picsum.photos/600/337?blur=5" alt="Project thumbnail" />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2">Project Title 3</h3>
+            <p class="text-gray-600 text-sm">
+              A short line explaining the concept, client, and visual outcome.
+            </p>
+          </div>
+        </div>
+
+        <!-- Add more project cards as needed -->
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section id="skills" class="mb-24">
+      <h2 class="text-4xl font-extrabold text-center mb-12">My Toolbox</h2>
+      <div class="flex flex-wrap justify-center items-center gap-8">
+        <!-- Example skill icons (replace with your own) -->
+        <div class="flex flex-col items-center animate-bounce100">
+          <img src="https://cdn-icons-png.flaticon.com/512/919/919831.png" alt="After Effects"
+            class="w-16 h-16 mb-2" />
+          <span class="text-sm font-medium">After Effects</span>
+        </div>
+        <div class="flex flex-col items-center animate-bounce100">
+          <img src="https://cdn-icons-png.flaticon.com/512/919/919831.png" alt="Blender"
+            class="w-16 h-16 mb-2" />
+          <span class="text-sm font-medium">Blender</span>
+        </div>
+        <div class="flex flex-col items-center animate-bounce100">
+          <img src="https://cdn-icons-png.flaticon.com/512/919/919840.png" alt="Maya"
+            class="w-16 h-16 mb-2" />
+          <span class="text-sm font-medium">Maya</span>
+        </div>
+        <div class="flex flex-col items-center animate-bounce100">
+          <img src="https://cdn-icons-png.flaticon.com/512/919/919832.png" alt="Cinema 4D"
+            class="w-16 h-16 mb-2" />
+          <span class="text-sm font-medium">Cinema 4D</span>
+        </div>
+        <!-- Add more skills as needed -->
+      </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section id="contact" class="mb-16">
+      <h2 class="text-4xl font-extrabold text-center mb-8">Get In Touch</h2>
+      <form action="#" method="POST"
+        class="max-w-xl mx-auto bg-white p-8 rounded-xl shadow-lg space-y-6">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+          <input type="text" id="name" name="name" required
+            class="block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary">
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input type="email" id="email" name="email" required
+            class="block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary">
+        </div>
+        <div>
+          <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+          <textarea id="message" name="message" rows="4" required
+            class="block w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+        </div>
+        <button type="submit"
+          class="w-full bg-primary text-white py-2 rounded-md hover:bg-secondary transition-colors">
+          Send Message
+        </button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- ===================== Footer ===================== -->
+  <footer class="bg-gray-900 text-gray-400 py-8">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-sm">&copy; <span id="year"></span> Your Name — All Rights Reserved.</p>
+      <nav class="flex space-x-6 mt-4 md:mt-0">
+        <a href="#about" class="hover:text-white transition">About</a>
+        <a href="#projects" class="hover:text-white transition">Projects</a>
+        <a href="#skills" class="hover:text-white transition">Skills</a>
+        <a href="#contact" class="hover:text-white transition">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Small script to keep the current year up‑to‑date -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+
+</html>

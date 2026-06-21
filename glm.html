@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kōgetsu Camera Trading — Second-hand film cameras, Jimbōchō Tokyo, since 1962</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;500&family=IBM+Plex+Mono:wght@500&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.13/dist/lenis.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#000000',
+          paper: '#ffffff',
+          'ink-soft': 'rgba(0,0,0,0.7)',
+          'ink-mute': 'rgba(0,0,0,0.5)',
+          'ink-faint': 'rgba(0,0,0,0.3)',
+          'ink-ghost': 'rgba(0,0,0,0.18)',
+          'line-soft': 'rgba(0,0,0,0.12)',
+        },
+        fontFamily: {
+          display: ['Montserrat', 'sans-serif'],
+          sans: ['Inter', 'sans-serif'],
+          mono: ['IBM Plex Mono', 'monospace'],
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #000000;
+    --text-soft: rgba(0,0,0,0.7);
+    --text-mute: rgba(0,0,0,0.5);
+    --text-faint: rgba(0,0,0,0.3);
+    --text-ghost: rgba(0,0,0,0.18);
+    --line: rgba(0,0,0,0.12);
+    --line-strong: rgba(0,0,0,0.25);
+    --ease-quiet: cubic-bezier(.22, 1, .36, 1);
+    --ease-precise: cubic-bezier(.4, 0, .2, 1);
+    --ease-emphasis: cubic-bezier(.16, 1, .3, 1);
+  }
+  * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html, body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+  body { overflow-x: hidden; }
+
+  .font-display { font-family: 'Montserrat', sans-serif; font-weight: 900; letter-spacing: -0.025em; line-height: 0.88; }
+  .font-mono { font-family: 'IBM Plex Mono', monospace; font-weight: 500; }
+  .label { font-family: 'IBM Plex Mono', monospace; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; font-size: 11px; line-height: 1.2; }
+  .label-sm { font-family: 'IBM Plex Mono', monospace; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; font-size: 10px; line-height: 1.2; }
+  .mono { font-family: 'IBM Plex Mono', monospace; font-weight: 500; }
+
+  /* fade-up enter */
+  .enter { opacity: 0; transform: translateY(40px); transition: opacity 1200ms var(--ease-quiet), transform 1200ms var(--ease-quiet); will-change: transform, opacity; }
+  .enter.is-in { opacity: 1; transform: none; }
+  .enter-fast { opacity: 0; transform: translateY(28px); transition: opacity 800ms var(--ease-quiet), transform 800ms var(--ease-quiet); }
+  .enter-fast.is-in { opacity: 1; transform: none; }
+
+  /* hero 4-beat */
+  .hero-stage > .beat { opacity: 0; transform: translateY(60px); transition: opacity 1100ms var(--ease-emphasis), transform 1100ms var(--ease-emphasis); }
+  .hero-stage.is-in > .beat:nth-child(1) { transition-delay: 0ms; }
+  .hero-stage.is-in > .beat:nth-child(2) { transition-delay: 180ms; }
+  .hero-stage.is-in > .beat:nth-child(3) { transition-delay: 360ms; }
+  .hero-stage.is-in > .beat:nth-child(4) { transition-delay: 540ms; }
+  .hero-stage.is-in > .beat:nth-child(5) { transition-delay: 720ms; }
+  .hero-stage.is-in > .beat { opacity: 1; transform: none; }
+
+  /* frame recolor hover */
+  .frame {
+    padding: 14px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    transition: border-color 450ms var(--ease-emphasis);
+    position: relative;
+  }
+  .frame:hover { border-color: var(--text); }
+  .frame::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: -1px;
+    width: 8px; height: 8px;
+    border-top: 1px solid var(--text);
+    border-left: 1px solid var(--text);
+    opacity: 0;
+    transition: opacity 300ms var(--ease-quiet);
+  }
+  .frame::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; right: -1px;
+    width: 8px; height: 8px;
+    border-bottom: 1px solid var(--text);
+    border-right: 1px solid var(--text);
+    opacity: 0;
+    transition: opacity 300ms var(--ease-quiet);
+  }
+  .frame:hover::before, .frame:hover::after { opacity: 1; }
+
+  /* image clip masks */
+  .clip-mask { clip-path: inset(0 100% 0 0); will-change: clip-path; }
+
+  /* image treatment */
+  .img-treat { filter: grayscale(0.2) contrast(1.04); transition: filter 600ms var(--ease-quiet), transform 1400ms var(--ease-quiet); }
+  .frame:hover .img-treat { filter: grayscale(0) contrast(1.06); transform: scale(1.025); }
+
+  /* hairline */
+  .rule { height: 1px; background: var(--line); }
+  .rule-strong { height: 1px; background: var(--text); }
+  .rule-v { width: 1px; background: var(--line); }
+
+  /* link underline */
+  .link-u { position: relative; padding-bottom: 3px; display: inline-block; }
+  .link-u::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: right center; transition: transform 500ms var(--ease-emphasis); }
+  .link-u:hover::after { transform: scaleX(1); transform-origin: left center; }
+
+  /* button */
+  .btn-ink {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    padding: 1.1rem 1.6rem;
+    background: var(--text); color: var(--bg);
+    font-family: 'IBM Plex Mono', monospace; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase; font-size: 11px;
+    border: 1px solid var(--text);
+    transition: background 400ms var(--ease-quiet), color 400ms var(--ease-quiet);
+  }
+  .btn-ink:hover { background: transparent; color: var(--text); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    padding: 1.1rem 1.6rem;
+    background: transparent; color: var(--text);
+    font-family: 'IBM Plex Mono', monospace; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase; font-size: 11px;
+    border: 1px solid var(--text);
+    transition: background 400ms var(--ease-quiet), color 400ms var(--ease-quiet);
+  }
+  .btn-ghost:hover { background: var(--text); color: var(--bg); }
+
+  /* marquee */
+  @keyframes marquee-x { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-track { display: flex; width: max-content; animation: marquee-x 90s linear infinite; }
+
+  /* parallel rows */
+  .parallax-row { display: flex; gap: 1.5rem; will-change: transform; }
+  .parallax-row > * { flex-shrink: 0; }
+
+  /* no scrollbar */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* blink */
+  @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+  .blink { animation: blink 1.1s steps(1) infinite; }
+
+  /* sticky two-col */
+  .sticky-col { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+
+  /* number marker */
+  .num-marker {
+    font-family: 'IBM Plex Mono', monospace; font-weight: 500;
+    font-size: 11px; letter-spacing: 0.2em;
+  }
+
+  /* select mono */
+  .mono-detail { font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 12px; line-height: 1.55; letter-spacing: 0.01em; }
+
+  /* big year display */
+  .big-year { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: clamp(8rem, 22vw, 22rem); line-height: 0.85; letter-spacing: -0.04em; }
+
+  /* nav blur */
+  .nav-bar { background: rgba(255,255,255,0.85); backdrop-filter: saturate(140%) blur(12px); -webkit-backdrop-filter: saturate(140%) blur(12px); }
+
+  /* table */
+  .spec-row { display: grid; grid-template-columns: 160px 1fr; padding: 0.85rem 0; border-bottom: 1px solid var(--line); }
+  .spec-row dt { font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-mute); padding-top: 2px; }
+  .spec-row dd { font-size: 14px; line-height: 1.55; color: var(--text); }
+
+  /* timeline */
+  .tl-row { display: grid; grid-template-columns: 140px 1fr; gap: 3rem; padding: 2.2rem 0; border-bottom: 1px solid var(--line); }
+  .tl-row dt { font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 13px; letter-spacing: 0.04em; color: var(--text); padding-top: 4px; }
+  .tl-row dd h3 { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.5rem; line-height: 1.05; letter-spacing: -0.015em; margin-bottom: 0.6rem; }
+  .tl-row dd p { font-size: 14px; line-height: 1.65; color: var(--text-soft); max-width: 56ch; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .clip-mask { clip-path: none !important; }
+  }
+</style>
+</head>
+<body class="bg-paper text-ink">
+
+<!-- ===================== NAV ===================== -->
+<nav class="nav-bar fixed top-0 left-0 right-0 z-50 border-b border-line-soft">
+  <div class="max-w-[1600px] mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-3 group">
+      <div class="w-9 h-9 border border-ink flex items-center justify-center">
+        <span class="font-display text-[15px]">K</span>
+      </div>
+      <div class="leading-tight">
+        <div class="font-display text-[13px] tracking-tight">KŌGETSU</div>
+        <div class="label-sm text-ink-mute mt-[2px]">CAMERA TRADING · TOKYO</div>
+      </div>
+    </a>
+    <div class="hidden md:flex items-center gap-9 label text-ink-soft">
+      <a href="#cabinet" class="link-u hover:text-ink">§ 01 Cabinet</a>
+      <a href="#house" class="link-u hover:text-ink">§ 02 House</a>
+      <a href="#inventory" class="link-u hover:text-ink">§ 03 Inventory</a>
+      <a href="#entry" class="link-u hover:text-ink">§ 04 Catalog</a>
+      <a href="#process" class="link-u hover:text-ink">§ 05 Process</a>
+      <a href="#archive" class="link-u hover:text-ink">§ 06 Archive</a>
+      <a href="#visit" class="link-u hover:text-ink">§ 07 Visit</a>
+    </div>
+    <div class="hidden lg:flex items-center gap-4 label-sm text-ink-mute">
+      <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-ink blink"></span>OPEN · 11:00–18:30 JST</span>
+      <span class="rule-v h-3"></span>
+      <span>47 IN CABINET</span>
+    </div>
+    <button class="md:hidden label">MENU</button>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section class="relative pt-32 md:pt-40 pb-20 md:pb-28 px-6 md:px-10">
+  <div class="max-w-[1600px] mx-auto">
+
+    <!-- top status strip -->
+    <div class="hero-stage grid grid-cols-12 gap-6 mb-16 md:mb-24">
+      <div class="col-span-12 md:col-span-6 beat">
+        <div class="flex items-center gap-4 label text-ink-mute">
+          <span>§ 00 / 07</span>
+          <span class="rule flex-1 max-w-[120px]"></span>
+          <span>EST. MCMLXII</span>
+          <span class="rule flex-1 max-w-[120px]"></span>
+          <span>JIMBŌCHŌ · CHIYODA-KU</span>
+        </div>
+      </div>
+      <div class="col-span-12 md:col-span-6 beat flex md:justify-end">
+        <div class="label text-ink-mute">
+          N 35°41′46″ · E 139°45′43″ — ALT 21M
+        </div>
+      </div>
+    </div>
+
+    <!-- hero headline -->
+    <div class="hero-stage grid grid-cols-12 gap-6">
+      <div class="col-span-12 beat">
+        <div class="label text-ink-mute mb-8 md:mb-12">
+          Second-hand film cameras — Acquired, certified, re-homed.
+        </div>
+      </div>
+
+      <div class="col-span-12 beat">
+        <h1 class="font-display text-[clamp(2.6rem,7.4vw,8.6rem)]">
+          Cameras with a past,<br>
+          calibrated for the<br>
+          <span class="italic font-display" style="font-style: italic; font-weight: 800;">next frame.</span>
+        </h1>
+      </div>
+
+      <div class="col-span-12 md:col-span-5 md:col-start-7 beat mt-12 md:mt-16">
+        <p class="text-[15px] md:text-[16px] leading-[1.7] text-ink-soft max-w-[44ch]">
+          Kōgetsu Camera Trading has occupied the second floor above a Jimbōchō tea-merchant since 1962. We acquire mechanical rangefinders, twin-lens reflexes, and medium-format systems from estates, working photographers, and departing collectors. Each piece is disassembled, cleaned, lubricated, and re-calibrated to factory tolerance, then sold with a hand-written provenance card.
+        </p>
+      </div>
+
+      <div class="col-span-12 beat mt-14 md:mt-20">
+        <div class="flex flex-wrap items-center gap-4">
+          <a href="#cabinet" class="btn-ink">
+            View the cabinet
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M0 5H13M13 5L9 1M13 5L9 9" stroke="currentColor" stroke-width="1.2"/></svg>
+          </a>
+          <a href="#house" class="btn-ghost">
+            House philosophy
+          </a>
+          <a href="#visit" class="btn-ghost">
+            Visit Jimbōchō
+          </a>
+        </div>
+      </div>
+
+      <div class="col-span-12 beat mt-20 md:mt-32">
+        <div class="rule-strong"></div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6 pt-6">
+          <div>
+            <div class="label-sm text-ink-mute mb-2">Founded</div>
+            <div class="font-display text-2xl md:text-3xl">1962</div>
+            <div class="mono-detail text-ink-mute mt-1">63 years in trade</div>
+          </div>
+          <div>
+            <div class="label-sm text-ink-mute mb-2">In cabinet</div>
+            <div class="font-display text-2xl md:text-3xl">47</div>
+            <div class="mono-detail text-ink-mute mt-1">pieces, refreshed weekly</div>
+          </div>
+          <div>
+            <div class="label-sm text-ink-mute mb-2">Avg. age</div>
+            <div class="font-display text-2xl md:text-3xl">41<span class="text-ink-mute text-lg"> yrs</span></div>
+            <div class="mono-detail text-ink-mute mt-1">oldest: 1934 Contax I</div>
+          </div>
+          <div>
+            <div class="label-sm text-ink-mute mb-2">CLA cycle</div>
+            <div class="font-display text-2xl md:text-3xl">11<span class="text-ink-mute text-lg"> days</span></div>
+            <div class="mono-detail text-ink-mute mt-1">average per camera</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== STATUS TICKER ===================== -->
+<section class="border-y border-ink py-4 overflow-hidden">
+  <div class="marquee-track label text-ink">
+    <div class="flex items-center gap-12 pr-12">
+      <span>LEICA M3 DOUBLE-STROKE · 1955</span><span class="text-ink-faint">◆</span>
+      <span>ROLLEIFLEX 2.8F PLANAR · 1965</span><span class="text-ink-faint">◆</span>
+      <span>HASSELBLAD 500C/M · 1978</span><span class="text-ink-faint">◆</span>
+      <span>NIKON SP BLACK · 1958</span><span class="text-ink-faint">◆</span>
+      <span>CONTAX IIIa COLOR-COUPLED · 1953</span><span class="text-ink-faint">◆</span>
+      <span>PENTAX 6×7 MIRROR-UP · 1979</span><span class="text-ink-faint">◆</span>
+      <span>VOIGTLÄNDER PROMINENT · 1952</span><span class="text-ink-faint">◆</span>
+      <span>ZEISS IKON CONTAFLEX SUPER BC · 1967</span><span class="text-ink-faint">◆</span>
+      <span>MINOLTA CLE · 1980</span><span class="text-ink-faint">◆</span>
+      <span>OLYMPUS PEN F HALF-FRAME · 1963</span><span class="text-ink-faint">◆</span>
+    </div>
+    <div class="flex items-center gap-12 pr-12" aria-hidden="true">
+      <span>LEICA M3 DOUBLE-STROKE · 1955</span><span class="text-ink-faint">◆</span>
+      <span>ROLLEIFLEX 2.8F PLANAR · 1965</span><span class="text-ink-faint">◆</span>
+      <span>HASSELBLAD 500C/M · 1978</span><span class="text-ink-faint">◆</span>
+      <span>NIKON SP BLACK · 1958</span><span class="text-ink-faint">◆</span>
+      <span>CONTAX IIIa COLOR-COUPLED · 1953</span><span class="text-ink-faint">◆</span>
+      <span>PENTAX 6×7 MIRROR-UP · 1979</span><span class="text-ink-faint">◆</span>
+      <span>VOIGTLÄNDER PROMINENT · 1952</span><span class="text-ink-faint">◆</span>
+      <span>ZEISS IKON CONTAFLEX SUPER BC · 1967</span><span class="text-ink-faint">◆</span>
+      <span>MINOLTA CLE · 1980</span><span class="text-ink-faint">◆</span>
+      <span>OLYMPUS PEN F HALF-FRAME · 1963</span><span class="text-ink-faint">◆</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== § 01 FEATURED CABINET ===================== -->
+<section id="cabinet" class="px-6 md:px-10 py-24 md:py-36">
+  <div class="max-w-[1600px] mx-auto">
+
+    <!-- section header -->
+    <div class="grid grid-cols-12 gap-6 mb-16 md:mb-24">
+      <div class="col-span-12 md:col-span-2">
+        <div class="num-marker text-ink-mute">§ 01 / 07</div>
+      </div>
+      <div class="col-span-12 md:col-span-7">
+        <div class="label text-ink-mute mb-6 enter-fast">This week's cabinet</div>
+        <h2 class="font-display text-[clamp(2rem,4.5vw,4.4rem)] enter-fast">
+          Three pieces, freshly<br>out of CLA.
+        </h2>
+      </div>
+      <div class="col-span-12 md:col-span-3 md:flex md:items-end">
+        <p class="mono-detail text-ink-mute enter-fast">
+          A rotating selection of cameras that have completed the eleven-day service cycle and are ready for a new owner. Each ships with the provenance card and a sixty-day mechanical warranty.
+        </p>
+      </div>
+    </div>
+
+    <div class="rule mb-12 md:mb-16"></div>
+
+    <!-- 3 featured pieces -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8" id="featured-grid">
+
+      <!-- piece 1 -->
+      <article class="frame group">
+        <div class="aspect-[4/5] overflow-hidden bg-ink-ghost mb-5">
+          <img class="img-treat clip-mask w-full h-full object-cover" src="https://picsum.photos/seed/camera-leica-m3-ds-front/900/1125" alt="Leica M3 double-stroke, front view">
+        </div>
+        <div class="flex items-baseline justify-between mb-3">
+          <div class="label-sm text-ink-mute">№ 001 · LEITZ WETZLAR</div>
+          <div class="label-sm text-ink-mute">1955</div>
+        </div>
+        <h3 class="font-display text-[1.7rem] mb-2 leading-tight">Leica M3<br>Double-Stroke</h3>
+        <p class="text-[13px] text-ink-soft leading-relaxed mb-4">Early double-stroke advance, 0.72× rangefinder. Original chrome finish, re-covered with griptan. Shutter re-curtained 2024.</p>
+        <div class="rule mb-4"></div>
+        <dl class="space-y-2 mono-detail text-ink-soft mb-5">
+          <div class="flex justify-between"><dt>Serial</dt><dd class="text-ink">785.432</dd></div>
+          <div class="flex justify-between"><dt>Lens</dt><dd class="text-ink">Summicron 50/2 rigid</dd></div>
+          <div class="flex justify-between"><dt>Condition</dt><dd class="text-ink">A− (user mint)</dd></div>
+          <div class="flex justify-between"><dt>CLA</dt><dd class="text-ink">11.2024 · 12 days</dd></div>
+        </dl>
+        <div class="flex items-baseline justify-between">
+          <div>
+            <div class="label-sm text-ink-mute">Price</div>
+            <div class="font-display text-xl">¥1,180,000</div>
+          </div>
+          <a href="#entry" class="label link-u">Inquire →</a>
+        </div>
+      </article>
+
+      <!-- piece 2 -->
+      <article class="frame group">
+        <div class="aspect-[4/5] overflow-hidden bg-ink-ghost mb-5">
+          <img class="img-treat clip-mask w-full h-full object-cover" src="https://picsum.photos/seed/camera-rolleiflex-28f-planar/900/1125" alt="Rolleiflex 2.8F with Carl Zeiss Planar lens">
+        </div>
+        <div class="flex items-baseline justify-between mb-3">
+          <div class="label-sm text-ink-mute">№ 002 · FRANKE & HEIDECKE</div>
+          <div class="label-sm text-ink-mute">1965</div>
+        </div>
+        <h3 class="font-display text-[1.7rem] mb-2 leading-tight">Rolleiflex 2.8F<br>Planar</h3>
+        <p class="text-[13px] text-ink-soft leading-relaxed mb-4">Carl Zeiss 80mm f/2.8 Planar, white-face. Meter recalibrated, focus screen upgraded to Maxwell. From a Yokohama studio estate.</p>
+        <div class="rule mb-4"></div>
+        <dl class="space-y-2 mono-detail text-ink-soft mb-5">
+          <div class="flex justify-between"><dt>Serial</dt><dd class="text-ink">2.451.876</dd></div>
+          <div class="flex justify-between"><dt>Lens</dt><dd class="text-ink">Planar 80/2.8 T</dd></div>
+          <div class="flex justify-between"><dt>Condition</dt><dd class="text-ink">A (collector grade)</dd></div>
+          <div class="flex justify-between"><dt>CLA</dt><dd class="text-ink">09.2024 · 14 days</dd></div>
+        </dl>
+        <div class="flex items-baseline justify-between">
+          <div>
+            <div class="label-sm text-ink-mute">Price</div>
+            <div class="font-display text-xl">¥385,000</div>
+          </div>
+          <a href="#entry" class="label link-u">Inquire →</a>
+        </div>
+      </article>
+
+      <!-- piece 3 -->
+      <article class="frame group">
+        <div class="aspect-[4/5] overflow-hidden bg-ink-ghost mb-5">
+          <img class="img-treat clip-mask w-full h-full object-cover" src="https://picsum.photos/seed/camera-hasselblad-500cm-black/900/1125" alt="Hasselblad 500C/M medium format">
+        </div>
+        <div class="flex items-baseline justify-between mb-3">
+          <div class="label-sm text-ink-mute">№ 003 · VICTOR HASSELBLAD</div>
+          <div class="label-sm text-ink-mute">1978</div>
+        </div>
+        <h3 class="font-display text-[1.7rem] mb-2 leading-tight">Hasselblad<br>500C/M</h3>
+        <p class="text-[13px] text-ink-soft leading-relaxed mb-4">Black-body, A12 back, Planar 80/2.8 T*. Mirror foam replaced, light seals renewed. Includes original Hasselblad ever-ready case.</p>
+        <div class="rule mb-4"></div>
+        <dl class="space-y-2 mono-detail text-ink-soft mb-5">
+          <div class="flex justify-between"><dt>Serial</dt><dd class="text-ink">RC.1123</dd></div>
+          <div class="flex justify-between"><dt>Lens</dt><dd class="text-ink">Planar 80/2.8 T*</dd></div>
+          <div class="flex justify-between"><dt>Condition</dt><dd class="text-ink">A−</dd></div>
+          <div class="flex justify-between"><dt>CLA</dt><dd class="text-ink">10.2024 · 10 days</dd></div>
+        </dl>
+        <div class="flex items-baseline justify-between">
+          <div>
+            <div class="label-sm text-ink-mute">Price</div>
+            <div class="font-display text-xl">¥298,000</div>
+          </div>
+          <a href="#entry" class="label link-u">Inquire →</a>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="mt-12 md:mt-16 flex items-center justify-between">
+      <p class="mono-detail text-ink-mute">Showing 3 of 47 pieces in cabinet.</p>
+      <a href="#inventory" class="label link-u">See full inventory →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== § 02 HOUSE PHILOSOPHY (sticky two-col) ===================== -->
+<section id="house" class="px-6 md:px-10 py-24 md:py-36 border-t border-line-soft">
+  <div class="max-w-[1600px] mx-auto">
+
+    <div class="grid grid-cols-12 gap-6 mb-16 md:mb-24">
+      <div class="col-span-12 md:col-span-2">
+        <div class="num-marker text-ink-mute">§ 02 / 07</div>
+      </div>
+      <div class="col-span-12 md:col-span-7">
+        <div class="label text-ink-mute mb-6 enter-fast">House philosophy</div>
+        <h2 class="font-display text-[clamp(2rem,4.5vw,4.4rem)] enter-fast">
+          The camera is not<br>a relic. It is an<br>instrument awaiting<br>its next operator.
+        </h2>
+      </div>
+    </div>
+
+    <div class="rule mb-16 md:mb-20"></div>
+
+    <!-- sticky two col -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+
+      <!-- left: sticky title + meta -->
+      <div class="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center">
+        <div class="num-marker text-ink-mute mb-8">— ON THE PRACTICE</div>
+        <div class="font-display text-[clamp(1.6rem,2.4vw,2.4rem)] mb-8 max-w-[18ch]">
+          We do not restore cameras to look new. We service them to work as intended for another forty years.
+        </div>
+        <div class="space-y-4 text-[14px] leading-[1.7] text-ink-soft max-w-[42ch]">
+          <p>Restoration implies erasure. A 1955 Leica M3 carries the brass-through of sixty years of handling, and that is the point — it is evidence that the instrument has done the work it was built to do.</p>
+          <p>What we do is mechanical conservation. Shutters are re-tensioned to original specs. RF prisms are re-collimated. Light seals are renewed. Brass is not re-plated, leather is not replaced unless it is failing.</p>
+        </div>
+        <div class="mt-10 grid grid-cols-2 gap-6 max-w-sm">
+          <div>
+            <div class="label-sm text-ink-mute mb-2">Founder</div>
+            <div class="mono-detail text-ink">Iwakura Tetsuo</div>
+            <div class="mono-detail text-ink-mute">1929–2011</div>
+          </div>
+          <div>
+            <div class="label-sm text-ink-mute mb-2">Current proprietor</div>
+            <div class="mono-detail text-ink">Iwakura Kenji</div>
+            <div class="mono-detail text-ink-mute">Since 2011</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right: scrolling content -->
+      <div class="space-y-20 lg:space-y-32">
+
+        <div class="enter">
+          <div class="img-wrap frame">
+            <div class="aspect-[4/3] overflow-hidden bg-ink-ghost">
+              <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/jimbocho-shop-interior-wood/1200/900" alt="Interior of Kōgetsu Camera Trading, Jimbōchō">
+            </div>
+          </div>
+          <div class="mt-4 flex items-baseline justify-between">
+            <div class="label-sm text-ink-mute">Plate I · The shop floor</div>
+            <div class="label-sm text-ink-mute">2024 · KENJI IWAKURA</div>
+          </div>
+        </div>
+
+        <div class="enter">
+          <div class="label-sm text-ink-mute mb-4">— § 02.1</div>
+          <h3 class="font-display text-2xl md:text-3xl mb-6 leading-tight">A short note on what we will not acquire.</h3>
+          <div class="space-y-4 text-[14px] leading-[1.75] text-ink-soft max-w-[58ch]">
+            <p>We pass on cameras that have been "re-finished" by previous dealers — re-plated brass, fake patina, replacement leatherette sold as original. We pass on lenses with fungus that has etched the coating. We pass on anything we cannot ourselves stand behind for another decade of shooting.</p>
+            <p>Most of what we acquire comes from three sources: estates of working photographers (about half), departing collectors (a third), and trade-ins from clients upgrading within the system (the remainder). We do not buy at camera shows. We do not buy online without inspection.</p>
+            <p>The result is a slow inventory — forty to fifty pieces in cabinet at any time. We would rather sell forty cameras well than four hundred poorly.</p>
+          </div>
+        </div>
+
+        <div class="enter">
+          <div class="img-wrap frame">
+            <div class="aspect-[3/4] overflow-hidden bg-ink-ghost">
+              <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/workshop-bench-tools-screwdrivers/900/1200" alt="Service bench with screwdrivers and tweezers">
+            </div>
+          </div>
+          <div class="mt-4 flex items-baseline justify-between">
+            <div class="label-sm text-ink-mute">Plate II · The bench</div>
+            <div class="label-sm text-ink-mute">JIMBŌCHŌ · 2F</div>
+          </div>
+        </div>
+
+        <div class="enter">
+          <div class="label-sm text-ink-mute mb-4">— § 02.2</div>
+          <h3 class="font-display text-2xl md:text-3xl mb-6 leading-tight">Why mechanical, and why now.</h3>
+          <div class="space-y-4 text-[14px] leading-[1.75] text-ink-soft max-w-[58ch]">
+            <p>A mechanical camera is a finite-state machine. Every shutter speed is a physical configuration of gears and springs; every aperture is a precise arrangement of blades. There is no firmware to degrade, no battery to leak, no proprietary chip whose failure renders the body inert.</p>
+            <p>What this means practically: a Leica M3 serviced today will, with reasonable care, produce images in 2065. We cannot say the same of any digital camera manufactured in the last twenty years.</p>
+            <p>This is not nostalgia. This is the math of moving parts versus firmware, and the half-life of proprietary silicon.</p>
+          </div>
+        </div>
+
+        <div class="enter">
+          <blockquote class="border-l border-ink pl-6 md:pl-8 max-w-[58ch]">
+            <p class="font-display text-[1.4rem] md:text-[1.7rem] leading-[1.25] mb-6">
+              "A camera is a tool for slowing down the act of seeing. The mechanical ones are best because they cannot be rushed."
+            </p>
+            <footer class="label text-ink-mute">— IWAKURA TETSUO · 1987 INTERVIEW, ASAHI CAMERA</footer>
+          </blockquote>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== § 03 INVENTORY (parallel strips) ===================== -->
+<section id="inventory" class="py-24 md:py-36 border-t border-line-soft overflow-hidden">
+  <div class="max-w-[1600px] mx-auto px-6 md:px-10">
+
+    <div class="grid grid-cols-12 gap-6 mb-16 md:mb-24">
+      <div class="col-span-12 md:col-span-2">
+        <div class="num-marker text-ink-mute">§ 03 / 07</div>
+      </div>
+      <div class="col-span-12 md:col-span-7">
+        <div class="label text-ink-mute mb-6 enter-fast">Current inventory</div>
+        <h2 class="font-display text-[clamp(2rem,4.5vw,4.4rem)] enter-fast">
+          Forty-seven pieces,<br>scrolling in two directions.
+        </h2>
+      </div>
+      <div class="col-span-12 md:col-span-3 md:flex md:items-end">
+        <p class="mono-detail text-ink-mute enter-fast">
+          The cabinet in two rows — top row drifts left, bottom row drifts right as you scroll. Each tile opens to a full catalog entry. Refreshed every Saturday after the bench closes.
+        </p>
+      </div>
+    </div>
+
+    <div class="rule mb-12 md:mb-16"></div>
+  </div>
+
+  <!-- parallel rows -->
+  <div id="parallax-strips" class="space-y-6 md:space-y-8">
+
+    <div id="parallax-top" class="parallax-row pl-6 md:pl-10">
+      <!-- tile template, repeated -->
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-nikon-sp-black/800/600" alt="Nikon SP">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>NIKON</span><span>1958</span></div>
+        <div class="font-display text-lg leading-tight">Nikon SP Black</div>
+        <div class="mono-detail text-ink-mute mt-1">¥640,000 · A</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-contax-iiia-silver/800/600" alt="Contax IIIa">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>ZEISS IKON</span><span>1953</span></div>
+        <div class="font-display text-lg leading-tight">Contax IIIa</div>
+        <div class="mono-detail text-ink-mute mt-1">¥185,000 · A−</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-pentax-67-mirrorup/800/600" alt="Pentax 67">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>ASAHI PENTAX</span><span>1979</span></div>
+        <div class="font-display text-lg leading-tight">Pentax 6×7 MU</div>
+        <div class="mono-detail text-ink-mute mt-1">¥148,000 · A−</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-voigtlander-prominent/800/600" alt="Voigtländer Prominent">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>VOIGTLÄNDER</span><span>1952</span></div>
+        <div class="font-display text-lg leading-tight">Prominent</div>
+        <div class="mono-detail text-ink-mute mt-1">¥98,000 · B+</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-leica-iiif-red/800/600" alt="Leica IIIc red dial">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>LEITZ WETZLAR</span><span>1951</span></div>
+        <div class="font-display text-lg leading-tight">Leica IIIf Red</div>
+        <div class="mono-detail text-ink-mute mt-1">¥268,000 · A</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-olympus-pen-f/800/600" alt="Olympus Pen F">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>OLYMPUS</span><span>1963</span></div>
+        <div class="font-display text-lg leading-tight">Pen F half-frame</div>
+        <div class="mono-detail text-ink-mute mt-1">¥78,000 · A−</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-rolleicord-va/800/600" alt="Rolleicord V">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>FRANKE & HEIDECKE</span><span>1959</span></div>
+        <div class="font-display text-lg leading-tight">Rolleicord V</div>
+        <div class="mono-detail text-ink-mute mt-1">¥88,000 · A−</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-minolta-cle/800/600" alt="Minolta CLE">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>MINOLTA</span><span>1980</span></div>
+        <div class="font-display text-lg leading-tight">CLE rangefinder</div>
+        <div class="mono-detail text-ink-mute mt-1">¥168,000 · A</div>
+      </div>
+    </div>
+
+    <div id="parallax-bottom" class="parallax-row pl-6 md:pl-10" style="transform: translateX(-200px);">
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-mamiya-6mf/800/600" alt="Mamiya 6">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>MAMIYA</span><span>1993</span></div>
+        <div class="font-display text-lg leading-tight">Mamiya 6 MF</div>
+        <div class="mono-detail text-ink-mute mt-1">¥385,000 · A</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-leica-m6-classic/800/600" alt="Leica M6">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>LEITZ</span><span>1986</span></div>
+        <div class="font-display text-lg leading-tight">Leica M6 classic</div>
+        <div class="mono-detail text-ink-mute mt-1">¥580,000 · A−</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-hasselblad-swc/800/600" alt="Hasselblad SWC">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>HASSELBLAD</span><span>1972</span></div>
+        <div class="font-display text-lg leading-tight">SWC 38/4.5</div>
+        <div class="mono-detail text-ink-mute mt-1">¥720,000 · A</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-rolex-rolleiflex-35e/800/600" alt="Rolleiflex 35E">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>ROLLEI</span><span>1974</span></div>
+        <div class="font-display text-lg leading-tight">Rollei 35 S</div>
+        <div class="mono-detail text-ink-mute mt-1">¥88,000 · A−</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-zeiss-contaflex/800/600" alt="Contaflex">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>ZEISS IKON</span><span>1967</span></div>
+        <div class="font-display text-lg leading-tight">Contaflex Super</div>
+        <div class="mono-detail text-ink-mute mt-1">¥48,000 · B+</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-canon-7-50mm/800/600" alt="Canon 7">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>CANON</span><span>1961</span></div>
+        <div class="font-display text-lg leading-tight">Canon 7 RF</div>
+        <div class="mono-detail text-ink-mute mt-1">¥118,000 · A−</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-yashica-mat-124g/800/600" alt="Yashica Mat">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>YASHICA</span><span>1971</span></div>
+        <div class="font-display text-lg leading-tight">Mat-124G</div>
+        <div class="mono-detail text-ink-mute mt-1">¥52,000 · A−</div>
+      </div>
+
+      <div class="frame w-[280px] md:w-[340px] flex-shrink-0">
+        <div class="aspect-[4/3] overflow-hidden bg-ink-ghost mb-4">
+          <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/inv-nikon-f2-photomic/800/600" alt="Nikon F2">
+        </div>
+        <div class="flex justify-between label-sm text-ink-mute mb-2"><span>NIKON</span><span>1974</span></div>
+        <div class="font-display text-lg leading-tight">F2 Photomic</div>
+        <div class="mono-detail text-ink-mute mt-1">¥98,000 · A</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-[1600px] mx-auto px-6 md:px-10 mt-12 md:mt-16">
+    <div class="rule mb-6"></div>
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <p class="mono-detail text-ink-mute">47 pieces · refreshed 14.NOV.2024 · 09:42 JST</p>
+      <a href="#visit" class="label link-u">Request the full cabinet list →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== § 04 CATALOG ENTRY (sticky two-col deep dive) ===================== -->
+<section id="entry" class="px-6 md:px-10 py-24 md:py-36 border-t border-line-soft">
+  <div class="max-w-[1600px] mx-auto">
+
+    <div class="grid grid-cols-12 gap-6 mb-16 md:mb-24">
+      <div class="col-span-12 md:col-span-2">
+        <div class="num-marker text-ink-mute">§ 04 / 07</div>
+      </div>
+      <div class="col-span-12 md:col-span-7">
+        <div class="label text-ink-mute mb-6 enter-fast">A single catalog entry</div>
+        <h2 class="font-display text-[clamp(2rem,4.5vw,4.4rem)] enter-fast">
+          Leica M3<br>Double-Stroke, № 785.432.
+        </h2>
+      </div>
+      <div class="col-span-12 md:col-span-3 md:flex md:items-end">
+        <p class="mono-detail text-ink-mute enter-fast">
+          How a single piece is documented, serviced, and re-homed. A representative entry — every camera in the cabinet receives the same treatment.
+        </p>
+      </div>
+    </div>
+
+    <div class="rule mb-16 md:mb-20"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+
+      <!-- left sticky image -->
+      <div class="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center">
+        <div class="frame">
+          <div class="aspect-[4/5] overflow-hidden bg-ink-ghost">
+            <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/leica-m3-deep-dive-portrait/1000/1250" alt="Leica M3 double-stroke, catalog portrait">
+          </div>
+          <div class="flex items-baseline justify-between mt-4">
+            <div class="label-sm text-ink-mute">Plate III · Catalog portrait</div>
+            <div class="label-sm text-ink-mute">KCT/2024/001</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- right scrolling catalog -->
+      <div class="space-y-16 md:space-y-24">
+
+        <!-- header -->
+        <div class="enter">
+          <div class="flex items-baseline justify-between mb-6">
+            <div class="label-sm text-ink-mute">№ 001 · LEITZ WETZLAR</div>
+            <div class="label-sm text-ink-mute">CABINET · 14.NOV.2024</div>
+          </div>
+          <h3 class="font-display text-3xl md:text-4xl leading-tight mb-4">Leica M3<br>Double-Stroke</h3>
+          <p class="text-[15px] leading-[1.7] text-ink-soft max-w-[52ch]">A 1955 Leica M3, serial 785.432, in user-mint condition. Original chrome over brass, re-covered in griptan by Camera Leather UK (2008). Shutter re-curtained in November 2024 at our bench. The double-stroke advance — Leica's earliest M3 configuration, replaced by single-stroke in 1957 — gives this body its characteristically deliberate wind-on feel.</p>
+        </div>
+
+        <!-- spec table -->
+        <div class="enter">
+          <div class="label-sm text-ink-mute mb-6">— Specification</div>
+          <dl class="max-w-[58ch]">
+            <div class="spec-row"><dt>Manufacturer</dt><dd>Ernst Leitz GmbH, Wetzlar</dd></div>
+            <div class="spec-row"><dt>Model</dt><dd>Leica M3, double-stroke</dd></div>
+            <div class="spec-row"><dt>Year of manufacture</dt><dd>1955 (serial 785.432)</dd></div>
+            <div class="spec-row"><dt>Mount</dt><dd>Leica M bayonet</dd></div>
+            <div class="spec-row"><dt>Viewfinder</dt><dd>0.72× magnification, automatically parallax-corrected, frame-lines for 50/75/90/135mm</dd></div>
+            <div class="spec-row"><dt>Shutter</dt><dd>Horizontal cloth focal-plane, 1s — 1/1000s + B</dd></div>
+            <div class="spec-row"><dt>Flash sync</dt><dd>PC socket, 1/50s X-sync</dd></div>
+            <div class="spec-row"><dt>Body finish</dt><dd>Chrome over brass, original</dd></div>
+            <div class="spec-row"><dt>Re-covering</dt><dd>Griptan, 2008</dd></div>
+            <div class="spec-row"><dt>Condition grade</dt><dd>A− (user mint — honest brass-through at strap lugs)</dd></div>
+            <div class="spec-row"><dt>Service record</dt><dd>CLA November 2024 (12 days), shutter re-curtained, RF re-collimated</dd></div>
+            <div class="spec-row"><dt>Warranty</dt><dd>60 days mechanical, extendable to 12 months</dd></div>
+          </dl>
+        </div>
+
+        <!-- detail crops -->
+        <div class="enter">
+          <div class="label-sm text-ink-mute mb-6">— Detail plates</div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="frame">
+              <div class="aspect-square overflow-hidden bg-ink-ghost">
+                <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/leica-m3-top-plate-detail/600/600" alt="Leica M3 top plate">
+              </div>
+              <div class="label-sm text-ink-mute mt-3">IV · Top plate</div>
+            </div>
+            <div class="frame">
+              <div class="aspect-square overflow-hidden bg-ink-ghost">
+                <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/leica-m3-shutter-dial/600/600" alt="Leica M3 shutter dial">
+              </div>
+              <div class="label-sm text-ink-mute mt-3">V · Shutter dial</div>
+            </div>
+            <div class="frame">
+              <div class="aspect-square overflow-hidden bg-ink-ghost">
+                <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/leica-m3-lens-mount/600/600" alt="Leica M3 lens mount">
+              </div>
+              <div class="label-sm text-ink-mute mt-3">VI · Lens mount</div>
+            </div>
+            <div class="frame">
+              <div class="aspect-square overflow-hidden bg-ink-ghost">
+                <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/leica-m3-serial-number/600/600" alt="Leica M3 serial">
+              </div>
+              <div class="label-sm text-ink-mute mt-3">VII · Serial 785.432</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- provenance -->
+        <div class="enter">
+          <div class="label-sm text-ink-mute mb-6">— Provenance</div>
+          <div class="space-y-5 text-[14px] leading-[1.7] text-ink-soft max-w-[58ch]">
+            <p><span class="mono text-ink">1955 — </span>Sold new by Hakkōdō Camera, Ginza, to a Yomiuri Shimbun staff photographer. Original receipt retained.</p>
+            <p><span class="mono text-ink">1971 — </span>Inherited by the photographer's son, a university lecturer in Sendai, who used it sparingly for family work.</p>
+            <p><span class="mono text-ink">2008 — </span>Re-covered in griptan and serviced by the son's local repairman; original leatherette retained and included.</p>
+            <p><span class="mono text-ink">2024 — </span>Acquired by Kōgetsu from the son's estate, October. CLA completed 26.NOV.2024.</p>
+          </div>
+        </div>
+
+        <!-- price block -->
+        <div class="enter">
+          <div class="rule-strong mb-6"></div>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <div class="label-sm text-ink-mute mb-2">Price</div>
+              <div class="font-display text-4xl md:text-5xl">¥1,180,000</div>
+              <div class="mono-detail text-ink-mute mt-1">Tax included · domestic shipping complimentary</div>
+            </div>
+            <div>
+              <div class="label-sm text-ink-mute mb-2">Included</div>
+              <div class="mono-detail text-ink leading-relaxed">
+                Body · Summicron 50/2 rigid (original) · ever-ready case · provenance card · CLA receipt · 60-day warranty
+              </div>
+            </div>
+          </div>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#visit" class="btn-ink">Reserve a viewing</a>
+            <a href="#" class="btn-ghost">Request additional images</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== § 05 PROCESS ===================== -->
+<section id="process" class="px-6 md:px-10 py-24 md:py-36 border-t border-line-soft bg-ink text-paper">
+  <div class="max-w-[1600px] mx-auto">
+
+    <div class="grid grid-cols-12 gap-6 mb-16 md:mb-24">
+      <div class="col-span-12 md:col-span-2">
+        <div class="num-marker text-paper/50">§ 05 / 07</div>
+      </div>
+      <div class="col-span-12 md:col-span-7">
+        <div class="label text-paper/50 mb-6 enter-fast">Service process</div>
+        <h2 class="font-display text-[clamp(2rem,4.5vw,4.4rem)] enter-fast">
+          Four stages, eleven<br>days, one bench.
+        </h2>
+      </div>
+      <div class="col-span-12 md:col-span-3 md:flex md:items-end">
+        <p class="mono-detail text-paper/50 enter-fast">
+          Every camera that enters the cabinet has completed the cycle below. The bench is run by Iwakura Kenji and one apprentice; throughput is deliberately capped at four cameras per month.
+        </p>
+      </div>
+    </div>
+
+    <div class="h-px bg-paper/15 mb-16 md:mb-20"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+
+      <!-- stage 1 -->
+      <div class="enter">
+        <div class="flex items-baseline gap-6 mb-6">
+          <div class="font-display text-[5rem] md:text-[6rem] leading-none text-paper/30">01</div>
+          <div>
+            <div class="label text-paper/50 mb-2">Day 01 — 02</div>
+            <h3 class="font-display text-2xl md:text-3xl leading-tight">Acquisition &<br>incoming report.</h3>
+          </div>
+        </div>
+        <div class="h-px bg-paper/15 mb-6"></div>
+        <div class="space-y-3 text-[14px] leading-[1.7] text-paper/70 max-w-[48ch]">
+          <p>The camera is unboxed on the bench, photographed from twelve angles, and logged with serial, manufacture date, and visible condition notes. A full incoming report is drafted — what works, what doesn't, what is suspect.</p>
+          <p>The report is shared with the seller as a matter of courtesy, regardless of whether they ask. We have returned cameras at this stage when the report turned up something the seller did not disclose.</p>
+        </div>
+        <div class="mt-6 mono-detail text-paper/50">
+          Output: 12-image set · incoming condition report · serial registration
+        </div>
+      </div>
+
+      <!-- stage 2 -->
+      <div class="enter">
+        <div class="flex items-baseline gap-6 mb-6">
+          <div class="font-display text-[5rem] md:text-[6rem] leading-none text-paper/30">02</div>
+          <div>
+            <div class="label text-paper/50 mb-2">Day 03 — 05</div>
+            <h3 class="font-display text-2xl md:text-3xl leading-tight">Disassembly &<br>diagnosis.</h3>
+          </div>
+        </div>
+        <div class="h-px bg-paper/15 mb-6"></div>
+        <div class="space-y-3 text-[14px] leading-[1.7] text-paper/70 max-w-[48ch]">
+          <p>Top plate, bottom plate, and (where applicable) lens elements are removed. Each subassembly is placed in a labeled tray. Shutter speeds are tested at every setting with a phonograph-based shutter tester; rangefinder alignment is checked at three distances.</p>
+          <p>A second report — the bench diagnosis — is drafted. This is the document that determines whether the camera proceeds or is sold as a parts body. Roughly one in twelve cameras does not proceed.</p>
+        </div>
+        <div class="mt-6 mono-detail text-paper/50">
+          Output: bench diagnosis · subassembly map · parts-body determination
+        </div>
+      </div>
+
+      <!-- stage 3 -->
+      <div class="enter">
+        <div class="flex items-baseline gap-6 mb-6">
+          <div class="font-display text-[5rem] md:text-[6rem] leading-none text-paper/30">03</div>
+          <div>
+            <div class="label text-paper/50 mb-2">Day 06 — 09</div>
+            <h3 class="font-display text-2xl md:text-3xl leading-tight">CLA — clean,<br>lubricate, adjust.</h3>
+          </div>
+        </div>
+        <div class="h-px bg-paper/15 mb-6"></div>
+        <div class="space-y-3 text-[14px] leading-[1.7] text-paper/70 max-w-[48ch]">
+          <p>The longest stage. Slow-shutter escapements are ultrasonically cleaned in naphtha, dried, and re-oiled with Moebius 8000. RF prisms are cleaned with isopropyl and re-collimated. Light seals and mirror foam are replaced wholesale. Shutter curtains, if present and degraded, are re-curtained using modern rubberized cloth.</p>
+          <p>Adjustment is iterative. Shutter speeds are re-tested at every setting, then again after 24 hours, then again after 72. Tolerances are held to ±⅓ stop at 1/1000 and ±⅙ stop at 1s.</p>
+        </div>
+        <div class="mt-6 mono-detail text-paper/50">
+          Output: CLA certification · shutter test log · re-assembly sequence
+        </div>
+      </div>
+
+      <!-- stage 4 -->
+      <div class="enter">
+        <div class="flex items-baseline gap-6 mb-6">
+          <div class="font-display text-[5rem] md:text-[6rem] leading-none text-paper/30">04</div>
+          <div>
+            <div class="label text-paper/50 mb-2">Day 10 — 11</div>
+            <h3 class="font-display text-2xl md:text-3xl leading-tight">Calibration, test<br>roll, cabinet.</h3>
+          </div>
+        </div>
+        <div class="h-px bg-paper/15 mb-6"></div>
+        <div class="space-y-3 text-[14px] leading-[1.7] text-paper/70 max-w-[48ch]">
+          <p>A test roll of Kodak Tri-X 400 is shot at five subject distances, three apertures, and all shutter speeds. The roll is developed in-house and contact-printed. The contact sheet is filed with the camera's documentation.</p>
+          <p>Provenance card is hand-written. The camera is placed in cabinet with the test contact sheet taped inside the lid of its case, visible to the next owner.</p>
+        </div>
+        <div class="mt-6 mono-detail text-paper/50">
+          Output: test contact sheet · provenance card · cabinet placement
+        </div>
+      </div>
+
+    </div>
+
+    <div class="h-px bg-paper/15 mt-20 md:mt-24 mb-10"></div>
+    <div class="flex flex-wrap items-baseline justify-between gap-6">
+      <p class="mono-detail text-paper/50">Throughput: 4 cameras per month · 48 per year · waitlist: 6–8 weeks</p>
+      <a href="#visit" class="label text-paper link-u">Discuss a consignment →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== § 06 ARCHIVE / TIMELINE ===================== -->
+<section id="archive" class="px-6 md:px-10 py-24 md:py-36 border-t border-line-soft">
+  <div class="max-w-[1600px] mx-auto">
+
+    <div class="grid grid-cols-12 gap-6 mb-16 md:mb-24">
+      <div class="col-span-12 md:col-span-2">
+        <div class="num-marker text-ink-mute">§ 06 / 07</div>
+      </div>
+      <div class="col-span-12 md:col-span-7">
+        <div class="label text-ink-mute mb-6 enter-fast">Provenance archive</div>
+        <h2 class="font-display text-[clamp(2rem,4.5vw,4.4rem)] enter-fast">
+          Sixty-three years of<br>the house, abbreviated.
+        </h2>
+      </div>
+      <div class="col-span-12 md:col-span-3 md:flex md:items-end">
+        <p class="mono-detail text-ink-mute enter-fast">
+          The ledger books — nineteen of them, hand-bound by a Jimbōchō bookbinder since 1962 — sit in the shop. Below is the abbreviated public record.
+        </p>
+      </div>
+    </div>
+
+    <div class="rule mb-12 md:mb-16"></div>
+
+    <!-- big year display -->
+    <div class="mb-20 md:mb-28 enter">
+      <div class="big-year">1962</div>
+      <div class="mt-4 label text-ink-mute">FOUNDING YEAR · SHOWA 37</div>
+    </div>
+
+    <!-- timeline -->
+    <dl class="max-w-[1100px]">
+
+      <div class="tl-row enter">
+        <dt>1962 · APR</dt>
+        <dd>
+          <h3>Iwakura Tetsuo opens Kōgetsu above a tea-merchant in Jimbōchō.</h3>
+          <p>Originally a one-room shop with twenty-two cameras. The first sale, on the third day, was a Canon IIIa to a Waseda University literature student. The receipt is framed above the bench.</p>
+        </dd>
+      </div>
+
+      <div class="tl-row enter">
+        <dt>1968 · NOV</dt>
+        <dd>
+          <h3>The bench is built.</h3>
+          <p>Iwakura Tetsuo studies for eighteen months under a retired Nicca Camera repairman in Sugamo, then commissions the workshop bench — a single 2.4-meter maple slab — that is still in use today.</p>
+        </dd>
+      </div>
+
+      <div class="tl-row enter">
+        <dt>1973 · MAR</dt>
+        <dd>
+          <h3>The shop survives the Jimbōchō book district fire.</h3>
+          <p>A fire in the adjacent building damages the stairwell but not the shop floor. Water damage to the ledger books is reversed by a paper conservator at the Tokyo National Museum. The ledgers have been kept in a fireproof safe since.</p>
+        </dd>
+      </div>
+
+      <div class="tl-row enter">
+        <dt>1985 · JUN</dt>
+        <dd>
+          <h3>First international client — a Berlin gallerist.</h3>
+          <p>A West Berlin gallerist, in Tokyo for an exhibition, acquires a Leica IIIg and a Rolleiflex 3.5F. The shop begins shipping internationally via EMS. The Berlin gallerist remains a client today; the relationship is in its fortieth year.</p>
+        </dd>
+      </div>
+
+      <div class="tl-row enter">
+        <dt>1995 · OCT</dt>
+        <dd>
+          <h3>Acquisition of the Yokohama studio estate.</h3>
+          <p>The working archive of a Yokohama portrait photographer — 41 cameras, mostly Rolleiflex TLRs and Hasselblad medium-format bodies, many in user-mint condition. The acquisition doubles the cabinet and establishes the shop's reputation among medium-format collectors.</p>
+        </dd>
+      </div>
+
+      <div class="tl-row enter">
+        <dt>2011 · JAN</dt>
+        <dd>
+          <h3>Iwakura Tetsuo passes. Iwakura Kenji assumes proprietorship.</h3>
+          <p>Kenji, who had apprenticed at the bench since 2003, takes over the shop at thirty-one. The first camera sold under his tenure is a Nikon S2 — to the same Berlin gallerist.</p>
+        </dd>
+      </div>
+
+      <div class="tl-row enter">
+        <dt>2017 · APR</dt>
+        <dd>
+          <h3>The provenance card is formalized.</h3>
+          <p>The hand-written provenance card — previously informal — becomes a standard inclusion with every camera. Each card is calligraphed by a Jimbōchō stationer and bears the shop seal.</p>
+        </dd>
+      </div>
+
+      <div class="tl-row enter">
+        <dt>2024 · TODAY</dt>
+        <dd>
+          <h3>47 pieces in cabinet. 4 cameras on the bench. 6 on the waitlist.</h3>
+          <p>The shop remains on the second floor above the tea-merchant, now in its third-generation proprietorship. Visits are by appointment Tuesday through Saturday. The bench is open to view.</p>
+        </dd>
+      </div>
+
+    </dl>
+
+    <!-- notable sales -->
+    <div class="mt-24 md:mt-32">
+      <div class="rule mb-10"></div>
+      <div class="grid grid-cols-12 gap-6 mb-12">
+        <div class="col-span-12 md:col-span-3">
+          <div class="label text-ink-mute enter-fast">Notable past sales</div>
+        </div>
+        <div class="col-span-12 md:col-span-9">
+          <p class="mono-detail text-ink-soft enter-fast max-w-[60ch]">A representative selection of pieces that have passed through the cabinet. Anonymized provenance on request.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+
+        <div class="frame enter-fast">
+          <div class="aspect-[4/5] overflow-hidden bg-ink-ghost mb-4">
+            <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/archive-leica-m3-blackpaint/700/875" alt="Leica M3 black paint">
+          </div>
+          <div class="label-sm text-ink-mute mb-2">SOLD · 2019</div>
+          <div class="font-display text-lg leading-tight mb-2">Leica M3 Black Paint</div>
+          <div class="mono-detail text-ink-mute">1958 · single-owner · to a European private collection</div>
+        </div>
+
+        <div class="frame enter-fast">
+          <div class="aspect-[4/5] overflow-hidden bg-ink-ghost mb-4">
+            <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/archive-hasselblad-moon/700/875" alt="Hasselblad 500EL">
+          </div>
+          <div class="label-sm text-ink-mute mb-2">SOLD · 2015</div>
+          <div class="font-display text-lg leading-tight mb-2">Hasselblad 500EL</div>
+          <div class="mono-detail text-ink-mute">1969 · NASA-spec · to a Japanese museum</div>
+        </div>
+
+        <div class="frame enter-fast">
+          <div class="aspect-[4/5] overflow-hidden bg-ink-ghost mb-4">
+            <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/archive-contax-1-1932/700/875" alt="Contax I">
+          </div>
+          <div class="label-sm text-ink-mute mb-2">SOLD · 2021</div>
+          <div class="font-display text-lg leading-tight mb-2">Contax I (1932)</div>
+          <div class="mono-detail text-ink-mute">first-year · to a Tokyo collector</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== § 07 VISIT ===================== -->
+<section id="visit" class="px-6 md:px-10 py-24 md:py-36 border-t border-line-soft">
+  <div class="max-w-[1600px] mx-auto">
+
+    <div class="grid grid-cols-12 gap-6 mb-16 md:mb-24">
+      <div class="col-span-12 md:col-span-2">
+        <div class="num-marker text-ink-mute">§ 07 / 07</div>
+      </div>
+      <div class="col-span-12 md:col-span-7">
+        <div class="label text-ink-mute mb-6 enter-fast">Visit the shop</div>
+        <h2 class="font-display text-[clamp(2rem,4.5vw,4.4rem)] enter-fast">
+          Second floor, above<br>the tea-merchant.
+        </h2>
+      </div>
+      <div class="col-span-12 md:col-span-3 md:flex md:items-end">
+        <p class="mono-detail text-ink-mute enter-fast">
+          By appointment Tuesday through Saturday. Walk-ins welcome when the stairwell lamp is lit. The bench is open to view.
+        </p>
+      </div>
+    </div>
+
+    <div class="rule mb-16 md:mb-20"></div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+
+      <!-- left: address & hours -->
+      <div class="space-y-12">
+
+        <div class="enter">
+          <div class="label-sm text-ink-mute mb-6">— Address</div>
+          <div class="font-display text-2xl md:text-3xl leading-tight mb-4">
+            Kōgetsu Camera Trading<br>
+            2-14-3 Jimbōchō, Kanda<br>
+            Chiyoda-ku, Tokyo 101-0051
+          </div>
+          <div class="mono-detail text-ink-soft leading-relaxed">
+            2F, above Morinoen Tea Merchants.<br>
+            Look for the brown wooden stairwell between the antiquarian bookshop and the calligraphy store.<br>
+            <span class="text-ink-mute">Coordinates · N 35°41′46″ E 139°45′43″</span>
+          </div>
+        </div>
+
+        <div class="enter">
+          <div class="label-sm text-ink-mute mb-6">— Hours</div>
+          <dl class="max-w-md">
+            <div class="grid grid-cols-2 py-3 border-b border-line-soft">
+              <dt class="mono text-ink">Tuesday — Friday</dt>
+              <dd class="mono text-ink-soft">11:00 — 18:30</dd>
+            </div>
+            <div class="grid grid-cols-2 py-3 border-b border-line-soft">
+              <dt class="mono text-ink">Saturday</dt>
+              <dd class="mono text-ink-soft">12:00 — 17:00</dd>
+            </div>
+            <div class="grid grid-cols-2 py-3 border-b border-line-soft">
+              <dt class="mono text-ink">Sunday — Monday</dt>
+              <dd class="mono text-ink-mute">Closed (bench work)</dd>
+            </div>
+            <div class="grid grid-cols-2 py-3 border-b border-line-soft">
+              <dt class="mono text-ink">Public holidays</dt>
+              <dd class="mono text-ink-mute">By appointment</dd>
+            </div>
+          </dl>
+          <div class="mt-6 flex items-center gap-3 label text-ink-mute">
+            <span class="w-1.5 h-1.5 bg-ink blink"></span>
+            <span>OPEN NOW · 14:32 JST</span>
+          </div>
+        </div>
+
+        <div class="enter">
+          <div class="label-sm text-ink-mute mb-6">— Access</div>
+          <div class="space-y-3 mono-detail text-ink-soft leading-relaxed">
+            <p><span class="text-ink">Subway · </span>Jimbōchō Station (Mita line, A7 exit) — 2 minutes on foot.</p>
+            <p><span class="text-ink">Subway · </span>Awajichō Station (Marunouchi line) — 5 minutes on foot.</p>
+            <p><span class="text-ink">JR · </span>Ochanomizu Station (Chūō line, Hijiribashi exit) — 7 minutes on foot.</p>
+            <p><span class="text-ink">Car · </span>No parking. Nearest coin parking on Yasukuni-dōri.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- right: image + appointment -->
+      <div class="space-y-10">
+
+        <div class="enter">
+          <div class="frame">
+            <div class="aspect-[4/3] overflow-hidden bg-ink-ghost">
+              <img class="img-treat w-full h-full object-cover" src="https://picsum.photos/seed/jimbocho-stairwell-tea-shop/1200/900" alt="The stairwell entrance to Kōgetsu Camera Trading">
+            </div>
+            <div class="flex items-baseline justify-between mt-4">
+              <div class="label-sm text-ink-mute">Plate VIII · The stairwell</div>
+              <div class="label-sm text-ink-mute">JIMBŌCHŌ · 2-14-3</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="enter">
+          <div class="label-sm text-ink-mute mb-6">— Appointments</div>
+          <p class="text-[15px] leading-[1.7] text-ink-soft mb-6 max-w-[44ch]">
+            Visits are by appointment Tuesday through Saturday. We can usually accommodate same-day requests — please call the shop or use the form below. Walk-ins are welcome when the stairwell lamp is lit.
+          </p>
+          <form class="space-y-4 max-w-md">
+            <div class="grid grid-cols-2 gap-3">
+              <input type="text" placeholder="Name" class="border border-line-strong bg-transparent px-4 py-3 mono text-sm placeholder:text-ink-mute focus:outline-none focus:border-ink transition-colors">
+              <input type="email" placeholder="Email" class="border border-line-strong bg-transparent px-4 py-3 mono text-sm placeholder:text-ink-mute focus:outline-none focus:border-ink transition-colors">
+            </div>
+            <input type="text" placeholder="Preferred date & time" class="w-full border border-line-strong bg-transparent px-4 py-3 mono text-sm placeholder:text-ink-mute focus:outline-none focus:border-ink transition-colors">
+            <textarea rows="3" placeholder="Camera(s) of interest, or note" class="w-full border border-line-strong bg-transparent px-4 py-3 mono text-sm placeholder:text-ink-mute focus:outline-none focus:border-ink transition-colors resize-none"></textarea>
+            <button type="button" class="btn-ink w-full justify-center">Request appointment</button>
+          </form>
+        </div>
+
+        <div class="enter">
+          <div class="rule mb-6"></div>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <div class="label-sm text-ink-mute mb-2">Telephone</div>
+              <div class="mono-detail text-ink">+81 3 3295 4471</div>
+            </div>
+            <div>
+              <div class="label-sm text-ink-mute mb-2">Correspondence</div>
+              <div class="mono-detail text-ink">kenji@kogetsu-camera.jp</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="border-t border-ink bg-paper">
+
+  <!-- big wordmark -->
+  <div class="px-6 md:px-10 pt-20 md:pt-28 pb-10 md:pb-14">
+    <div class="max-w-[1600px] mx-auto">
+      <div class="font-display text-[clamp(3rem,11vw,13rem)] leading-[0.85] tracking-[-0.04em]">
+        KŌGETSU.
+      </div>
+      <div class="mt-6 flex flex-wrap items-baseline justify-between gap-4">
+        <div class="label text-ink-mute">CAMERA TRADING · JIMBŌCHŌ TOKYO · EST. MCMLXII</div>
+        <div class="label text-ink-mute">§ END OF DOCUMENT</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rule-strong"></div>
+
+  <!-- footer grid -->
+  <div class="px-6 md:px-10 py-14 md:py-16">
+    <div class="max-w-[1600px] mx-auto grid grid-cols-2 md:grid-cols-5 gap-8 md:gap-10">
+
+      <div class="col-span-2">
+        <div class="label-sm text-ink-mute mb-4">— Kōgetsu Camera Trading</div>
+        <p class="text-[13px] leading-[1.65] text-ink-soft max-w-[40ch] mb-6">
+          Acquiring, servicing, and re-homing second-hand mechanical film cameras since 1962. Second floor, above the tea-merchant, Jimbōchō.
+        </p>
+        <div class="mono-detail text-ink-mute">
+          東京都千代田区神田神保町 2-14-3 2F<br>
+          101-0051 · Japan
+        </div>
+      </div>
+
+      <div>
+        <div class="label-sm text-ink-mute mb-4">— Navigate</div>
+        <ul class="space-y-3 text-[13px] text-ink-soft">
+          <li><a href="#cabinet" class="link-u">§ 01 Cabinet</a></li>
+          <li><a href="#house" class="link-u">§ 02 House</a></li>
+          <li><a href="#inventory" class="link-u">§ 03 Inventory</a></li>
+          <li><a href="#entry" class="link-u">§ 04 Catalog</a></li>
+          <li><a href="#process" class="link-u">§ 05 Process</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="label-sm text-ink-mute mb-4">— Continued</div>
+        <ul class="space-y-3 text-[13px] text-ink-soft">
+          <li><a href="#archive" class="link-u">§ 06 Archive</a></li>
+          <li><a href="#visit" class="link-u">§ 07 Visit</a></li>
+          <li><a href="#" class="link-u">Mailing list</a></li>
+          <li><a href="#" class="link-u">Press</a></li>
+          <li><a href="#" class="link-u">Consignment</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="label-sm text-ink-mute mb-4">— Correspondence</div>
+        <ul class="space-y-3 text-[13px] text-ink-soft mono">
+          <li>+81 3 3295 4471</li>
+          <li>kenji@kogetsu-camera.jp</li>
+          <li>Tue–Sat · 11:00–18:30</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 bg-ink blink"></span>Open now</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <!-- bottom strip -->
+  <div class="px-6 md:px-10 py-6 md:py-8">
+    <div class="max-w-[1600px] mx-auto flex flex-wrap items-baseline justify-between gap-4 label-sm text-ink-mute">
+      <div>© 1962 — 2024 KŌGETSU CAMERA TRADING KABUSHIKI KAISHA</div>
+      <div class="flex items-center gap-6">
+        <span>TOKYO REGISTRY · 1962-04-014</span>
+        <span class="rule-v h-3"></span>
+        <span>SECOND-HAND DEALER LICENSE · 東 13 第 30471 号</span>
+        <span class="rule-v h-3"></span>
+        <span>v.2024.11</span>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+<!-- ===================== MOTION SCRIPTS ===================== -->
+<script>
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Lenis smooth scroll ---- */
+  let lenis;
+  if (typeof Lenis !== 'undefined' && !reduceMotion) {
+    lenis = new Lenis({
+      duration: 1.15,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 0.95,
+    });
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+    if (window.gsap && window.ScrollTrigger) {
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(time => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+  }
+
+  /* ---- Hero 4-beat ---- */
+  const hero = document.querySelector('.hero-stage');
+  if (hero) {
+    requestAnimationFrame(() => {
+      setTimeout(() => hero.classList.add('is-in'), 120);
+    });
+  }
+
+  /* ---- IntersectionObserver: fade-up & directional clip ---- */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.18, rootMargin: '0px 0px -8% 0px' });
+
+  document.querySelectorAll('.enter, .enter-fast').forEach(el => io.observe(el));
+
+  /* ---- Directional clip on featured grid images ---- */
+  const clipDirs = [
+    'inset(0 100% 0 0)',   // right → left
+    'inset(0 0 100% 0)',   // top → bottom
+    'inset(0 0 0 100%)',   // left → right
+    'inset(100% 0 0 0)',   // bottom → top
+  ];
+
+  function animateClip(img) {
+    if (reduceMotion) {
+      img.style.clipPath = 'none';
+      return;
+    }
+    const idx = parseInt(img.dataset.clipIdx || 0, 10);
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.set(img, { clipPath: clipDirs[idx % clipDirs.length] });
+      ScrollTrigger.create({
+        trigger: img,
+        start: 'top 88%',
+        once: true,
+        onEnter: () => {
+          gsap.to(img, {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            duration: 1.3,
+            ease: 'power4.inOut',
+          });
+        }
+      });
+    } else {
+      img.style.clipPath = 'none';
+    }
+  }
+
+  const featuredImgs = document.querySelectorAll('#featured-grid .clip-mask');
+  featuredImgs.forEach((img, i) => {
+    img.dataset.clipIdx = i;
+    animateClip(img);
+  });
+
+  /* ---- Parallel strips ---- */
+  if (window.gsap && window.ScrollTrigger && !reduceMotion) {
+    const strip = document.getElementById('parallax-strips');
+    const top = document.getElementById('parallax-top');
+    const bottom = document.getElementById('parallax-bottom');
+    if (strip && top && bottom) {
+      ScrollTrigger.create({
+        trigger: strip,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1,
+        onUpdate: self => {
+          const p = self.progress;
+          gsap.set(top,    { x: -p * 320 });
+          gsap.set(bottom, { x:  p * 320 - 200 });
+        }
+      });
+    }
+  }
+
+  /* ---- Refresh ScrollTrigger after load ---- */
+  if (window.ScrollTrigger) {
+    window.addEventListener('load', () => ScrollTrigger.refresh());
+  }
+
+  /* ---- Touch fallback: disable hover frame corners on coarse pointer ---- */
+  if (window.matchMedia('(pointer: coarse)').matches) {
+    document.documentElement.classList.add('touch');
+  }
+
+})();
+</script>
+
+</body>
+</html>

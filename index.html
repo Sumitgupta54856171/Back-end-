@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-white dark:bg-gray-900">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animation Portfolio | [Your Name]</title>
+
+  <!-- Tailwind CSS CDN (fixed build) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* ----- Custom animations ----- */
+    @keyframes slideInDown {
+      0% { transform: translateY(-100%); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .animate-slide-down { animation: slideInDown 0.8s ease-out forwards; }
+
+    @keyframes fadeInScale {
+      0% { transform: scale(0.95); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-fade-scale { animation: fadeInScale 0.6s ease-out forwards; }
+
+    /* Utility to retain aspect ratio for any project card image */
+    .aspect-16x9 {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 */
+      overflow: hidden;
+    }
+    .aspect-16x9 img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+
+<body class="min-h-full flex flex-col">
+
+  <!-- ♻️ Dark‑mode toggle -->
+  <div class="flex justify-end p-4">
+    <button id="themeToggle" aria-label="Toggle dark mode" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition">
+      <svg id="moon" class="w-6 h-6 text-gray-600 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.36-6.36l-.7.7M6.8 17.2l-.7-.7m12.28 0l-.7-.7M6.8 6.8l-.7.7m0 0a9 9 0 117.58 7.58m-2.42-9.58c-1.66-.13-3.23.48-4.34 1.59A7.5 7.5 0 0112 4a7.5 7.5 0 014.42 13.49c1.1-1.11 1.7-2.68 1.59-4.34"/>
+      </svg>
+      <svg id="sun" class="w-6 h-6 text-yellow-500 hidden dark:inline-block" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 15a5 5 0 100-10 5 5 0 000 10zm0 5a1 1 0 110-2 1 1 0 010 2zM4.222 15.278a1 1 0 011.5 1.414l-1.414 1.414a1 1 0 01-1.5-1.414l1.414-1.414zm12.556 0l-1.414 1.414a1 1 0 01-1.5-1.414l1.414-1.414a1 1 0 011.5 1.414zM18 10a1 1 0 110 2 1 1 0 010-2zm-6-2.222a1 1 0 011.414-1.5l1.414 1.414a1 1 0 01-1.414 1.5L12 8.778zm-8 0l1.414-1.414a1 1 0 011.414 1.5L4.222 10a1 1 0 01-1.414-1.5zM10 4a1 1 0 110 2 1 1 0 010-2z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ★ Hero section -->
+  <section
+    class="flex flex-1 flex-col items-center justify-center text-center bg-gradient-to-br from-indigo-600 to-purple-600 text-white p-8"
+  >
+    <h1 class="text-4xl sm:text-5xl font-bold mb-4 animate-slide-down">
+      Hi, I'm <span class="text-yellow-300">[Your Name]</span>
+    </h1>
+    <p class="text-lg sm:text-xl mb-8 animate-slide-down delay-200">
+      I create motion graphics, UI animations, and interactive experiences.
+    </p>
+    <a
+      href="#portfolio"
+      class="px-8 py-3 bg-yellow-300 text-indigo-800 font-semibold rounded-full shadow-md hover:bg-yellow-400 transition transform hover:-translate-y-1 animate-slide-down delay-400"
+    >
+      View Work
+    </a>
+  </section>
+
+  <!-- ★ About -->
+  <section id="about" class="max-w-4xl mx-auto py-16 px-8 text-center">
+    <h2 class="text-3xl font-bold mb-4 text-indigo-700 dark:text-indigo-300">
+      About Me
+    </h2>
+    <p class="text-gray-800 dark:text-gray-300 leading-relaxed">
+      [Your bio goes here. Mention your specialty, tools you love, and a few interesting facts about your creative process.]
+    </p>
+  </section>
+
+  <!-- ★ Portfolio -->
+  <section id="portfolio" class="bg-gray-100 dark:bg-gray-800 py-16">
+    <div class="max-w-6xl mx-auto px-8">
+      <h2 class="text-3xl font-bold mb-8 text-center text-indigo-700 dark:text-indigo-300">
+        My Projects
+      </h2>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+      >
+        <!-- Example card: -->
+        <article
+          class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition transform hover:scale-105 animate-fade-scale"
+        >
+          <div class="aspect-16x9">
+            <img
+              src="https://picsum.photos/640/360?random=1"
+              alt="Project demo"
+              loading="lazy"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-indigo-800 dark:text-indigo-200">
+              Project Title 1
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+              Brief description of this animation, technique used, and the goal.
+            </p>
+            <a
+              href="#"
+              class="inline-block text-indigo-600 dark:text-indigo-400 hover:underline"
+              >View details</a
+            >
+          </div>
+        </article>
+
+        <!-- Repeat the card for each project (copy/paste block, change src, title, etc.) -->
+        <!-- Example second card -->
+        <article
+          class="bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition transform hover:scale-105 animate-fade-scale"
+        >
+          <div class="aspect-16x9">
+            <img
+              src="https://picsum.photos/640/360?random=2"
+              alt="Project demo"
+              loading="lazy"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2 text-indigo-800 dark:text-indigo-200">
+              Project Title 2
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-4">
+              A quick showcase of a kinetic typographic piece or an interactive UI animation.
+            </p>
+            <a
+              href="#"
+              class="inline-block text-indigo-600 dark:text-indigo-400 hover:underline"
+              >View details</a
+            >
+          </div>
+        </article>
+
+        <!-- Add as many cards as needed -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ★ Contact -->
+  <section id="contact" class="py-16">
+    <div class="max-w-3xl mx-auto px-8 text-center">
+      <h2 class="text-3xl font-bold mb-6 text-indigo-700 dark:text-indigo-300">
+        Get in Touch
+      </h2>
+      <p class="mb-8 text-gray-700 dark:text-gray-400">
+        Feel free to reach out if you'd like to collaborate or just want to say hi!
+      </p>
+
+      <form
+        action="https://formspree.io/f/moqzydzt"
+        method="POST"
+        class="space-y-6"
+      >
+        <div>
+          <input
+            type="text"
+            name="name"
+            placeholder="Your Name"
+            class="w-full p-4 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+        </div>
+        <div>
+          <input
+            type="email"
+            name="email"
+            placeholder="Your Email"
+            class="w-full p-4 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          />
+        </div>
+        <div>
+          <textarea
+            name="message"
+            rows="5"
+            placeholder="Your Message"
+            class="w-full p-4 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            required
+          ></textarea>
+        </div>
+        <button
+          type="submit"
+          class="w-full py-3 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 transition"
+        >
+          Send Message
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ★ Footer -->
+  <footer class="bg-gray-800 text-gray-200 py-6">
+    <div class="max-w-6xl mx-auto px-8 text-center">
+      <p>&copy; 2026 [Your Name] – All rights reserved.</p>
+      <p class="mt-2">
+        <a href="https://twitter.com/yourhandle" target="_blank" class="hover:underline">
+          Twitter
+        </a>
+        •
+        <a href="https://github.com/yourhandle" target="_blank" class="hover:underline">
+          GitHub
+        </a>
+        •
+        <a href="mailto:you@example.com" class="hover:underline">
+          Email
+        </a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Dark‑mode toggle script -->
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const currentTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    // Apply user or system preference on page load
+    if (currentTheme === 'dark' || (!currentTheme && systemPrefersDark)) {
+      root.classList.add('dark');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      root.classList.toggle('dark');
+      const isDark = root.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+  </script>
+</body>
+</html>
