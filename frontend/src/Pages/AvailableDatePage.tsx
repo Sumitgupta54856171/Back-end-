@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { ChevronLeft, ChevronRight, Sync, Download, MessageSquare, CalendarDays, Banknote } from 'lucide-react';
+import { ChevronLeft, ChevronRight, WifiSync, Download, MessageSquare, CalendarDays, Banknote } from 'lucide-react';
 
 const calendarData: Record<string, { status: 'available' | 'booked' | 'blocked'; price?: string }> = {
   '2024-10-01': { status: 'available', price: '$120' },
@@ -173,7 +173,7 @@ export default function AvailableDatePage() {
             </div>
             <div className="flex flex-wrap gap-3">
               <button className="flex items-center gap-2 px-4 py-2 text-[#5f5e5e] hover:text-[#1b1c1c] border border-[#e3e2e2] rounded-lg text-[14px] font-semibold transition-colors h-10">
-                <Sync className="h-[18px] w-[18px]" /> Sync with Google
+                <WifiSync className="h-[18px] w-[18px]" /> Sync with Google
               </button>
               <button className="flex items-center gap-2 px-4 py-2 text-[#5f5e5e] hover:text-[#1b1c1c] border border-[#e3e2e2] rounded-lg text-[14px] font-semibold transition-colors h-10">
                 <Download className="h-[18px] w-[18px]" /> Import
@@ -192,7 +192,7 @@ export default function AvailableDatePage() {
             {/* Calendar Grid */}
             <div className="lg:col-span-3 bg-white rounded-xl border border-[#e3e2e2] shadow-sm overflow-hidden flex flex-col">
               <Calendar
-                onChange={setDate}
+                onChange={(value) => setDate(value as Date)}
                 value={date}
                 view="month"
                 tileContent={tileContent}
