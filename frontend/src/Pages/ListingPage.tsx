@@ -54,23 +54,23 @@ export default function ListingPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   return (
-    <div className="min-h-screen bg-white font-sans text-[#222222]">
-      <main className="mx-auto max-w-[1280px] px-4 py-8 sm:px-6 md:px-10 lg:px-20">
+    <div className="min-h-screen bg-white font-sans text-[#1b1c1c]">
+      <main className="mx-auto max-w-[1280px] px-6 py-8 md:px-10 lg:px-20">
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-[28px] font-semibold leading-[36px] tracking-[-0.01em] text-[#222222] md:text-[32px] md:leading-[40px]">
+            <h1 className="text-[28px] font-semibold leading-[36px] tracking-[-0.01em] text-[#1b1c1c] md:text-[32px] md:leading-[40px]">
               Your listings
             </h1>
-            <p className="mt-1 text-[16px] text-[#717171]">
+            <p className="mt-1 text-[16px] text-[#5f5e5e]">
               Manage and edit your properties
             </p>
           </div>
           <div className="flex gap-3">
-            <button className="rounded-full border border-[#DDDDDD] bg-white px-4 py-2 text-sm font-medium text-[#222222] transition-colors hover:bg-[#F7F7F7]">
+            <button className="rounded-full border border-[#e3e2e2] bg-white px-4 py-2 text-[14px] font-semibold text-[#1b1c1c] transition-colors hover:bg-[#f5f3f3]">
               Import listings
             </button>
-            <button className="flex items-center rounded-full bg-[#FF385C] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#e03153]">
+            <button className="flex items-center rounded-full bg-[#ba0036] px-4 py-2 text-[14px] font-semibold text-white transition-colors hover:bg-[#920029]">
               <span className="mr-2 text-lg leading-none">+</span> Add new listing
             </button>
           </div>
@@ -80,11 +80,11 @@ export default function ListingPage() {
         <div className="mt-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-1 flex-col gap-4 sm:flex-row sm:items-center">
             <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#717171]" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#5f5e5e]" />
               <input
                 type="text"
                 placeholder="Search listings..."
-                className="w-full rounded-full border border-[#DDDDDD] py-2 pl-9 pr-4 text-sm outline-none focus:border-[#222222] focus:ring-1 focus:ring-[#222222]"
+                className="w-full rounded-full border border-[#e3e2e2] py-2 pl-9 pr-4 text-[14px] outline-none focus:border-[#1b1c1c] focus:ring-1 focus:ring-[#1b1c1c]"
               />
             </div>
             <div className="flex gap-2 overflow-x-auto pb-2 sm:pb-0">
@@ -92,10 +92,10 @@ export default function ListingPage() {
                 <button
                   key={filter}
                   onClick={() => setActiveFilter(filter)}
-                  className={`whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                  className={`whitespace-nowrap rounded-full px-4 py-1.5 text-[14px] font-semibold transition-colors ${
                     activeFilter === filter
-                      ? 'bg-[#222222] text-white'
-                      : 'border border-[#DDDDDD] bg-white text-[#222222] hover:bg-[#F7F7F7]'
+                      ? 'bg-[#1b1c1c] text-white'
+                      : 'border border-[#e3e2e2] bg-white text-[#1b1c1c] hover:bg-[#f5f3f3]'
                   }`}
                 >
                   {filter}
@@ -104,19 +104,19 @@ export default function ListingPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button className="flex items-center rounded-full border border-[#DDDDDD] bg-white px-4 py-2 text-sm font-medium text-[#222222] hover:bg-[#F7F7F7]">
+            <button className="flex items-center rounded-full border border-[#e3e2e2] bg-white px-4 py-2 text-[14px] font-semibold text-[#1b1c1c] hover:bg-[#f5f3f3]">
               <SlidersHorizontal className="mr-2 h-4 w-4" /> Sort
             </button>
-            <div className="flex rounded-full border border-[#DDDDDD] p-1">
+            <div className="flex rounded-full border border-[#e3e2e2] p-1">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`rounded-full p-1.5 transition-colors ${viewMode === 'grid' ? 'bg-[#F7F7F7] text-[#222222]' : 'text-[#717171]'}`}
+                className={`rounded-full p-1.5 transition-colors ${viewMode === 'grid' ? 'bg-[#f5f3f3] text-[#1b1c1c]' : 'text-[#5f5e5e]'}`}
               >
                 <Grid3x3 className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`rounded-full p-1.5 transition-colors ${viewMode === 'list' ? 'bg-[#F7F7F7] text-[#222222]' : 'text-[#717171]'}`}
+                className={`rounded-full p-1.5 transition-colors ${viewMode === 'list' ? 'bg-[#f5f3f3] text-[#1b1c1c]' : 'text-[#5f5e5e]'}`}
               >
                 <List className="h-4 w-4" />
               </button>
@@ -125,7 +125,7 @@ export default function ListingPage() {
         </div>
 
         {/* Content Grid */}
-        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
           {/* Listings */}
           <div className={`grid gap-6 ${viewMode === 'grid' ? 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
             {listings.map((listing) => (
