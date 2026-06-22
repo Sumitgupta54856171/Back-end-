@@ -29,6 +29,7 @@ import AddHomePage8 from './Pages/AddHomePage8.tsx';
 import AddHomeReviewPage from './Pages/AddHomeReviewPage.tsx';
 import OnboardingLayout from './component/Host/OnboardingLayout.tsx';
 import Reservation from './component/Host/Reservation.tsx';
+import ListingPage from './Pages/ListingPage.tsx';
 
 function App() {
   const checkrole = useContext(ConditionContext)
@@ -66,6 +67,9 @@ function App() {
 
       {/* Standalone Review Page (Includes its own layout as per the UI design mockup) */}
       <Route path="/add-home-review" element={<AddHomeReviewPage />} />
+      
+      {/* Standalone Listing Page (Navbar ignored as per requirements) */}
+      <Route path="/host/my-listings" element={<ListingPage />} />
       
       {/* Host Dashboard routes wrapped in Layout */}
       <Route element={<Layout />}>
