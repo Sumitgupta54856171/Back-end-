@@ -28,6 +28,7 @@ import AddHomePage7 from './Pages/AddHomePage7.tsx';
 import AddHomePage8 from './Pages/AddHomePage8.tsx';
 import AddHomeReviewPage from './Pages/AddHomeReviewPage.tsx';
 import OnboardingLayout from './component/Host/OnboardingLayout.tsx';
+import Reservation from './component/Host/Reservation.tsx';
 
 function App() {
   const checkrole = useContext(ConditionContext)
@@ -68,8 +69,9 @@ function App() {
       
       {/* Host Dashboard routes wrapped in Layout */}
       <Route element={<Layout />}>
-        <Route path="/host/dashboard" element={<HostDashboard />} />
+        <Route path="/" element={<HostDashboard />} />
         <Route path="/host/listings" element={<Listings />} />
+        <Route path="/host/reservations" element={<Reservation />} />
       </Route>
     </Routes>
   )
