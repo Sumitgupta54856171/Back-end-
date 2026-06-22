@@ -30,6 +30,7 @@ import AddHomeReviewPage from './Pages/AddHomeReviewPage.tsx';
 import OnboardingLayout from './component/Host/OnboardingLayout.tsx';
 import Reservation from './component/Host/Reservation.tsx';
 import ListingPage from './Pages/ListingPage.tsx';
+import AvailableDatePage from './Pages/AvailableDatePage.tsx';
 
 function App() {
   const checkrole = useContext(ConditionContext)
@@ -70,6 +71,9 @@ function App() {
       
       {/* Standalone Listing Page (Navbar ignored as per requirements) */}
       <Route path="/host/my-listings" element={<ListingPage />} />
+      
+      {/* Standalone Availability Calendar Page (Navbar ignored as per requirements) */}
+      <Route path="/host/availability" element={<AvailableDatePage />} />
       
       {/* Host Dashboard routes wrapped in Layout */}
       <Route element={<Layout />}>
